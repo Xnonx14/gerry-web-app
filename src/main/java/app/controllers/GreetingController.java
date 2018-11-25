@@ -1,8 +1,9 @@
-package hello;
+package app.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -22,7 +23,19 @@ public class GreetingController {
 
     @GetMapping("/register")
     public String register() {
-        //model.addAttribute("name", name);
+        return "register";
+    }
+
+    @PostMapping("/register")
+    public String registerAccount() {
+        /*
+            if failed to create account, return "register"
+            else,
+                create account
+                persist to database
+                return "loggedIn
+         */
+
         return "register";
     }
 
