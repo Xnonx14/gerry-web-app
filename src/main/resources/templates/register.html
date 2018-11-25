@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Leaflet Map</title>
+	<!-- External Stylesheets -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+		  th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"
+			th:src="@{/webjars/jquery/3.3.1/jquery.min.js}"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+			th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.0.2/bootstrap-slider.js"
+			th:src="@{/webjars/bootstrap-slider/10.0.2/bootstrap-slider.js}"></script>
+
+	<link rel="stylesheet" th:href="@{/css/leaflet.css}"
+		  href="../static/css/leaflet.css" />
+	<link rel="stylesheet" th:href="@{/css/style.css}"
+		  href="../static/css/style.css" />
+</head>
+<body>
+	<nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+	  <div class="container-fluid">
+		<div class="navbar-header">
+		  <a class="navbar-brand" href="/">Congressional Redistricting Website</a>
+		</div>
+		<ul class="nav navbar-nav">
+		</ul>
+		<ul class="nav navbar-nav navbar-right">
+		<li><a href="/login">Login</a></li>
+		<li><a href="/about">About</a></li>
+		</ul>
+	  </div>
+	</nav>
+    <div>
+		<div id="third">
+			<font size="5">Register</font>
+			<form action="/register" method="post">
+			  <div class="active-purple-3 active-purple-4 mb-4">
+			  <input class="form-control" type="text" placeholder="Email" aria-label="Search">
+			  <input class="form-control" type="text" placeholder="Password" aria-label="Search">
+			  <input class="form-control" type="text" placeholder="Confirm Password" aria-label="Search">
+			</div>
+			<input type="submit" class="button" value="Submit">
+			</form>
+		</div>
+	</div>
+	
+</body>
+</html>
