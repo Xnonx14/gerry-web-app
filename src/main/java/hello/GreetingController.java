@@ -15,37 +15,37 @@ public class GreetingController {
     }
 
     @GetMapping("/index")
-    public String index(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
+    public String index() {
         //model.addAttribute("name", name);
         return "index";
     }
 
     @GetMapping("/register")
-    public String register(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
+    public String register() {
         //model.addAttribute("name", name);
         return "register";
     }
 
     @GetMapping("/about")
-    public String about(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
+    public String about() {
         //model.addAttribute("name", name);
         return "about";
     }
 
     @GetMapping("/login")
-    public String login(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
+    public String login() {
         //model.addAttribute("name", name);
         return "login";
     }
 
     @GetMapping("/loggedIn")
-    public String loggedIn(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
+    public String loggedIn() {
         //model.addAttribute("name", name);
         return "loggedIn";
     }
 
     @GetMapping("/myAccount")
-    public String myAccount(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
+    public String myAccount() {
         //model.addAttribute("name", name);
         return "myAccount";
     }
