@@ -42,16 +42,13 @@ public class GreetingController {
     }
 
     @PostMapping("/register")
-    public String registerAccount() {
-        /*
-            if failed to create account, return "register"
-            else,
-                create account
-                persist to database
-                return "loggedIn
-         */
-
-        return "register";
+    public String registerAccount(@RequestParam String email, @RequestParam String password) {
+        Account n = new Account();
+        n.setEmail(email);
+        n.setPassword(password);
+        n.setIsAdmin(false);
+        userRepository.save(n);
+        return "about";
     }
 
     @GetMapping("/about")
