@@ -8,16 +8,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class GreetingController {
-
+    /*
     @GetMapping("/greeting")
     public String greeting(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
         model.addAttribute("name", name);
         return "greeting";
-    }
+    }*/
 
     @GetMapping("/index")
-    public String index() {
-        //model.addAttribute("name", name);
+    public String index(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
+        model.addAttribute("name", name);
         return "index";
     }
 
@@ -45,6 +45,12 @@ public class GreetingController {
         return "about";
     }
 
+    @GetMapping("/logout")
+    public String logout() {
+        //model.addAttribute("name", name);
+        return "index";
+    }
+    
     @GetMapping("/login")
     public String login() {
         //model.addAttribute("name", name);
@@ -52,8 +58,8 @@ public class GreetingController {
     }
 
     @GetMapping("/loggedIn")
-    public String loggedIn() {
-        //model.addAttribute("name", name);
+    public String loggedIn(Model model) {
+        model.addAttribute("success", true);
         return "loggedIn";
     }
 
