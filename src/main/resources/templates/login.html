@@ -36,13 +36,20 @@
     <div>
 		<div id="third">
 			<font size="5">Login</font>
-			<form action="/loggedIn" method="get">
-			  <div class="active-purple-3 active-purple-4 mb-4">
-			  <input class="form-control" type="text" placeholder="Email" aria-label="Search">
-			  <input class="form-control" type="text" placeholder="Password" aria-label="Search">
-			</div>
-			<input type="submit" class="button" value="Submit">
-			<a href="/register">Forgot your Password?</a>
+                        <div th:if="${param.error}">
+                            Invalid username and password.
+                        </div>
+                        <div th:if="${param.logout}">
+                            You have been logged out.
+                        </div>
+			<form th:action="@{/login}" method="post">
+                            <div class="active-purple-3 active-purple-4 mb-4">
+                            <input name="username" class="form-control" type="text" placeholder="Email" aria-label="Search">
+                            <input type="password" name="password" class="form-control" placeholder="Password" aria-label="Search">
+                            <br>
+                            </div>
+                            <input type="submit" class="button" value="Submit">
+                            <a href="/register">Forgot your Password?</a>
 			</form>
 		</div>
 	</div>
