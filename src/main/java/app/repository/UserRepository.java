@@ -1,5 +1,6 @@
-package app.controllers;
+package app.repository;
 
+import app.model.Account;
 import org.springframework.data.repository.CrudRepository;
 
 
