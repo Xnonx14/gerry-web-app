@@ -1,13 +1,28 @@
 package app.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class GreetingController {
+    @Autowired
+    private UserRepository userRepository;
+    
+    @GetMapping("/add")
+    public String add(@RequestParam String email, @RequestParam String password) {
+        Account n = new Account();
+        n.setEmail(email);
+        n.setPassword(password);
+        n.setIsAdmin(false);
+        userRepository.save(n);
+        return "about";
+    }
+
     /*
     @GetMapping("/greeting")
     public String greeting(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
@@ -16,7 +31,7 @@ public class GreetingController {
     }*/
 
     @GetMapping("/index")
-    public String index(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
+    public String index(@RequestParam(name = "name", required = false, defaultValue = "World") String name, Model model) {
         model.addAttribute("name", name);
         return "index";
     }
@@ -50,7 +65,7 @@ public class GreetingController {
         //model.addAttribute("name", name);
         return "index";
     }
-    
+
     @GetMapping("/login")
     public String login() {
         //model.addAttribute("name", name);
@@ -68,4 +83,5 @@ public class GreetingController {
         //model.addAttribute("name", name);
         return "myAccount";
     }
+
 }
