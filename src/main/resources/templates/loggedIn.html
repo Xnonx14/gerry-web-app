@@ -40,20 +40,18 @@
     <div id="container" style="width: 100%">
         <div id="first">
             <script src="js/leaflet.js"></script>
-            <script type="text/javascript" src="js/us-states.js"></script>
+            <!--<script type="text/javascript" src="js/us-states.js"></script>-->
             <div id="map" style="width: 100%; height: 650px"></div>
-            <script th:src="@{js/make-map.js}" src="../static/js/make-map.js"></script>
+			<script th:src="@{js/make-map.js}" src="../static/js/make-map.js"></script>
         </div>
 	<div id="second">
             <font size="5">Select State</font>
-			<form action="/loggedIn" method="POST" th:action="@{/loggedIn}" th:object="${state}">
-			<select class="form-control" th:field="*{state}">
-				<option value="Illinois" th:value="Illinois">Illinois</option>
-				<option value="New Hampshire" th:value="Illinois">New Hampshire</option>
-				<option value="West Virginia" th:value="Illinois">West Virginia</option>
+			<select id = "selected_state" class="form-control">
+				<option value="Illinois">Illinois</option>
+				<option value="New Hampshire">New Hampshire</option>
+				<option value="West Virginia">West Virginia</option>
 			</select>
-			<input type="submit" class="button" value="View Data">
-			</form>
+			<input type="submit" class="button" id="select_state" value="View Data">
 			<br>
 	</div>
 	<div id="second">
@@ -87,6 +85,6 @@
 	</div>
 	
 
-    </div>	
+    </div>
 </body>
 </html>

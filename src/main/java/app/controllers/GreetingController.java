@@ -94,11 +94,11 @@ public class GreetingController {
         return "loggedIn";
     }
 
-    @PostMapping("/loggedIn")
-    public String loggedInState(@ModelAttribute("state") TempDao state) {
-        System.out.println(state.getState());
-        return "loggedIn";
-    }
+//    @PostMapping("/loggedIn")
+//    public String loggedInState(@ModelAttribute("state") TempDao state) {
+//        System.out.println(state.getState());
+//        return "loggedIn";
+//    }
 
     @GetMapping("/myAccount")
     public String myAccount() {
