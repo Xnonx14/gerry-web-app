@@ -37,11 +37,12 @@
     <div>
 		<div id="third">
 			<font size="5">Register</font>
-			<form action="/register"  method="POST" th:action="@{/register}">
+			<form action="/register"  method="POST" th:action="@{/register}" th:object="${account}">
 			  <div class="active-purple-3 active-purple-4 mb-4">
-			  <input class="form-control" type="text" placeholder="Email" name = "email" aria-label="Search">
-			  <input class="form-control" type="text" placeholder="Password" name = "password" aria-label="Search">
-			  <input class="form-control" type="text" placeholder="Confirm Password" aria-label="Search">
+			  <div th:if="${errorMessage}" class="alert alert-danger" role="alert" ></div>
+			  <input class="form-control" type="text" placeholder="Email" name = "email" th:field="*{email}" aria-label="Search">
+			  <input class="form-control" type="text" placeholder="Password" name = "password" th:field="*{password}" aria-label="Search">
+			  <input class="form-control" type="text" placeholder="Confirm Password" th:field="*{confirm}" aria-label="Search">
 			</div>
 			<input type="submit" class="button" value="Submit">
 			</form>

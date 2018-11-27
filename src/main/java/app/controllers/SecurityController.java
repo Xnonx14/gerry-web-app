@@ -19,13 +19,14 @@ public class SecurityController extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-            .antMatchers("/","/css/**","/js/**","/webjars/**","/index","/register","/about").permitAll().anyRequest().authenticated()
+            .antMatchers("/","/css/**","/js/**","/webjars/**","/index","/register","/about","/loggedIn").permitAll().anyRequest().authenticated()
         .and()
             .formLogin()
             .loginPage("/login").defaultSuccessUrl("/loggedIn").permitAll()
         .and()
             .logout()
             .logoutSuccessUrl("/index").permitAll();
+        http.csrf().disable();
     }
 
      @Autowired

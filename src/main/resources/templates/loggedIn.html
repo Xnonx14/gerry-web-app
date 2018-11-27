@@ -46,12 +46,15 @@
         </div>
 	<div id="second">
             <font size="5">Select State</font>
-            <form action="/" method="post">
-                <div class="active-purple-3 active-purple-4 mb-4">
-                <input class="form-control" type="text" placeholder="Search" aria-label="Search">
-                </div>
-                <input type="submit" class="button" value="View Data">
-            </form>
+			<form action="/loggedIn" method="POST" th:action="@{/loggedIn}" th:object="${state}">
+			<select class="form-control" th:field="*{state}">
+				<option value="Illinois" th:value="Illinois">Illinois</option>
+				<option value="New Hampshire" th:value="Illinois">New Hampshire</option>
+				<option value="West Virginia" th:value="Illinois">West Virginia</option>
+			</select>
+			<input type="submit" class="button" value="View Data">
+			</form>
+			<br>
 	</div>
 	<div id="second">
         <font size="5">Automated Redistricting</font>

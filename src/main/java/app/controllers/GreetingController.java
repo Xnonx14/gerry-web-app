@@ -1,18 +1,25 @@
 package app.controllers;
 
+import app.dao.AccountDao;
+import app.dao.TempDao;
 import app.model.Account;
-import app.repository.UserRepository;
+import app.repository.AccountRepository;
+import app.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class GreetingController {
     @Autowired
-    private UserRepository userRepository;
+    private AccountRepository accountRepository;
+    @Autowired
+    private AccountService accountService;
     
     @GetMapping("/add")
     public String add(@RequestParam String email, @RequestParam String password) {
@@ -20,7 +27,7 @@ public class GreetingController {
         n.setEmail(email);
         n.setPassword(password);
         n.setIsAdmin(false);
-        userRepository.save(n);
+        accountRepository.save(n);
         return "about";
     }
 
@@ -32,24 +39,35 @@ public class GreetingController {
     }*/
 
     @GetMapping("/index")
-    public String index(@RequestParam(name = "name", required = false, defaultValue = "World") String name, Model model) {
-        model.addAttribute("name", name);
+    public String index() {
         return "index";
     }
 
     @GetMapping("/register")
-    public String register() {
+    public String register(Model model) {
+        model.addAttribute("account", new AccountDao());
         return "register";
     }
 
     @PostMapping("/register")
-    public String registerAccount(@RequestParam String email, @RequestParam String password) {
-        Account n = new Account();
-        n.setEmail(email);
-        n.setPassword(password);
-        n.setIsAdmin(false);
-        userRepository.save(n);
-        return "about";
+    public ModelAndView registerAccount(ModelAndView modelAndView, @ModelAttribute AccountDao accountDao) {
+        Account account = accountService.findByEmail(accountDao.getEmail());
+        if(account != null) {
+            modelAndView.addObject("account", new AccountDao());
+            //modelAndView.addObject("errorMessage", "Account already exists");
+            modelAndView.getModelMap().addAttribute("errorMessage", "Account already exists");
+            modelAndView.setViewName("register");
+        }
+        else {
+            System.out.println("DOESNT EXIST");
+            modelAndView.setViewName("about");
+        }
+//        Account n = new Account();
+//        n.setEmail(email);
+//        n.setPassword(password);
+//        n.setIsAdmin(false);
+//        accountRepository.save(n);
+        return modelAndView;
     }
 
     @GetMapping("/about")
@@ -72,7 +90,13 @@ public class GreetingController {
 
     @GetMapping("/loggedIn")
     public String loggedIn(Model model) {
-        model.addAttribute("success", true);
+        model.addAttribute("state", new TempDao());
+        return "loggedIn";
+    }
+
+    @PostMapping("/loggedIn")
+    public String loggedInState(@ModelAttribute("state") TempDao state) {
+        System.out.println(state.getState());
         return "loggedIn";
     }
 
