@@ -1,6 +1,7 @@
 package app.controllers;
 
 import app.dao.AccountDao;
+import app.dao.LoginDao;
 import app.dao.TempDao;
 import app.model.Account;
 import app.repository.AccountRepository;
@@ -53,20 +54,20 @@ public class GreetingController {
     public ModelAndView registerAccount(ModelAndView modelAndView, @ModelAttribute AccountDao accountDao) {
         Account account = accountService.findByEmail(accountDao.getEmail());
         if(account != null) {
-            modelAndView.addObject("account", new AccountDao());
-            //modelAndView.addObject("errorMessage", "Account already exists");
+            modelAndView.getModelMap().addAttribute("account", new AccountDao());
             modelAndView.getModelMap().addAttribute("errorMessage", "Account already exists");
             modelAndView.setViewName("register");
         }
         else {
-            System.out.println("DOESNT EXIST");
-            modelAndView.setViewName("about");
+            account = new Account();
+            account.setEmail(accountDao.getEmail());
+            account.setPassword(accountDao.getPassword());
+            account.setIsAdmin(false);
+            accountService.saveAccount(account);
+            modelAndView.getModelMap().addAttribute("successMessage", "Account successfully created!");
+            modelAndView.getModelMap().addAttribute("login", new LoginDao());
+            modelAndView.setViewName("login");
         }
-//        Account n = new Account();
-//        n.setEmail(email);
-//        n.setPassword(password);
-//        n.setIsAdmin(false);
-//        accountRepository.save(n);
         return modelAndView;
     }
 
@@ -83,10 +84,31 @@ public class GreetingController {
     }
 
     @GetMapping("/login")
-    public String login() {
-        //model.addAttribute("name", name);
+    public String login(Model model) {
+        System.out.println("running");
+        model.addAttribute("login", new LoginDao());
         return "login";
     }
+//    @PostMapping("/login")
+//    public ModelAndView loginAttempt(ModelAndView modelAndView, @ModelAttribute("login") LoginDao loginDao) {
+//        Account account = accountService.findByEmail(loginDao.getEmail());
+//        System.out.println("DB password: " + account.getPassword());
+//        System.out.println("Form password: " + loginDao.getPassword());
+//        if(account == null) {
+//            modelAndView.getModelMap().addAttribute("errorMessage", "Account doesn't exist");
+//            modelAndView.setViewName("login");
+//        }
+//        else if(account.getPassword().equals(loginDao.getPassword())){
+//            modelAndView.getModelMap().addAttribute("state", new TempDao());
+//            modelAndView.setViewName("loggedIn");
+//        }
+//        else {
+//            modelAndView.getModelMap().addAttribute("errorMessage", "Invalid password.");
+//            modelAndView.setViewName("login");
+//        }
+//        modelAndView.setViewName("login");
+//        return modelAndView;
+//    }
 
     @GetMapping("/loggedIn")
     public String loggedIn(Model model) {

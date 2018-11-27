@@ -42,10 +42,12 @@
                         <div th:if="${param.logout}">
                             You have been logged out.
                         </div>
-			<form th:action="@{/login}" method="post">
+						<div th:if="${successMessage}" class="alert alert-success" role="alert" th:text="${successMessage}"></div>
+						<div th:if="${errorMessage}" class="alert alert-error" role="alert" th:text="${errorMessage}"></div>
+			<form th:action="@{/login}" method="POST" >
                             <div class="active-purple-3 active-purple-4 mb-4">
-                            <input name="username" class="form-control" type="text" placeholder="Email" aria-label="Search">
-                            <input type="password" name="password" class="form-control" placeholder="Password" aria-label="Search">
+                            <input name="username" class="form-control" type="text" placeholder="Email" aria-label="Search" >
+                            <input type="password" name="password" class="form-control" placeholder="Password" aria-label="Search" >
                             <br>
                             </div>
                             <input type="submit" class="button" value="Submit">
