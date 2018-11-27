@@ -27,7 +27,7 @@ public class GreetingController {
         Account n = new Account();
         n.setEmail(email);
         n.setPassword(password);
-        n.setIsAdmin(false);
+        n.setIs_Admin(false);
         accountRepository.save(n);
         return "about";
     }
@@ -62,7 +62,7 @@ public class GreetingController {
             account = new Account();
             account.setEmail(accountDao.getEmail());
             account.setPassword(accountDao.getPassword());
-            account.setIsAdmin(false);
+            account.setIs_Admin(false);
             accountService.saveAccount(account);
             modelAndView.getModelMap().addAttribute("successMessage", "Account successfully created!");
             modelAndView.getModelMap().addAttribute("login", new LoginDao());
