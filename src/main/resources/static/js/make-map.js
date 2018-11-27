@@ -13,19 +13,30 @@ maxZoom: 18,
 
 function getColor(name) {
 return name == "New Hampshire" ? '#3399ff' :
-       name == "Illinois"  ? '#3399ff' :
+       name == "Illinois"  ? '#ffffff' :
        name == "West Virginia"  ? '#3399ff' :
        '#FFEDA0';
 }
 
 function style(feature) {
 return {
-    fillColor: getColor(feature.properties.name),
+    fillColor: getColor(feature.properties.NAME),
     weight: 2,
     opacity: 1,
     color: 'white',
     dashArray: '3',
-    fillOpacity: 0.7
+    fillOpacity: 0.5
+};
+}
+
+function styleDistrict(feature) {
+return {
+    fillColor: '#3399ff',
+    weight: 2,
+    opacity: 1,
+    color: 'white',
+    dashArray: '3',
+    fillOpacity: 0.5
 };
 }
 
@@ -36,7 +47,7 @@ layer.setStyle({
     weight: 1,
     color: '#4286f4',
     dashArray: '',
-    fillOpacity: 0.7
+    fillOpacity: 0.5
 });
 
 if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
@@ -51,16 +62,13 @@ layer.setStyle({
     weight: 1,
     color: '#FFFFFF',
     dashArray: '',
-    fillOpacity: 0.7
+    fillOpacity: 0.5
 });
 
 }
 
 function zoomToFeature(e) {
 map.fitBounds(e.target.getBounds());
-
-
-
 }
 
 function onEachFeature(feature, layer) {
@@ -74,8 +82,14 @@ layer.on({
 
 $.getJSON("/geo/Illinois_D.json",function(data){
 L.geoJson(data, {
-style: style,
+style: styleDistrict,
 onEachFeature: onEachFeature,
+}).addTo(map);
+});
+
+$.getJSON("/geo/states.json",function(data){
+stateData = L.geoJson(data, {
+style: style,
 }).addTo(map);
 });
 
@@ -96,3 +110,13 @@ this._div.innerHTML = '<h4>Data</h4>' +  (props ?
 };
 
 info.addTo(map);
+
+$(function() {
+    $( "#select_state" ).click(function() {
+		stateData.eachLayer(function (layer) {
+			if (layer.feature.properties.NAME === $("#selected_state").val()) {
+				map.fitBounds(layer.getBounds());
+			}
+		});
+    });
+});

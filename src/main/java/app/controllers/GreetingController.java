@@ -2,7 +2,7 @@ package app.controllers;
 
 import app.dao.AccountDao;
 import app.dao.LoginDao;
-import app.dao.TempDao;
+import app.dao.SliderDao;
 import app.model.Account;
 import app.repository.AccountRepository;
 import app.service.AccountService;
@@ -112,13 +112,15 @@ public class GreetingController {
 
     @GetMapping("/loggedIn")
     public String loggedIn(Model model) {
-        model.addAttribute("state", new TempDao());
+        model.addAttribute("state", new SliderDao());
         return "loggedIn";
     }
 
     @PostMapping("/loggedIn")
-    public String loggedInState(@ModelAttribute("state") TempDao state) {
-        System.out.println(state.getState());
+    public String loggedInState(@ModelAttribute("state") SliderDao state) {
+        System.out.println("Compactness is " + state.getCompactness());
+        System.out.println("Political Fairness is " + state.getPolitical());
+        System.out.println("Population is " + state.getPopulation());
         return "loggedIn";
     }
 
