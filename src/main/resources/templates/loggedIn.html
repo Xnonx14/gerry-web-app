@@ -57,24 +57,29 @@
 	<div id="second">
         <font size="5">Automated Redistricting</font>
 	   <br>
-	   <input type="submit" class="button2" value="Start">
-	   <input type="submit" class="button2" value="Pause">
-	   <input type="submit" class="button2" value="Step">
-	   <input type="submit" class="button2" value="Stop">
-	   <br>
 
-	   <div class="slidecontainer">
-	   Compactness
-		<input type="range" min="1" max="100" value="50" class="slider" id="myRange">
-		</div>
-		<div class="slidecontainer">
-	   Political Fairness
-		<input type="range" min="1" max="100" value="50" class="slider" id="myRange">
-		</div>
-		<div class="slidecontainer">
-	   Population Equality
-		<input type="range" min="1" max="100" value="50" class="slider" id="myRange">
-		</div>
+		<form action="/loggedIn" method="POST" th:action="@{/loggedIn}" th:object="${state}">
+			<input type="submit" class="button2" value="Start">
+			<input type="submit" class="button2" value="Pause">
+			<input type="submit" class="button2" value="Step">
+			<input type="submit" class="button2" value="Stop">
+
+
+			<div class="slidecontainer">
+				Compactness
+				<input type="range" min="1" max="100" value="50" class="slider" th:field="*{compactness}">
+			</div>
+
+			<div class="slidecontainer">
+				Political Fairness
+				<input type="range" min="1" max="100" value="50" class="slider" th:field="*{political}">
+			</div>
+
+			<div class="slidecontainer">
+				Population Equality
+				<input type="range" min="1" max="100" value="50" class="slider" th:field="*{population}">
+			</div>
+		</form>
 	</div>
 	<div id="second">
         <form action="/" method="post">
