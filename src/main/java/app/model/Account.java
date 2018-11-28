@@ -14,7 +14,7 @@ public class Account {
 
     private String email;
     private String password;
-    private boolean isadmin;
+    private boolean is_admin;
 
     public Integer getId() {
         return id;
@@ -40,12 +40,11 @@ public class Account {
         return password;
     }
 
-    public void setIsAdmin(boolean admin) {
-        this.isadmin = admin;
-    }
-    
-    public boolean getIsAdmin(){
-        return isadmin;
+    public boolean isIs_admin() {
+        return is_admin;
     }
 
+    public void setIs_admin(boolean is_admin) {
+        this.is_admin = is_admin;
+    }
 }

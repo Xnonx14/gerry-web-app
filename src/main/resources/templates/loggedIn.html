@@ -59,15 +59,15 @@
 	   <br>
 
 		<form action="/loggedIn" method="POST" th:action="@{/loggedIn}" th:object="${state}">
-			<input type="submit" class="button2" value="Start">
-			<input type="submit" class="button2" value="Pause">
-			<input type="submit" class="button2" value="Step">
-			<input type="submit" class="button2" value="Stop">
+			<input type="submit" class="button2" name="start" value="Start" onclick="return running('compactness')";>
+			<input type="submit" class="button2" name="pause" value="Pause">
+			<input type="submit" class="button2" name="step" value="Step">
+			<input type="submit" class="button2" name="stop" value="Stop">
 
-
+			<script th:src="@{js/MoveSseEvent.js}" src="../static/js/MoveSseEvent.js"></script>
 			<div class="slidecontainer">
 				Compactness
-				<input type="range" min="1" max="100" value="50" class="slider" th:field="*{compactness}">
+				<input type="range" min="1" max="100" value="50" class="slider" id="compactness" th:field="*{compactness}">
 			</div>
 
 			<div class="slidecontainer">
@@ -88,8 +88,9 @@
         </form>
 	</div>
 	</div>
-	
-
-    </div>
+	</div>
+	<div>
+		<ul id="test_messages"></ul>
+	</div>
 </body>
 </html>

@@ -27,7 +27,7 @@ public class GreetingController {
         Account n = new Account();
         n.setEmail(email);
         n.setPassword(password);
-        n.setIsAdmin(false);
+        n.setIs_admin(false);
         accountRepository.save(n);
         return "about";
     }
@@ -62,7 +62,7 @@ public class GreetingController {
             account = new Account();
             account.setEmail(accountDao.getEmail());
             account.setPassword(accountDao.getPassword());
-            account.setIsAdmin(false);
+            account.setIs_admin(false);
             accountService.saveAccount(account);
             modelAndView.getModelMap().addAttribute("successMessage", "Account successfully created!");
             modelAndView.getModelMap().addAttribute("login", new LoginDao());
@@ -89,26 +89,6 @@ public class GreetingController {
         model.addAttribute("login", new LoginDao());
         return "login";
     }
-//    @PostMapping("/login")
-//    public ModelAndView loginAttempt(ModelAndView modelAndView, @ModelAttribute("login") LoginDao loginDao) {
-//        Account account = accountService.findByEmail(loginDao.getEmail());
-//        System.out.println("DB password: " + account.getPassword());
-//        System.out.println("Form password: " + loginDao.getPassword());
-//        if(account == null) {
-//            modelAndView.getModelMap().addAttribute("errorMessage", "Account doesn't exist");
-//            modelAndView.setViewName("login");
-//        }
-//        else if(account.getPassword().equals(loginDao.getPassword())){
-//            modelAndView.getModelMap().addAttribute("state", new TempDao());
-//            modelAndView.setViewName("loggedIn");
-//        }
-//        else {
-//            modelAndView.getModelMap().addAttribute("errorMessage", "Invalid password.");
-//            modelAndView.setViewName("login");
-//        }
-//        modelAndView.setViewName("login");
-//        return modelAndView;
-//    }
 
     @GetMapping("/loggedIn")
     public String loggedIn(Model model) {
@@ -121,6 +101,7 @@ public class GreetingController {
         System.out.println("Compactness is " + state.getCompactness());
         System.out.println("Political Fairness is " + state.getPolitical());
         System.out.println("Population is " + state.getPopulation());
+
         return "loggedIn";
     }
 
