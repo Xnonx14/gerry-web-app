@@ -36,7 +36,12 @@ public class GreetingController {
     @PostMapping("/register")
     public ModelAndView registerAccount(ModelAndView modelAndView, @ModelAttribute AccountDao accountDao) {
         Account account = accountService.findByEmail(accountDao.getEmail());
-        if(account != null) {
+        if(!accountDao.getConfirm().equals(accountDao.getPassword())){
+            modelAndView.getModelMap().addAttribute("account", new AccountDao());
+            modelAndView.getModelMap().addAttribute("errorMessage", "Passwords do not match");
+            modelAndView.setViewName("register");
+        }
+        else if(account != null) {
             modelAndView.getModelMap().addAttribute("account", new AccountDao());
             modelAndView.getModelMap().addAttribute("errorMessage", "Account already exists");
             modelAndView.setViewName("register");
