@@ -40,7 +40,11 @@
     <div id="container" style="width: 100%">
         <div id="first">
             <script src="js/leaflet.js"></script>
-            <!--<script type="text/javascript" src="js/us-states.js"></script>-->
+			<script src="js/leaflet.ajax.min.js"></script>
+			<script src="https://unpkg.com/leaflet.vectorgrid@latest/dist/Leaflet.VectorGrid.js"></script>
+			<script type="text/javascript" src="js/us-states.js"></script>
+			<script type="text/javascript" src="js/illinoisD.js"></script>
+			<script type="text/javascript" src="js/illinoisP.js"></script>
             <div id="map" style="width: 100%; height: 650px"></div>
 			<script th:src="@{js/make-map.js}" src="../static/js/make-map.js"></script>
         </div>
@@ -58,28 +62,28 @@
         <font size="5">Automated Redistricting</font>
 	   <br>
 
-		<form action="/loggedIn" method="POST" th:action="@{/loggedIn}" th:object="${state}">
-			<input type="submit" class="button2" name="start" value="Start" onclick="return running('compactness')";>
+		<!--<form action="/loggedIn" method="POST" th:action="@{/loggedIn}" th:object="${state}">-->
+			<script th:src="@{js/MoveSseEvent.js}" src="../static/js/MoveSseEvent.js"></script>
+			<input type="submit" class="button2" name="start" value="Start" onclick="subscribe('compactness')";>
 			<input type="submit" class="button2" name="pause" value="Pause">
 			<input type="submit" class="button2" name="step" value="Step">
 			<input type="submit" class="button2" name="stop" value="Stop">
 
-			<script th:src="@{js/MoveSseEvent.js}" src="../static/js/MoveSseEvent.js"></script>
 			<div class="slidecontainer">
 				Compactness
-				<input type="range" min="1" max="100" value="50" class="slider" id="compactness" th:field="*{compactness}">
+				<input type="range" min="1" max="100" value="50" class="slider" id="compactness">
 			</div>
 
 			<div class="slidecontainer">
 				Political Fairness
-				<input type="range" min="1" max="100" value="50" class="slider" th:field="*{political}">
+				<input type="range" min="1" max="100" value="50" class="slider">
 			</div>
 
 			<div class="slidecontainer">
 				Population Equality
-				<input type="range" min="1" max="100" value="50" class="slider" th:field="*{population}">
+				<input type="range" min="1" max="100" value="50" class="slider">
 			</div>
-		</form>
+		<!--</form>-->
 	</div>
 	<div id="second">
         <form action="/" method="post">
@@ -89,8 +93,8 @@
 	</div>
 	</div>
 	</div>
-	<div>
-		<ul id="test_messages"></ul>
-	</div>
+
+	<h1>Notifications: </h1>
+	<div id="notificationDiv"></div>
 </body>
 </html>
