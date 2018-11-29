@@ -40,7 +40,11 @@
     <div id="container" style="width: 100%">
         <div id="first">
             <script src="js/leaflet.js"></script>
-            <!--<script type="text/javascript" src="js/us-states.js"></script>-->
+			<script src="js/leaflet.ajax.min.js"></script>
+			<script src="https://unpkg.com/leaflet.vectorgrid@latest/dist/Leaflet.VectorGrid.js"></script>
+			<script type="text/javascript" src="js/us-states.js"></script>
+			<script type="text/javascript" src="js/illinoisD.js"></script>
+			<script type="text/javascript" src="js/illinoisP.js"></script>
             <div id="map" style="width: 100%; height: 650px"></div>
 			<script th:src="@{js/make-map.js}" src="../static/js/make-map.js"></script>
         </div>

@@ -11,10 +11,12 @@ maxZoom: 18,
     id: 'mapbox.light'
 }).addTo(map);
 
+
+//Color and Style Code
 function getColor(name) {
-return name == "New Hampshire" ? '#3399ff' :
-       name == "Illinois"  ? '#ffffff' :
-       name == "West Virginia"  ? '#3399ff' :
+return name == "New Hampshire" ? '#EE82EE' :
+       name == "Illinois"  ? '#EE82EE' :
+       name == "West Virginia"  ? '#EE82EE' :
        '#FFEDA0';
 }
 
@@ -25,7 +27,7 @@ return {
     opacity: 1,
     color: 'white',
     dashArray: '3',
-    fillOpacity: 0.5
+    fillOpacity: 0.3
 };
 }
 
@@ -36,10 +38,12 @@ return {
     opacity: 1,
     color: 'white',
     dashArray: '3',
-    fillOpacity: 0.5
+    fillOpacity: 0.3
 };
 }
 
+
+//Highlight on hover Code
 function highlightFeature(e) {
 var layer = e.target;
 
@@ -47,7 +51,7 @@ layer.setStyle({
     weight: 1,
     color: '#4286f4',
     dashArray: '',
-    fillOpacity: 0.5
+    fillOpacity: 0.3
 });
 
 if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
@@ -62,11 +66,12 @@ layer.setStyle({
     weight: 1,
     color: '#FFFFFF',
     dashArray: '',
-    fillOpacity: 0.5
+    fillOpacity: 0.3
 });
 
 }
 
+//Click to Zoom Code
 function zoomToFeature(e) {
 map.fitBounds(e.target.getBounds());
 }
@@ -80,20 +85,7 @@ layer.on({
 }
 
 
-$.getJSON("/geo/Illinois_D.json",function(data){
-L.geoJson(data, {
-style: styleDistrict,
-onEachFeature: onEachFeature,
-}).addTo(map);
-});
-
-$.getJSON("/geo/states.json",function(data){
-stateData = L.geoJson(data, {
-style: style,
-}).addTo(map);
-});
-
-
+//Add info to Data on hover code
 var info = L.control();
 
 info.onAdd = function (map) {
@@ -111,6 +103,8 @@ this._div.innerHTML = '<h4>Data</h4>' +  (props ?
 
 info.addTo(map);
 
+
+//Button Click Zoom to State
 $(function() {
     $( "#select_state" ).click(function() {
 		stateData.eachLayer(function (layer) {
@@ -120,3 +114,103 @@ $(function() {
 		});
     });
 });
+
+//Parse Json
+
+$.getJSON("/geo/states.json",function(data){
+stateData = L.geoJson(data, {
+style: style,
+onEachFeature: onEachFeature,
+}).addTo(map);
+})
+
+//$.getJSON("/geo/Illinois_D.json",function(data){
+//IllinoisDistrict = L.geoJson(data, {
+//style: styleDistrict,
+//onEachFeature: onEachFeature,
+//})
+//});
+//
+//$.getJSON("/geo/Illinois_P.json",function(data){
+//IllinoisPrecinct = L.geoJson(data, {
+//style: styleDistrict,
+//onEachFeature: onEachFeature,
+//})
+//});
+
+
+var precinct = L.vectorGrid.slicer( illinoisPrecienct, {
+	minZoom: 8,
+	rendererFactory: L.svg.tile,
+	vectorTileLayerStyles: {
+	sliced: function(properties, zoom) {
+	var p = parseInt(properties.GEOID10);
+		return {
+		fillColor:
+		(p % 2 == 0)  ?  '#F92828' :
+		(p % 2 == 1)  ?  '#5AA5EC' : '#F92828',
+		fillOpacity: 0.5,
+		stroke: true,
+		fill: true,
+		color: 'black',
+		weight: 0.5,
+		}
+	}
+},
+	interactive: true,
+	getFeatureId: function(f) {
+		return f.properties.wb_a3;
+	}
+})
+.addTo(map);
+
+var district = L.vectorGrid.slicer(illinoisDistrict, {
+	minZoom: 6,
+	rendererFactory: L.svg.tile,
+	vectorTileLayerStyles: {
+	sliced: function(properties, zoom) {
+		return {
+		fillColor: '#FFFFE0',
+		fillOpacity: 0.3,
+	 	//fillOpacity: 1,
+		stroke: true,
+		fill: true,
+		color: 'black',
+		weight: 1,
+		}
+	}
+},
+	interactive: true,
+	getFeatureId: function(f) {
+		return f.properties.wb_a3;
+	}
+})
+.addTo(map);
+
+map.on('zoomend', function (e) {
+    zoomHandler();
+});
+
+function clean_map() {
+    map.eachLayer(function (layer) {
+        if (layer instanceof L.GeoJSON)
+        {
+            map.removeLayer(layer);
+        }
+    });
+}
+
+function zoomHandler() {
+var currentZoom = map.getZoom();
+    switch (currentZoom) {
+        case 5:
+            clean_map();
+            stateData.addTo(map);
+            break;
+        case 6:
+            clean_map();
+            break;
+        default:
+            break;
+    }
+}
