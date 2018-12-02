@@ -1,8 +1,8 @@
-from shapely.geometry import Polygon
+from shapely.geometry import Polygon, shape, mapping
 from shapely.ops import cascaded_union
 import json
 
-with open("illinois_P.json") as f:
+with open("nh_final.json") as f:
 	data = json.load(f)
 
 counties = dict()
@@ -38,30 +38,31 @@ for chunk in counties.keys():
 	countyCoordinates = []
 	for temp in precincts:
 		countyCoordinates.append(polygons[temp])
-	boundary = str(cascaded_union(countyCoordinates))
+	boundary = cascaded_union(countyCoordinates)
 	temp = {}
 	temp["precincts"] = counties[chunk]
-	temp["boundary"] = boundary
+
+	temp["geometry"] = mapping(boundary)
 	jsonData[chunk] = temp
 
 #adjacencyMap
-adjacencyMap = {}
-for i in polygons.keys():
-	polygonList = []
-	for j in polygons.keys():
-		if i == j: 
-			continue
-		if polygons[i].touches(polygons[j]):
-			polygonList.append(j)
-	adjacencyMap[i] = polygonList
+# adjacencyMap = {}
+# for i in polygons.keys():
+# 	polygonList = []
+# 	for j in polygons.keys():
+# 		if i == j: 
+# 			continue
+# 		if polygons[i].touches(polygons[j]):
+# 			polygonList.append(j)
+# 	adjacencyMap[i] = polygonList
 
-file = open("IL_outputAdj", "w")
-# print(adjacencyMap)
-file.write(str(adjacencyMap))
+# file = open("IL_outputAdj", "w")
+# # print(adjacencyMap)
+# file.write(str(adjacencyMap))
 
-f = open("IL_counties.txt", "w")
+f = open("NH_counties.txt", "w")
 for c in counties.keys():
 	f.write(str(c) + ": "+str(counties[c]) + "\n")
 		
-with open('IL_counties.json', 'w') as outfile:
+with open('NH_counties.json', 'w') as outfile:
     json.dump(jsonData, outfile)
