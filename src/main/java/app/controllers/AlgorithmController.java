@@ -41,33 +41,33 @@ public class AlgorithmController {
 //        return emitter;
 //    }
 
-    @GetMapping("/new_notification")
-    public SseEmitter getNewNotification() throws InterruptedException {
-        SseEmitter emitter = new SseEmitter();
-        this.emitters.add(emitter);
-
-        emitter.onCompletion(() -> this.emitters.remove(emitter));
-        emitter.onTimeout(() -> {
-            emitter.complete();
-            this.emitters.remove(emitter);
-        });
-        notificationJobService.publishJobNotifications();
-        System.out.println("returned emitter");
-        return emitter;
-    }
-
-    @EventListener
-    public void onNotification(Notification notification) {
-        List<SseEmitter> deadEmitters = new ArrayList<>();
-        this.emitters.forEach(emitter -> {
-            try {
-                emitter.send(notification);
-            } catch (Exception e) {
-                deadEmitters.add(emitter);
-            }
-        });
-        this.emitters.remove(deadEmitters);
-    }
+//    @GetMapping("/new_notification")
+//    public SseEmitter getNewNotification() throws InterruptedException {
+//        SseEmitter emitter = new SseEmitter();
+//        this.emitters.add(emitter);
+//
+//        emitter.onCompletion(() -> this.emitters.remove(emitter));
+//        emitter.onTimeout(() -> {
+//            emitter.complete();
+//            this.emitters.remove(emitter);
+//        });
+//        notificationJobService.publishJobNotifications();
+//        System.out.println("returned emitter");
+//        return emitter;
+//    }
+//
+//    @EventListener
+//    public void onNotification(Notification notification) {
+//        List<SseEmitter> deadEmitters = new ArrayList<>();
+//        this.emitters.forEach(emitter -> {
+//            try {
+//                emitter.send(notification);
+//            } catch (Exception e) {
+//                deadEmitters.add(emitter);
+//            }
+//        });
+//        this.emitters.remove(deadEmitters);
+//    }
 
     @GetMapping("/running/moves")
     public SseEmitter getMoves() {
