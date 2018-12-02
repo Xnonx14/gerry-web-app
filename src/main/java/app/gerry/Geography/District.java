@@ -14,7 +14,7 @@ public class District {
     public GeometricData geometricData;
     public double ObjectiveValue;
 
-    public Chunk getRandomBorderChunks(){
+    public Chunk getRandomBorderChunk(){
         return null;
     }
 
