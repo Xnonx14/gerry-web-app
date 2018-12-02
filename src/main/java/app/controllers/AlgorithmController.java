@@ -69,6 +69,20 @@ public class AlgorithmController {
         this.emitters.remove(deadEmitters);
     }
 
+    @GetMapping("/running/data")
+    public SseEmitter getData() {
+        SseEmitter emitter = new SseEmitter();
+        this.emitters.add(emitter);
+
+        emitter.onCompletion(() -> this.emitters.remove(emitter));
+        emitter.onTimeout(() -> {
+            emitter.complete();
+            this.emitters.remove(emitter);
+        });
+        algorithmMoveService.runAlgorithm(new TestAlgorithm());
+        return emitter;
+    }
+    
     @GetMapping("/running/moves")
     public SseEmitter getMoves() {
         SseEmitter emitter = new SseEmitter();

@@ -5,7 +5,7 @@ import app.gerry.Sse.SseResultData;
 public class SimulatedAnnealing implements Algorithm{
     @Override
     public void step() {
-
+        //getRandomDistrict(State)
     }
 
     @Override

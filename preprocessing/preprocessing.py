@@ -1,4 +1,6 @@
-from Shapely.geometry import Polygon
+from shapely.geometry import Polygon
+from shapely.ops import cascaded_union
+import json
 from matplotlib import pyplot as plt
 from descartes import PolygonPatch
 
@@ -10,14 +12,18 @@ polygons = dict()
 
 for feature in data['features']:
 	arr = []
-	countyName = feature['COUNTYFP']
-	precinctName = feature['VTDST10']
-	coordinates = feature['geometry']['coordinates']
-	coordinates = coordinates.strip("[");
-	coordinates = coordinates.strip("]");
-	for set in line.split("], ["):
-		temp = set.split(", ")
-		arr.append((float(temp[0]),float(temp[1])))
+	countyName = feature['properties']['COUNTYFP10']
+	precinctName = feature['properties']['VTDST10']
+	geometry = feature['geometry']
+	count = 0
+	coordinates = geometry['coordinates']
+	type = geometry['type']
+	if(type == "MultiPolygon"):
+		for coord in coordinates[0][0]:
+			arr.append((coord[0],coord[1]))
+	else:
+		for coord in coordinates[0]:
+			arr.append((coord[0],coord[1]))
 	polygons[precinctName] = (Polygon(arr))
 	if countyName in counties:
 		counties[countyName].append(precinctName);
@@ -28,8 +34,24 @@ fig = plt.figure()
 
 ax = fig.add_subplot(111)
 
-adjacencyMap = {}
 
+#print(counties)
+#print(polygons)
+jsonData = {}
+#boundaryCoordinates	cascaded_union(polygons)
+for chunk in counties.keys():
+	precincts = counties[chunk]
+	countyCoordinates = []
+	for temp in precincts:
+		countyCoordinates.append(polygons[temp])
+	boundary = str(cascaded_union(countyCoordinates))
+	temp = {}
+	temp["precincts"] = counties[chunk]
+	temp["boundary"] = boundary
+	jsonData[chunk] = temp
+
+#adjacencyMap
+adjacencyMap = {}
 for i in polygons.keys():
 	polygonList = []
 	for j in polygons.keys():
@@ -45,4 +67,8 @@ file.write(str(adjacencyMap))
 
 f = open("NH_counties.txt", "w")
 for c in counties.keys():
-	f.write(str(counties[c]) + "\n")
+	f.write(str(c) + ": "+str(counties[c]) + "\n")
+	
+print(jsonData)	
+with open('NH_counties.json', 'w') as outfile:
+    json.dump(jsonData, outfile)
