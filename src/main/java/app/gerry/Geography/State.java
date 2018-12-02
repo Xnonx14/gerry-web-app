@@ -20,7 +20,7 @@ public class State {
     public Set<String> getSubdivisionNames(){
         return null;
     }
-    public District getRandomDistrct(){
+    public District getRandomDistrict(){
         return null;
     }
     public Set<District> getSeedDistricts(int count){

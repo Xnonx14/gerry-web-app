@@ -1,100 +1,103 @@
 <!DOCTYPE html>
 <html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-	<meta charset="utf-8">
-	<title>Leaflet Map</title>
-	<!-- External Stylesheets -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-		  th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"
-			th:src="@{/webjars/jquery/3.3.1/jquery.min.js}"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-			th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.0.2/bootstrap-slider.js"
-			th:src="@{/webjars/bootstrap-slider/10.0.2/bootstrap-slider.js}"></script>
+    <html xmlns:th="http://www.thymeleaf.org">
+        <head>
+            <meta charset="utf-8">
+            <title>Leaflet Map</title>
+            <!-- External Stylesheets -->
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+                  th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}">
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"
+            th:src="@{/webjars/jquery/3.3.1/jquery.min.js}"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.0.2/bootstrap-slider.js"
+            th:src="@{/webjars/bootstrap-slider/10.0.2/bootstrap-slider.js}"></script>
+            <script th:src="@{js/MoveSseEvent.js}" src="../static/js/MoveSseEvent.js"></script>
+            <link rel="stylesheet" th:href="@{/css/leaflet.css}"
+                  href="../static/css/leaflet.css" />
+            <link rel="stylesheet" th:href="@{/css/style.css}"
+                  href="../static/css/style.css" />
+        </head>
+        <body>
+            <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="/loggedIn">Congressional Redistricting Website</a>
+                    </div>
+                    <ul class="nav navbar-nav">
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="/myAccount">My Account</a></li>
+                        <li><a href="javascript: document.logoutForm.submit()" role="menuitem"> Logout</a>
+                            <form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true">
+                                <input hidden type="submit" value="Sign Out"/>
+                            </form> 
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <div id="container" style="width: 100%">
+                <div id ="data">
+                    Data
+                </div>
+                <div id="first">
+                    <script src="js/leaflet.js"></script>
+                    <script src="js/leaflet.ajax.min.js"></script>
+                    <script src="https://unpkg.com/leaflet.vectorgrid@latest/dist/Leaflet.VectorGrid.js"></script>
+                    <script type="text/javascript" src="js/us-states.js"></script>
+                    <script type="text/javascript" src="js/illinoisD.js"></script>
+                    <script type="text/javascript" src="js/illinoisP.js"></script>
+                    <div id="map" style="width: 100%; height: 650px"></div>
+                    <script th:src="@{js/make-map.js}" src="../static/js/make-map.js"></script>
+                </div>
+                <div id="second">
+                    <font size="5">Select State</font>
+                    <select id = "selected_state" class="form-control">
+                        <option value="Illinois">Illinois</option>
+                        <option value="New Hampshire">New Hampshire</option>
+                        <option value="West Virginia">West Virginia</option>
+                    </select>
+                    <input type="submit" class="button" id="select_state" value="View Data" onclick="subscribe('compactness')">
+                    <br>
+                </div>
+                <div id="second">
+                    
+                    <font size="5">Automated Redistricting</font>
+                    <br>
 
-	<link rel="stylesheet" th:href="@{/css/leaflet.css}"
-		  href="../static/css/leaflet.css" />
-	<link rel="stylesheet" th:href="@{/css/style.css}"
-		  href="../static/css/style.css" />
-</head>
-<body>
-    <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="/loggedIn">Congressional Redistricting Website</a>
+                    <!--<form action="/loggedIn" method="POST" th:action="@{/loggedIn}" th:object="${state}">-->
+                    <input type="submit" class="button2" name="start" value="Start" onclick="subscribe('compactness')">
+                    <input type="submit" class="button2" name="pause" value="Pause">
+                    <input type="submit" class="button2" name="step" value="Step">
+                    <input type="submit" class="button2" name="stop" value="Stop">
+
+                    <div class="slidecontainer">
+                        Compactness
+                        <input type="range" min="1" max="100" value="50" class="slider" id="compactness">
+                    </div>
+
+                    <div class="slidecontainer">
+                        Political Fairness
+                        <input type="range" min="1" max="100" value="50" class="slider">
+                    </div>
+
+                    <div class="slidecontainer">
+                        Population Equality
+                        <input type="range" min="1" max="100" value="50" class="slider">
+                    </div>
+                    <!--</form>-->
+                </div>
+                <div id="second">
+                    <form action="/" method="post">
+                        <div class="active-purple-3 active-purple-4 mb-4"></div>
+                        <input type="submit" class="button" value="Save">
+                    </form>
+                </div>
+            </div>
         </div>
-        <ul class="nav navbar-nav">
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-            <li><a href="/myAccount">My Account</a></li>
-            <li><a href="javascript: document.logoutForm.submit()" role="menuitem"> Logout</a>
-                <form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true">
-                    <input hidden type="submit" value="Sign Out"/>
-                 </form> 
-            </li>
-        </ul>
-      </div>
-    </nav>
-    <div id="container" style="width: 100%">
-        <div id="first">
-            <script src="js/leaflet.js"></script>
-			<script src="js/leaflet.ajax.min.js"></script>
-			<script src="https://unpkg.com/leaflet.vectorgrid@latest/dist/Leaflet.VectorGrid.js"></script>
-			<script type="text/javascript" src="js/us-states.js"></script>
-			<script type="text/javascript" src="js/illinoisD.js"></script>
-			<script type="text/javascript" src="js/illinoisP.js"></script>
-            <div id="map" style="width: 100%; height: 650px"></div>
-			<script th:src="@{js/make-map.js}" src="../static/js/make-map.js"></script>
-        </div>
-	<div id="second">
-            <font size="5">Select State</font>
-			<select id = "selected_state" class="form-control">
-				<option value="Illinois">Illinois</option>
-				<option value="New Hampshire">New Hampshire</option>
-				<option value="West Virginia">West Virginia</option>
-			</select>
-			<input type="submit" class="button" id="select_state" value="View Data">
-			<br>
-	</div>
-	<div id="second">
-        <font size="5">Automated Redistricting</font>
-	   <br>
 
-		<!--<form action="/loggedIn" method="POST" th:action="@{/loggedIn}" th:object="${state}">-->
-			<script th:src="@{js/MoveSseEvent.js}" src="../static/js/MoveSseEvent.js"></script>
-			<input type="submit" class="button2" name="start" value="Start" onclick="subscribe('compactness')";>
-			<input type="submit" class="button2" name="pause" value="Pause">
-			<input type="submit" class="button2" name="step" value="Step">
-			<input type="submit" class="button2" name="stop" value="Stop">
-
-			<div class="slidecontainer">
-				Compactness
-				<input type="range" min="1" max="100" value="50" class="slider" id="compactness">
-			</div>
-
-			<div class="slidecontainer">
-				Political Fairness
-				<input type="range" min="1" max="100" value="50" class="slider">
-			</div>
-
-			<div class="slidecontainer">
-				Population Equality
-				<input type="range" min="1" max="100" value="50" class="slider">
-			</div>
-		<!--</form>-->
-	</div>
-	<div id="second">
-        <form action="/" method="post">
-		  <div class="active-purple-3 active-purple-4 mb-4"></div>
-          <input type="submit" class="button" value="Save">
-        </form>
-	</div>
-	</div>
-	</div>
-
-	<h1>Notifications: </h1>
-	<div id="notificationDiv"></div>
-</body>
+        <h1>Notifications: </h1>
+        <div id="notificationDiv"></div>
+    </body>
 </html>

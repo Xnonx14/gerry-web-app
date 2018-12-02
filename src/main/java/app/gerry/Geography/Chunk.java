@@ -20,9 +20,14 @@ public class Chunk {
     public District parentDistrict;
     public boolean isBorderChunk;
 
-    public Set<District> getAdjacentDistricts(){
+    //I don't think this would work logically
+    /*public Set<District> getAdjacentDistricts(){
         return null;
+    }*/
+    public District getDistrict(){
+        return parentDistrict;
     }
+    
     public Set<Chunk> getAdjacentChunks(){
         return null;
     }
