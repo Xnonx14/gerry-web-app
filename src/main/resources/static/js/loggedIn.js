@@ -1,4 +1,17 @@
+function algoSelected(){
+    if(document.getElementById("selected_algo").value == "region"){
+        document.getElementById("algoConfigR").style = "display: block";
+        document.getElementById("algoConfigS").style = "display: none";
+    }else{
+        document.getElementById("algoConfigS").style = "display: block";
+        document.getElementById("algoConfigR").style = "display: none";
+    }
 
+
+}
+function stateSelected(){
+    document.getElementById("selectAlgorithm").style = "visibility: visible";
+}
 // Create variable to hold map element, give initial settings to map
 var mapboxAccessToken = "pk.eyJ1IjoiZGNib3k2ODY4IiwiYSI6ImNqbXBlbG5wejB6M3kzcHFjZDN0dDg1N2wifQ.fv6q_orjFeF9Vcx5nLEu3w";
 var map = L.map('map').setView([37.8, -96], 4);
