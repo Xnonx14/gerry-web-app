@@ -1,8 +1,10 @@
 package app.repository;
 
-import app.model.District;
+import app.model.DistrictEntity;
 import org.springframework.data.repository.CrudRepository;
 
-public interface DistrictRepository extends CrudRepository<District, Long>{
-    District findByStateId(Integer stateId);
+import java.util.List;
+
+public interface DistrictRepository extends CrudRepository<DistrictEntity, Long>{
+    List<DistrictEntity> findByStateId(Integer stateId);
 }

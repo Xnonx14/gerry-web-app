@@ -21,7 +21,7 @@ public class Chunk {
     public boolean isBorderChunk;
 
     //I don't think this would work logically
-    /*public Set<District> getAdjacentDistricts(){
+    /*public Set<DistrictEntity> getAdjacentDistricts(){
         return null;
     }*/
     public District getDistrict(){

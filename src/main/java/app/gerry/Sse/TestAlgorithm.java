@@ -3,7 +3,7 @@ package app.gerry.Sse;
 import app.gerry.AlgorithmCore.Algorithm;
 import app.gerry.Sse.SseResultData;
 
-public class TestAlgorithm implements Algorithm {
+public class TestAlgorithm extends Algorithm {
 
     private static final int MAX = 1000;
 

@@ -7,6 +7,7 @@ import app.gerry.AlgorithmCore.RegionGrowing;
 import app.gerry.Sse.AlgorithmMoveService;
 import app.gerry.Sse.SseResultData;
 import app.gerry.Sse.TestAlgorithm;
+import app.gerry.Util.AlgorithmUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,9 @@ public class AlgorithmController {
 
     @Autowired
     AlgorithmMoveService algorithmMoveService;
+
+    @Autowired
+    AlgorithmUtil algorithmUtil;
     
     @GetMapping("/algorithm/feed")
     public SseEmitter getFeed() {
@@ -48,7 +52,7 @@ public class AlgorithmController {
     @PostMapping("/algorithm/start")
     @ResponseBody
     public ResponseEntity initiateAlgorithm(@RequestBody Map<String, Object> params) {
-        Algorithm algorithm = new RegionGrowing(params);
+        Algorithm algorithm = new RegionGrowing(params, algorithmUtil);
         SseResultData data = new SseResultData("Data", false);
 
         for(int i = 0; i < 10; i++) {

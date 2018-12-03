@@ -1,18 +1,21 @@
 package app.gerry.AlgorithmCore;
 
 import app.gerry.Sse.SseResultData;
+import app.gerry.Util.AlgorithmUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-import static app.gerry.Util.AlgorithmUtil.initializeAlgorithmParameters;
-
 public class RegionGrowing extends Algorithm{
 
+    private AlgorithmUtil algorithmUtil;
     private String stateName;
     private Context context;
 
-    public RegionGrowing(Map<String, Object> params) {
-        context = initializeAlgorithmParameters(params);
+    public RegionGrowing(Map<String, Object> params, AlgorithmUtil algorithmUtil) {
+        this.algorithmUtil = algorithmUtil;
+        context = algorithmUtil.initializeAlgorithmParameters(params);
         //initializeSeedDistricts();
     }
 
