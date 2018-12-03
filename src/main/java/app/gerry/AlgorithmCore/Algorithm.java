@@ -2,11 +2,21 @@ package app.gerry.AlgorithmCore;
 
 import app.gerry.Sse.SseResultData;
 
-public interface Algorithm {
+public abstract class Algorithm {
 
-    public void step();
+    private Context context;
 
-    public boolean isFinished();
+    public abstract void step();
 
-    public SseResultData getSseResultData();
+    public abstract boolean isFinished();
+
+    public abstract SseResultData getSseResultData();
+
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
 }

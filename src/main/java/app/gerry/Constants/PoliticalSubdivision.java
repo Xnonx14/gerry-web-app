@@ -1,4 +1,4 @@
-package app.gerry.Enum;
+package app.gerry.Constants;
 
 public enum PoliticalSubdivision {
     PRECINCT,

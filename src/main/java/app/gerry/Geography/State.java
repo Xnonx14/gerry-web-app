@@ -1,7 +1,7 @@
 package app.gerry.Geography;
 
 import app.gerry.Data.Representative;
-import app.gerry.Enum.PoliticalSubdivision;
+import app.gerry.Constants.PoliticalSubdivision;
 
 import java.util.Set;
 

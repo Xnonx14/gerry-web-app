@@ -3,7 +3,7 @@ package app.gerry.Geography;
 import app.gerry.Data.Boundary;
 import app.gerry.Data.ElectionData;
 import app.gerry.Data.YearData;
-import app.gerry.Enum.PoliticalSubdivision;
+import app.gerry.Constants.PoliticalSubdivision;
 
 import java.util.Map;
 import java.util.Set;
