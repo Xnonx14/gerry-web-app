@@ -58,12 +58,34 @@
                         <option value="New Hampshire">New Hampshire</option>
                         <option value="West Virginia">West Virginia</option>
                     </select>
-                    <input type="submit" class="button" id="select_state" value="View Data" onclick="subscribe('compactness')">
+                    <input type="submit" class="button" id="select_state" value="View Data" onclick="stateSelected()">
                     <br>
                 </div>
-                <div id="second">
-                    
-                    <font size="5">Automated Redistricting</font>
+                <div id ="selectAlgorithm">
+                    <select id = "selected_algo" class="form-control">
+                        <option value="simulated">Simulated Annealing</option>
+                        <option value="region">Region Growing</option>
+                    </select>
+                    <input type="submit" class="button" id="select_state" value="Select Algorithm" onclick="algoSelected()">
+                </div>
+                <script>
+                    function algoSelected(){
+                        if(document.getElementById("selected_algo").value == "region"){
+                            document.getElementById("algoConfigR").style = "display: block";
+                            document.getElementById("algoConfigS").style = "display: none";
+                        }else{
+                            document.getElementById("algoConfigS").style = "display: block";
+                            document.getElementById("algoConfigR").style = "display: none";
+                        }
+                        
+                        
+                    }
+                    function stateSelected(){
+                        document.getElementById("selectAlgorithm").style = "visibility: visible";
+                    }
+                </script> 
+                <div id="algoConfigR">
+                    <font size="5">Region Growing Redistricting</font>
                     <br>
 
                     <!--<form action="/loggedIn" method="POST" th:action="@{/loggedIn}" th:object="${state}">-->
@@ -72,8 +94,56 @@
                     <input type="submit" class="button2" name="step" value="Step">
                     <input type="submit" class="button2" name="stop" value="Stop">
 
+                    
                     <div class="slidecontainer">
-                        Compactness
+                        Reock Compactness
+                        <input type="range" min="1" max="100" value="50" class="slider" id="compactness">
+                    </div>
+                    
+                    <div class="slidecontainer">
+                        Polsby-Popper Compactness
+                        <input type="range" min="1" max="100" value="50" class="slider" id="compactness">
+                    </div>
+                    
+                    <div class="slidecontainer">
+                        Convex Hull Compactness
+                        <input type="range" min="1" max="100" value="50" class="slider" id="compactness">
+                    </div>
+
+                    <div class="slidecontainer">
+                        Political Fairness
+                        <input type="range" min="1" max="100" value="50" class="slider" id="political_fairness">
+                    </div>
+
+                    <div class="slidecontainer">
+                        Population Equality
+                        <input type="range" min="1" max="100" value="50" class="slider" id="population_equality">
+                    </div>
+                    <!--</form>-->
+                </div>
+                <div id="algoConfigS">
+                    <font size="5">Simulated Annealing Redistricting</font>
+                    <br>
+
+                    <!--<form action="/loggedIn" method="POST" th:action="@{/loggedIn}" th:object="${state}">-->
+                    <input type="submit" class="button2" name="start" value="Start" onclick="subscribe('compactness')">
+                    <input type="submit" class="button2" name="pause" value="Pause">
+                    <input type="submit" class="button2" name="step" value="Step">
+                    <input type="submit" class="button2" name="stop" value="Stop">
+
+                    
+                    <div class="slidecontainer">
+                        Reock Compactness
+                        <input type="range" min="1" max="100" value="50" class="slider" id="compactness">
+                    </div>
+                    
+                    <div class="slidecontainer">
+                        Polsby-Popper Compactness
+                        <input type="range" min="1" max="100" value="50" class="slider" id="compactness">
+                    </div>
+                    
+                    <div class="slidecontainer">
+                        Convex Hull Compactness
                         <input type="range" min="1" max="100" value="50" class="slider" id="compactness">
                     </div>
 
