@@ -11,7 +11,6 @@ public class RegionGrowing extends Algorithm{
     private String stateName;
     private Context context;
 
-
     public RegionGrowing(Map<String, Object> params) {
         context = initializeAlgorithmParameters(params);
         //initializeSeedDistricts();

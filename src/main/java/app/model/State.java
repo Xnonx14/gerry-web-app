@@ -18,7 +18,4 @@ public class State {
 
     @Column(name = "CONSTITUTION_TEXT")
     private String constitutionText;
-
-
-
 }

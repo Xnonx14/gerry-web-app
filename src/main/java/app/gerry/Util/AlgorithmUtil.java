@@ -2,6 +2,7 @@ package app.gerry.Util;
 
 import app.gerry.AlgorithmCore.Algorithm;
 import app.gerry.AlgorithmCore.Context;
+import app.gerry.Geography.State;
 
 import java.util.Map;
 
@@ -18,6 +19,10 @@ public class AlgorithmUtil {
         context.setPopulationEqualityWeight(toDouble(params, POPULATION_EQUALITY));
         context.setStateName(toString(params, STATE_NAME));
         return context;
+    }
+
+    public static State initializeStateWithSeedDistricts() {
+        return null;
     }
 
     private static Double toDouble(Map<String, Object> params, String key) {
