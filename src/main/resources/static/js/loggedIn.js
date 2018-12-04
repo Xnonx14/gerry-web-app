@@ -131,8 +131,18 @@ $(function() {
     });
 });
 
-//Parse Json
+//Color Generation
+function genColor (seed) {
+    color = Math.floor((Math.abs(Math.sin(parseInt(seed)) * 16777215)) % 16777215);
+    color = color.toString(16);
+    while(color.length < 6) {
+        color = '0' + color;
+    }
 
+    return '#' + color;
+}
+
+//Parse Json
 $.getJSON("/geo/states.json",function(data){
 stateData = L.geoJson(data, {
 style: style,
@@ -140,58 +150,19 @@ onEachFeature: onEachFeature,
 }).addTo(map);
 })
 
-//$.getJSON("/geo/Illinois_D.json",function(data){
-//IllinoisDistrict = L.geoJson(data, {
-//style: styleDistrict,
-//onEachFeature: onEachFeature,
-//})
-//});
-//
-//$.getJSON("/geo/Illinois_P.json",function(data){
-//IllinoisPrecinct = L.geoJson(data, {
-//style: styleDistrict,
-//onEachFeature: onEachFeature,
-//})
-//});
 
-
-var precinct = L.vectorGrid.slicer( illinoisPrecienct, {
+var illinois = L.vectorGrid.slicer( illinoisPrecienct, {
 	minZoom: 8,
 	rendererFactory: L.svg.tile,
 	vectorTileLayerStyles: {
 	sliced: function(properties, zoom) {
-	var p = parseInt(properties.GEOID10);
+	var p = parseInt(properties.COUNTYFP10);
 		return {
-		fillColor:
-		(p % 2 == 0)  ?  '#F92828' :
-		(p % 2 == 1)  ?  '#5AA5EC' : '#F92828',
+		fillColor: genColor(p),
 		fillOpacity: 0.5,
 		stroke: true,
 		fill: true,
-		color: 'black',
-		weight: 0.5,
-		}
-	}
-},
-	interactive: true,
-	getFeatureId: function(f) {
-		return f.properties.wb_a3;
-	}
-})
-.addTo(map);
-
-var district = L.vectorGrid.slicer(illinoisDistrict, {
-	minZoom: 6,
-	rendererFactory: L.svg.tile,
-	vectorTileLayerStyles: {
-	sliced: function(properties, zoom) {
-		return {
-		fillColor: '#FFFFE0',
-		fillOpacity: 0.3,
-	 	//fillOpacity: 1,
-		stroke: true,
-		fill: true,
-		color: 'black',
+		color: 'white',
 		weight: 1,
 		}
 	}
@@ -201,6 +172,62 @@ var district = L.vectorGrid.slicer(illinoisDistrict, {
 		return f.properties.wb_a3;
 	}
 })
+		.on('click', function(e) {
+			var properties = e.layer.properties;
+			L.popup()
+				.setContent(properties.VTDST10)
+				.setLatLng(e.latlng)
+				.openOn(map);
+		})
+.addTo(map);
+
+var illinois_district = L.vectorGrid.slicer(illinoisDistrict, {
+	minZoom: 6,
+	rendererFactory: L.svg.tile,
+	vectorTileLayerStyles: {
+	sliced: function(properties, zoom) {
+		return {
+		fillColor: 'white',
+		fillOpacity: 0,
+		stroke: true,
+		fill: true,
+		color: 'black',
+		weight: 1,
+		}
+	}
+}
+}).addTo(map);
+
+var new_Hampshire = L.vectorGrid.slicer(nH_data, {
+	minZoom: 7,
+	rendererFactory: L.svg.tile,
+	vectorTileLayerStyles: {
+	sliced: function(properties, zoom) {
+		var district = parseInt(properties.CONG_DISTR);
+		return {
+		fillColor: genColor(district * 20),
+		fillOpacity:
+		(district == 0) ? 0 : 0.6,
+		stroke: true,
+		fill: true,
+		color: 'white',
+		weight:
+		(district == 0) ? 0 : 1,
+		}
+	}
+},
+	interactive: true,
+	getFeatureId: function(f) {
+		return f.properties.wb_a3;
+	}
+})
+		.on('click', function(e) {
+			var properties = e.layer.properties;
+			L.popup()
+				.setContent(properties.VTDST10)
+				.setLatLng(e.latlng)
+				.openOn(map);
+		})
 .addTo(map);
 
 map.on('zoomend', function (e) {
@@ -219,11 +246,21 @@ function clean_map() {
 function zoomHandler() {
 var currentZoom = map.getZoom();
     switch (currentZoom) {
+        case 4:
+            clean_map();
+            stateData.addTo(map);
+            break;
         case 5:
             clean_map();
             stateData.addTo(map);
             break;
         case 6:
+            clean_map();
+            break;
+        case 7:
+            clean_map();
+            break;
+        case 8:
             clean_map();
             break;
         default:

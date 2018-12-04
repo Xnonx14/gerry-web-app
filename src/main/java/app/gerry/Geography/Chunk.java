@@ -53,7 +53,7 @@ public class Chunk {
     public District getDistrict(){
         return parentDistrict;
     }
-    
+
     public Set<Chunk> getAdjacentChunks(){
         return null;
     }
