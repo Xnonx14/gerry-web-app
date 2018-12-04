@@ -4,13 +4,15 @@ import app.gerry.Data.Representative;
 import app.gerry.Constants.PoliticalSubdivision;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class State {
     private int id;
     private String name;
     private List<District> districts;
-    private List<Chunk> chunks;
+    private Map<Integer, Chunk> idChunkMap;
+    private Map<Integer, List<Integer>> adjacentChunkIdMap;
     private Set<Representative> representatives;
     private PoliticalSubdivision restriction;
     private int population;
@@ -22,6 +24,8 @@ public class State {
         this.representatives = builder.representatives;
         this.restriction = builder.restriction;
         this.population = builder.population;
+        this.adjacentChunkIdMap = builder.adjacentChunkIdMap;
+        this.idChunkMap = builder.idChunkMap;
     }
 
     public Set<Precinct> getAllPrecincts(){
@@ -45,7 +49,8 @@ public class State {
         private int id;
         private String name;
         private List<District> districts;
-        private List<Chunk> chunks;
+        private Map<Integer, Chunk> idChunkMap;
+        private Map<Integer, List<Integer>> adjacentChunkIdMap;
         private Set<Representative> representatives;
         private PoliticalSubdivision restriction;
         private int population;
@@ -56,11 +61,6 @@ public class State {
 
         public Builder withDistricts(List<District> districts) {
             this.districts = districts;
-            return this;
-        }
-
-        public Builder withChunks(List<Chunk> chunks) {
-            this.chunks = chunks;
             return this;
         }
 
@@ -76,6 +76,16 @@ public class State {
 
         public Builder withPopulation(int population) {
             this.population = population;
+            return this;
+        }
+
+        public Builder withAdjacentChunkMap(Map<Integer, List<Integer>> adjacentChunkIdMap) {
+            this.adjacentChunkIdMap = adjacentChunkIdMap;
+            return this;
+        }
+
+        public Builder withIdChunkMap(Map<Integer, Chunk> idChunkMap) {
+            this.idChunkMap = idChunkMap;
             return this;
         }
 

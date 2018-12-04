@@ -151,7 +151,7 @@ onEachFeature: onEachFeature,
 })
 
 
-var illinois = L.vectorGrid.slicer( illinoisPrecienct, {
+var illinois = L.vectorGrid.slicer( illinoisPrecinct, {
 	minZoom: 8,
 	rendererFactory: L.svg.tile,
 	vectorTileLayerStyles: {
@@ -218,7 +218,7 @@ var new_Hampshire = L.vectorGrid.slicer(nH_data, {
 },
 	interactive: true,
 	getFeatureId: function(f) {
-		return f.properties.wb_a3;
+		return f.properties.PRECINCT_ID;
 	}
 })
 		.on('click', function(e) {
