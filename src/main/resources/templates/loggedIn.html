@@ -48,51 +48,61 @@
                     <script type="text/javascript" src="js/us-states.js"></script>
                     <script type="text/javascript" src="js/illinoisD.js"></script>
                     <script type="text/javascript" src="js/illinoisP.js"></script>
+                    <script type="text/javascript" src="js/newHampshire_P.js"></script>
                     <div id="map" style="width: 100%; height: 650px"></div>
-                    <script th:src="@{js/make-map.js}" src="../static/js/make-map.js"></script>
                 </div>
                 <div id="second">
-                    <font size="5">Select State</font>
                     <select id = "selected_state" class="form-control">
                         <option value="Illinois">Illinois</option>
                         <option value="New Hampshire">New Hampshire</option>
                         <option value="West Virginia">West Virginia</option>
                     </select>
-                    <input type="submit" class="button" id="select_state" value="View Data" onclick="subscribe('compactness')">
+                    <input type="submit" class="button" id="select_state" value="Select State" onclick="stateSelected()">
                     <br>
                 </div>
-                <div id="second">
-                    
-                    <font size="5">Automated Redistricting</font>
+                <div id ="selectAlgorithm">
+                    <select id = "selected_algo" class="form-control">
+                        <option value="simulated">Simulated Annealing</option>
+                        <option value="region">Region Growing</option>
+                    </select>
+                    <input type="submit" class="button" id="select_algo" onclick="algoSelected()" value="Select Algorithm">
+                </div>
+                <div id="algoConfigR">
+                    <font size="5">Region Growing</font>
                     <br>
 
                     <!--<form action="/loggedIn" method="POST" th:action="@{/loggedIn}" th:object="${state}">-->
-                    <input type="submit" class="button2" name="start" value="Start" onclick="subscribe('compactness')">
+                    <input type="submit" class="button2" name="start" value="Start" onclick="subscribe()">
                     <input type="submit" class="button2" name="pause" value="Pause">
                     <input type="submit" class="button2" name="step" value="Step">
                     <input type="submit" class="button2" name="stop" value="Stop">
 
+                    
                     <div class="slidecontainer">
-                        Compactness
-                        <input type="range" min="1" max="100" value="50" class="slider" id="compactness">
+                        Reock Compactness
+                        <input type="range" min="1" max="100" value="50" class="slider" id="reock">
+                    </div>
+                    
+                    <div class="slidecontainer">
+                        Polsby-Popper Compactness
+                        <input type="range" min="1" max="100" value="50" class="slider" id="polsbyPopper">
+                    </div>
+                    
+                    <div class="slidecontainer">
+                        Convex Hull Compactness
+                        <input type="range" min="1" max="100" value="50" class="slider" id="convexHull">
                     </div>
 
                     <div class="slidecontainer">
                         Political Fairness
-                        <input type="range" min="1" max="100" value="50" class="slider">
+                        <input type="range" min="1" max="100" value="50" class="slider" id="politicalFairness">
                     </div>
 
                     <div class="slidecontainer">
                         Population Equality
-                        <input type="range" min="1" max="100" value="50" class="slider">
+                        <input type="range" min="1" max="100" value="50" class="slider" id="populationEquality">
                     </div>
                     <!--</form>-->
-                </div>
-                <div id="second">
-                    <form action="/" method="post">
-                        <div class="active-purple-3 active-purple-4 mb-4"></div>
-                        <input type="submit" class="button" value="Save">
-                    </form>
                 </div>
             </div>
         </div>
@@ -100,4 +110,5 @@
         <h1>Notifications: </h1>
         <div id="notificationDiv"></div>
     </body>
+    <script th:src="@{js/loggedIn.js}" src="../static/js/loggedIn.js"></script>
 </html>

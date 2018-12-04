@@ -7,7 +7,7 @@ import app.gerry.Sse.SseResultData;
 import java.util.HashSet;
 import java.util.Set;
 
-public class SimulatedAnnealing implements Algorithm{
+public class SimulatedAnnealing extends Algorithm{
     State startingState;
     MoveManager mm;
     public SimulatedAnnealing(State state,MoveManager manager){

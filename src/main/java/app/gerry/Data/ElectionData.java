@@ -1,7 +1,7 @@
 package app.gerry.Data;
 
-import app.gerry.Enum.Party;
-import app.gerry.Enum.electionType;
+import app.gerry.Constants.Party;
+import app.gerry.Constants.electionType;
 
 import java.util.Map;
 

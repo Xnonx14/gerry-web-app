@@ -3,16 +3,30 @@ package app.gerry.Geography;
 import app.gerry.Data.GeometricData;
 import app.gerry.Data.Representative;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 public class District {
     public int id;
     public String name;
     public Representative representative;
-    public Set<Precinct> precients;
-    public Set<Chunk> chunks;
+    public Set<Precinct> precincts;
+    public List<Chunk> chunks;
     public GeometricData geometricData;
     public double ObjectiveValue;
+
+    /**
+     * Construct a district that contains one chunk (Seed district)
+     * @param chunk
+     */
+    public District(Chunk chunk) {
+        chunks = new ArrayList<>();
+        chunks.add(chunk);
+        chunk.setParentDistrict(this);
+
+        //TODO: Add Chunk to chunks and update geometric data, etc...
+    }
 
     public Chunk getRandomBorderChunk(){
         return null;
@@ -48,5 +62,45 @@ public class District {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Representative getRepresentative() {
+        return representative;
+    }
+
+    public void setRepresentative(Representative representative) {
+        this.representative = representative;
+    }
+
+    public Set<Precinct> getPrecincts() {
+        return precincts;
+    }
+
+    public void setPrecincts(Set<Precinct> precincts) {
+        this.precincts = precincts;
+    }
+
+    public List<Chunk> getChunks() {
+        return chunks;
+    }
+
+    public void setChunks(List<Chunk> chunks) {
+        this.chunks = chunks;
+    }
+
+    public GeometricData getGeometricData() {
+        return geometricData;
+    }
+
+    public void setGeometricData(GeometricData geometricData) {
+        this.geometricData = geometricData;
+    }
+
+    public double getObjectiveValue() {
+        return ObjectiveValue;
+    }
+
+    public void setObjectiveValue(double objectiveValue) {
+        ObjectiveValue = objectiveValue;
     }
 }

@@ -115,6 +115,39 @@ body {
     background-color: #e3f2fd;;
 }
 
+#algoConfigR{
+    width: 19%;
+    float: right;
+    height: 100%;
+    margin: auto;
+    border: 1px solid #ddd;
+    padding:10px 10px;
+    background-color: #e3f2fd;
+    display: none;
+}
+
+#algoConfigS{
+    width: 19%;
+    float: right;
+    height: 100%;
+    margin: auto;
+    border: 1px solid #ddd;
+    padding:10px 10px;
+    background-color: #e3f2fd;
+    display: none;
+}
+
+#selectAlgorithm{
+    width: 19%;
+    float: right;
+    height: 100%;
+    margin: auto;
+    border: 1px solid #ddd;
+    padding:10px 10px;
+    background-color: #e3f2fd;
+    visibility: hidden;
+}
+
 #third {
     width: 20%;
     float: auto;

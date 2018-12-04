@@ -1,6 +1,6 @@
 package app.gerry.Data;
 
-import app.gerry.Enum.Party;
+import app.gerry.Constants.Party;
 import app.gerry.Geography.Precinct;
 
 public class Representative {
