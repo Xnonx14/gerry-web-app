@@ -45,14 +45,14 @@ public class District {
     }
 
     public void addChunk(Chunk chunk){
+        chunk.setParentDistrict(this);
         chunks.add(chunk);
         adjacentChunks.addAll(chunk.getAdjacentChunks().stream().filter(c -> c.getParentDistrict() == null).collect(Collectors.toList()));
         adjacentChunks.remove(chunk);
-        chunk.setParentDistrict(this);
     }
 
-    public void removeChunkFromAdjacencies(Chunk chunk) {
-        adjacentChunks.remove(chunk);
+    public void removeChunkFromAdjacencies(Set<Chunk> chunk) {
+        adjacentChunks.removeAll(chunk);
     }
 
     public Precinct getRandomBordering(){
