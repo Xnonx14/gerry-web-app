@@ -77,6 +77,24 @@ body {
     border:2px solid #ce93d8;
 }
 
+#dataField{
+    text-align: left;
+    height: auto;
+    margin-right: 5px;
+    border: 1px solid #ddd;
+    padding:10px 10px;
+    background-color: #e3f2fd;
+}
+
+#dataTitle {
+    height: auto;
+    margin-right: 5px;
+    border: 1px solid #ddd;
+    padding:10px 10px;
+    background-color: #e3f2fd;
+}
+
+
 #data {
     width: 15%;
     float: left;
