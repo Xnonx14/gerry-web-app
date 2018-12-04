@@ -10,7 +10,6 @@ import java.util.Set;
 
 public class Precinct {
     private int id;
-    private Set<Integer> adjacentPrecinctIds;
     private Set<Precinct> adjacentPrecincts;
     private Map<String, YearData> yearData;
     private boolean isBorderPrecinct;
@@ -30,8 +29,6 @@ public class Precinct {
     public String getSubdivisionName(PoliticalSubdivision ps){
         return null;
     }
-
-
 
     public static class Builder {
         private int id;
