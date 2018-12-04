@@ -27,6 +27,7 @@ public class Chunk {
      * @param precinct
      */
     public Chunk(Precinct precinct) {
+        id = precinct.getId();
         precincts = new ArrayList<>();
         precincts.add(precinct);
         subdivision = PoliticalSubdivision.PRECINCT;
