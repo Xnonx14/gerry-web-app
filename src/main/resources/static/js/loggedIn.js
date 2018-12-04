@@ -204,14 +204,12 @@ onEachFeature: onEachFeature,
 	sliced: function(properties, zoom) {
 		var district = parseInt(properties.CONG_DISTR);
 		return {
-		fillColor: genColor(district),
-		fillOpacity:
-		(district == 0) ? 0 : 0.6,
+		fillColor: 'white',
+		fillOpacity: 0.6,
 		stroke: true,
 		fill: true,
 		color: 'white',
-		weight:
-		(district == 0) ? 0 : 1,
+		weight: 1,
 		}
 	}
 },
@@ -237,13 +235,11 @@ var west_Virginia = L.vectorGrid.slicer(wV_data, {
 		var district = parseInt(properties.CONG_DISTR);
 		return {
 		fillColor: genColor(district),
-		fillOpacity:
-		(district == 0) ? 0 : 0.6,
+		fillOpacity: 0.6,
 		stroke: true,
 		fill: true,
 		color: 'white',
-		weight:
-		(district == 0) ? 0 : 1,
+		weight: 1,
 		}
 	}
 },

@@ -16,7 +16,7 @@ var subscribe = function () {
         var move = JSON.parse(e.data);
         var precinctId = move.precinctId;
         var districtId = move.districtId;
-        var color = genColor(Math.random() * 100);
+        var color = genColor(districtId);
         new_Hampshire.setFeatureStyle(precinctId, colorStyle(color))
         console.log(precinctId);
         console.log(districtId);
