@@ -197,9 +197,7 @@ onEachFeature: onEachFeature,
 //	}
 //}
 //}).addTo(map);
-
-$.getJSON("/geo/nh_final_updated.json",function(data){
-var new_Hampshire = L.vectorGrid.slicer(data, {
+    new_Hampshire = L.vectorGrid.slicer(nH_data, {
 	minZoom: 7,
 	rendererFactory: L.svg.tile,
 	vectorTileLayerStyles: {
@@ -230,10 +228,8 @@ var new_Hampshire = L.vectorGrid.slicer(data, {
 				.openOn(map);
 		})
 .addTo(map);
-});
 
-$.getJSON("/geo/wv_final_updated.json",function(data){
-var west_Virginia = L.vectorGrid.slicer(data, {
+var west_Virginia = L.vectorGrid.slicer(wV_data, {
 	minZoom: 7,
 	rendererFactory: L.svg.tile,
 	vectorTileLayerStyles: {
@@ -264,7 +260,6 @@ var west_Virginia = L.vectorGrid.slicer(data, {
 				.openOn(map);
 		})
 .addTo(map);
-});
 
 map.on('zoomend', function (e) {
     zoomHandler();

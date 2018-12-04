@@ -4,15 +4,18 @@ import app.gerry.Data.GeometricData;
 import app.gerry.Data.Representative;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class District {
     public int id;
     public String name;
+    public State state;
     public Representative representative;
     public Set<Precinct> precincts;
-    public List<Chunk> chunks;
+    public Set<Chunk> chunks;
+    public Set<Chunk> adjacentChunks;
     public GeometricData geometricData;
     public double ObjectiveValue;
 
@@ -21,9 +24,9 @@ public class District {
      * @param chunk
      */
     public District(Chunk chunk) {
-        chunks = new ArrayList<>();
-        chunks.add(chunk);
-        chunk.setParentDistrict(this);
+        chunks = new HashSet<>();
+        adjacentChunks = new HashSet<>();
+        addChunk(chunk);
 
         //TODO: Add Chunk to chunks and update geometric data, etc...
     }
@@ -33,15 +36,18 @@ public class District {
     }
 
     public Set<Chunk> getAdjacentChunks(){
-        return null;
+        return adjacentChunks;
     }
 
     public void removeChunk(Chunk c){
         return;
     }
 
-    public void addChunk(Chunk c){
-        return;
+    public void addChunk(Chunk chunk){
+        chunks.add(chunk);
+        adjacentChunks.addAll(chunk.getAdjacentChunks());
+        adjacentChunks.remove(chunk);
+        chunk.setParentDistrict(this);
     }
 
     public Precinct getRandomBordering(){
@@ -80,11 +86,11 @@ public class District {
         this.precincts = precincts;
     }
 
-    public List<Chunk> getChunks() {
+    public Set<Chunk> getChunks() {
         return chunks;
     }
 
-    public void setChunks(List<Chunk> chunks) {
+    public void setChunks(Set<Chunk> chunks) {
         this.chunks = chunks;
     }
 

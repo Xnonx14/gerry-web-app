@@ -45,28 +45,35 @@ public class AlgorithmController {
             emitter.complete();
             this.emitters.remove(emitter);
         });
-        //algorithmMoveService.runAlgorithm(new TestAlgorithm());
         return emitter;
     }
+
+//    @PostMapping("/algorithm/start")
+//    @ResponseBody
+//    public ResponseEntity initiateAlgorithm(@RequestBody Map<String, Object> params) {
+//        Algorithm algorithm = new RegionGrowing(params, algorithmUtil);
+//        SseResultData data = new SseResultData("Data", false);
+//
+//        for(int i = 0; i < 10; i++) {
+//            this.emitters.forEach(e -> {
+//                try {
+//                    Thread.sleep(1000);
+//                    e.send(data);
+//                } catch (IOException e1) {
+//                    e1.printStackTrace();
+//                } catch (InterruptedException e1) {
+//                    e1.printStackTrace();
+//                }
+//            });
+//        }
+//        return new ResponseEntity(HttpStatus.ACCEPTED);
+//    }
 
     @PostMapping("/algorithm/start")
     @ResponseBody
     public ResponseEntity initiateAlgorithm(@RequestBody Map<String, Object> params) {
         Algorithm algorithm = new RegionGrowing(params, algorithmUtil);
-        SseResultData data = new SseResultData("Data", false);
-
-        for(int i = 0; i < 10; i++) {
-            this.emitters.forEach(e -> {
-                try {
-                    Thread.sleep(1000);
-                    e.send(data);
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                } catch (InterruptedException e1) {
-                    e1.printStackTrace();
-                }
-            });
-        }
+        algorithmMoveService.runAlgorithm(algorithm);
         return new ResponseEntity(HttpStatus.ACCEPTED);
     }
 
