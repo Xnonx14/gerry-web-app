@@ -3,7 +3,7 @@
     <html xmlns:th="http://www.thymeleaf.org">
         <head>
             <meta charset="utf-8">
-            <title>Leaflet Map</title>
+            <title>Redistricting</title>
             <!-- External Stylesheets -->
             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
                   th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}">
@@ -68,39 +68,46 @@
                     <input type="submit" class="button" id="select_algo" onclick="algoSelected()" value="Select Algorithm">
                 </div>
                 <div id="algoConfigR">
-                    <font size="5">Region Growing</font>
+                    <div id = "algoTitle">Region Growing </div>
                     <br>
 
                     <!--<form action="/loggedIn" method="POST" th:action="@{/loggedIn}" th:object="${state}">-->
-                    <input type="submit" class="button2" name="start" value="Start" onclick="subscribe()">
-                    <input type="submit" class="button2" name="pause" value="Pause">
-                    <input type="submit" class="button2" name="step" value="Step">
-                    <input type="submit" class="button2" name="stop" value="Stop">
-
-                    
-                    <div class="slidecontainer">
+                    <div>
+                        <input type="submit" class="button2" name="start" value="Start" onclick="subscribe()">
+                        <input type="submit" class="button2" name="pause" value="Pause">
+                        <input type="submit" class="button2" name="step" value="Step">
+                        <input type="submit" class="button2" name="stop" value="Stop">
+                    </div>
+                    <br>
+                    <div id = "regionSeeds">
+                        Number of seeds <input type="number" name="quantity" min="2">
+                    </div>
+                    <br>
+                    <div>
+                        <div class="slidecontainer">
                         Reock Compactness
                         <input type="range" min="1" max="100" value="50" class="slider" id="reock">
-                    </div>
+                        </div>
                     
-                    <div class="slidecontainer">
-                        Polsby-Popper Compactness
-                        <input type="range" min="1" max="100" value="50" class="slider" id="polsbyPopper">
-                    </div>
-                    
-                    <div class="slidecontainer">
-                        Convex Hull Compactness
-                        <input type="range" min="1" max="100" value="50" class="slider" id="convexHull">
-                    </div>
+                        <div class="slidecontainer">
+                            Polsby-Popper Compactness
+                            <input type="range" min="1" max="100" value="50" class="slider" id="polsbyPopper">
+                        </div>
 
-                    <div class="slidecontainer">
-                        Political Fairness
-                        <input type="range" min="1" max="100" value="50" class="slider" id="politicalFairness">
-                    </div>
+                        <div class="slidecontainer">
+                            Convex Hull Compactness
+                            <input type="range" min="1" max="100" value="50" class="slider" id="convexHull">
+                        </div>
 
-                    <div class="slidecontainer">
-                        Population Equality
-                        <input type="range" min="1" max="100" value="50" class="slider" id="populationEquality">
+                        <div class="slidecontainer">
+                            Political Fairness
+                            <input type="range" min="1" max="100" value="50" class="slider" id="politicalFairness">
+                        </div>
+
+                        <div class="slidecontainer">
+                            Population Equality
+                            <input type="range" min="1" max="100" value="50" class="slider" id="populationEquality">
+                        </div>
                     </div>
                     <!--</form>-->
                 </div>

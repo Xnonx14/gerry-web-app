@@ -1,14 +1,12 @@
-//function algoSelected(){
-//    if(document.getElementById("selected_algo").value == "region"){
-//        document.getElementById("algoConfigR").style = "display: block";
-//        document.getElementById("algoConfigS").style = "display: none";
-//    }else{
-//        document.getElementById("algoConfigS").style = "display: block";
-//        document.getElementById("algoConfigR").style = "display: none";
-//    }
-//}
-
 function algoSelected(){
+    if(document.getElementById("selected_algo").value === "region"){
+        document.getElementById("algoTitle").innerHTML = "Region Growing";
+        document.getElementById("regionSeeds").style = "display: block"; 
+        
+    }else{
+        document.getElementById("algoTitle").innerHTML = "Simulated Annealing";
+        document.getElementById("regionSeeds").style = "display: none"; 
+    }
     document.getElementById("algoConfigR").style = "display: block";
 }
 
