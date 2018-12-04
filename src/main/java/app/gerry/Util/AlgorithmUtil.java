@@ -130,7 +130,6 @@ public class AlgorithmUtil {
         return precinctEntities.stream()
                 .map(p -> new Precinct.Builder()
                             .withId(p.getId())
-                            .withAdjacentPrecincts(null)
                             .build()
                 )
                 .collect(Collectors.toList());

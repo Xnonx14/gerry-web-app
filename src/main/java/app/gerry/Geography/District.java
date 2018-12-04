@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class District {
     public int id;
@@ -45,9 +46,13 @@ public class District {
 
     public void addChunk(Chunk chunk){
         chunks.add(chunk);
-        adjacentChunks.addAll(chunk.getAdjacentChunks());
+        adjacentChunks.addAll(chunk.getAdjacentChunks().stream().filter(c -> c.getParentDistrict() == null).collect(Collectors.toList()));
         adjacentChunks.remove(chunk);
         chunk.setParentDistrict(this);
+    }
+
+    public void removeChunkFromAdjacencies(Chunk chunk) {
+        adjacentChunks.remove(chunk);
     }
 
     public Precinct getRandomBordering(){
