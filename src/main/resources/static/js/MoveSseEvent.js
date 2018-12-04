@@ -3,7 +3,10 @@ var subscribe = function () {
 
     eventSource.onmessage = function (e) {
         var move = JSON.parse(e.data);
-        document.getElementById("notificationDiv").innerHTML += move.data + " at " + new Date(move.dateSent) + "<br/>";
+        var precinctId = move.precinctId;
+        var districtId = move.districtId;
+        console.log(precinctId);
+        console.log(districtId);
     };
 
     eventSource.onopen = function () {

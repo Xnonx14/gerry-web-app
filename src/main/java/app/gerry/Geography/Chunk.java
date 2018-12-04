@@ -13,7 +13,7 @@ public class Chunk {
     private int id;
     private String name;
     private List<Precinct> precincts;
-    private List<Chunk> adjacentChunks;
+    private Set<Chunk> adjacentChunks;
     private ElectionData cummElectionData;
     private GeometricData cummGeometricData;
     private int cummPopulation;
@@ -55,7 +55,7 @@ public class Chunk {
     }
 
     public Set<Chunk> getAdjacentChunks(){
-        return null;
+        return adjacentChunks;
     }
     public void populateChunk(Precinct p){
         return;
@@ -85,7 +85,7 @@ public class Chunk {
         this.precincts = precincts;
     }
 
-    public void setAdjacentChunks(List<Chunk> adjacentChunks) {
+    public void setAdjacentChunks(Set<Chunk> adjacentChunks) {
         this.adjacentChunks = adjacentChunks;
     }
 

@@ -3,7 +3,7 @@ package app.gerry.Json;
 public class ChunkJson {
 
     private int id;
-    private int[] adjacents;
+    private int[] precincts;
 
     public int getId() {
         return id;
@@ -13,11 +13,11 @@ public class ChunkJson {
         this.id = id;
     }
 
-    public int[] getAdjacents() {
-        return adjacents;
+    public int[] getPrecincts() {
+        return precincts;
     }
 
-    public void setAdjacents(int[] adjacents) {
-        this.adjacents = adjacents;
+    public void setPrecincts(int[] precincts) {
+        this.precincts = precincts;
     }
 }

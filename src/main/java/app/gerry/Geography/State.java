@@ -45,6 +45,30 @@ public class State {
         return districts;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Map<Integer, Chunk> getIdChunkMap() {
+        return idChunkMap;
+    }
+
+    public void setIdChunkMap(Map<Integer, Chunk> idChunkMap) {
+        this.idChunkMap = idChunkMap;
+    }
+
+    public Map<Integer, List<Integer>> getAdjacentChunkIdMap() {
+        return adjacentChunkIdMap;
+    }
+
+    public void setAdjacentChunkIdMap(Map<Integer, List<Integer>> adjacentChunkIdMap) {
+        this.adjacentChunkIdMap = adjacentChunkIdMap;
+    }
+
     public static class Builder {
         private int id;
         private String name;
