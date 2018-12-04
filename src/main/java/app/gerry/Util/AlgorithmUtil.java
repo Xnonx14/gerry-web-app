@@ -13,6 +13,7 @@ import app.repository.DistrictRepository;
 import app.repository.PrecinctRepository;
 import app.repository.StateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -45,8 +46,13 @@ public class AlgorithmUtil {
         List<Precinct> precincts = aggregatePrecinctsInState(stateName);
         Map<Integer, Chunk> idChunkMap = toIdChunkMap(precincts);
         List<Chunk> chunks = new ArrayList<>(idChunkMap.values());
-        List<District> seeds = constructSeedDistrictsRandomly(chunks, numDistricts);
         Map<Integer, List<Integer>> adjacentChunkIdMap = constructAdjacentChunkMap(chunks, stateName);
+        setAdjacentChunks(idChunkMap, adjacentChunkIdMap);
+        List<District> seeds = constructSeedDistrictsRandomly(chunks, numDistricts);
+
+        for(int i = 0; i < seeds.size(); i++) {
+            seeds.get(i).id = i;
+        }
         State state = new State.Builder(stateName)
                         .withIdChunkMap(idChunkMap)
                         .withDistricts(seeds)
@@ -55,13 +61,26 @@ public class AlgorithmUtil {
         return state;
     }
 
+    private void setAdjacentChunks(Map<Integer, Chunk> idChunkMap, Map<Integer, List<Integer>> adjacentChunkIdMap) {
+        for(Chunk chunk : idChunkMap.values()) {
+            List<Integer> adjIds = adjacentChunkIdMap.get(chunk.getId());
+            if(adjIds == null)
+                continue;
+            chunk.setAdjacentChunks(
+                    adjIds.stream()
+                    .map(i -> idChunkMap.get(i))
+                    .collect(Collectors.toSet())
+            );
+        }
+    }
+
     private Map<Integer, List<Integer>> constructAdjacentChunkMap(List<Chunk> chunks, String stateName) {
         Map<Integer, List<Integer>> idAdjacencyMap = new HashMap<>();
         String politicalSubdivision = chunks.get(0).getSubdivision().toString();
-        String filepath = "./preprocessing/nh/" + stateName + "_" + politicalSubdivision + "_" + "adjacency" + ".json";
+        String filepath = "./preprocessing/nh/idPrecinctAdj.json";
         List<ChunkJson> chunkJsons = createChunkJsons(filepath);
         for(ChunkJson chunkJson : chunkJsons) {
-            List<Integer> adjacency = Arrays.stream(chunkJson.getAdjacents()).boxed().collect(Collectors.toList());
+            List<Integer> adjacency = Arrays.stream(chunkJson.getPrecincts()).boxed().collect(Collectors.toList());
             idAdjacencyMap.put(chunkJson.getId(), adjacency);
         }
         return idAdjacencyMap;

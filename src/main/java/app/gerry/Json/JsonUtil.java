@@ -20,8 +20,7 @@ public class JsonUtil {
             return Arrays.stream(chunkJsons).collect(Collectors.toList());
         } catch(Exception e) {
             e.printStackTrace();
-        } finally {
-            return null;
         }
+        return null;
     }
 }

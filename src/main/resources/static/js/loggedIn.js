@@ -1,14 +1,12 @@
-//function algoSelected(){
-//    if(document.getElementById("selected_algo").value == "region"){
-//        document.getElementById("algoConfigR").style = "display: block";
-//        document.getElementById("algoConfigS").style = "display: none";
-//    }else{
-//        document.getElementById("algoConfigS").style = "display: block";
-//        document.getElementById("algoConfigR").style = "display: none";
-//    }
-//}
-
 function algoSelected(){
+    if(document.getElementById("selected_algo").value === "region"){
+        document.getElementById("algoTitle").innerHTML = "Region Growing";
+        document.getElementById("regionSeeds").style = "display: block"; 
+        
+    }else{
+        document.getElementById("algoTitle").innerHTML = "Simulated Annealing";
+        document.getElementById("regionSeeds").style = "display: none"; 
+    }
     document.getElementById("algoConfigR").style = "display: block";
 }
 
@@ -199,9 +197,7 @@ onEachFeature: onEachFeature,
 //	}
 //}
 //}).addTo(map);
-
-$.getJSON("/geo/nh_final_updated.json",function(data){
-var new_Hampshire = L.vectorGrid.slicer(data, {
+    new_Hampshire = L.vectorGrid.slicer(nH_data, {
 	minZoom: 7,
 	rendererFactory: L.svg.tile,
 	vectorTileLayerStyles: {
@@ -232,10 +228,8 @@ var new_Hampshire = L.vectorGrid.slicer(data, {
 				.openOn(map);
 		})
 .addTo(map);
-});
 
-$.getJSON("/geo/wv_final_updated.json",function(data){
-var west_Virginia = L.vectorGrid.slicer(data, {
+var west_Virginia = L.vectorGrid.slicer(wV_data, {
 	minZoom: 7,
 	rendererFactory: L.svg.tile,
 	vectorTileLayerStyles: {
@@ -266,7 +260,6 @@ var west_Virginia = L.vectorGrid.slicer(data, {
 				.openOn(map);
 		})
 .addTo(map);
-});
 
 map.on('zoomend', function (e) {
     zoomHandler();

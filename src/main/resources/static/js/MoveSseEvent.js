@@ -1,9 +1,25 @@
+function colorStyle(color){
+        return {
+            	fillColor: color,
+            	fillOpacity: 0.3,
+            	stroke: true,
+            	fill: true,
+            	color: 'white',
+            	weight: 1,
+            };
+}
+
 var subscribe = function () {
     var eventSource = new EventSource('algorithm/feed');
 
     eventSource.onmessage = function (e) {
         var move = JSON.parse(e.data);
-        document.getElementById("notificationDiv").innerHTML += move.data + " at " + new Date(move.dateSent) + "<br/>";
+        var precinctId = move.precinctId;
+        var districtId = move.districtId;
+        var color = genColor(Math.random() * 100);
+        new_Hampshire.setFeatureStyle(precinctId, colorStyle(color))
+        console.log(precinctId);
+        console.log(districtId);
     };
 
     eventSource.onopen = function () {
