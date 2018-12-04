@@ -10,6 +10,7 @@ import java.util.Set;
 
 public class Precinct {
     private int id;
+    private Set<Integer> adjacentPrecinctIds;
     private Set<Precinct> adjacentPrecincts;
     private Map<String, YearData> yearData;
     private boolean isBorderPrecinct;
@@ -54,6 +55,8 @@ public class Precinct {
             this.adjacentPrecincts = adjacentPrecincts;
             return this;
         }
+
+
 
         public Precinct build() {
             return new Precinct(this);

@@ -4,7 +4,7 @@ public class Context {
     private String stateName;
     private double polsbyPopperWeight;
     private double convexHullWeight;
-    private double boyceClarkWeight;
+    private double reockWeight;
     private double populationEqualityWeight;
     private double politicalFairnessWeight;
 
@@ -32,12 +32,12 @@ public class Context {
         this.convexHullWeight = convexHullWeight;
     }
 
-    public double getBoyceClarkWeight() {
-        return boyceClarkWeight;
+    public double getReockWeight() {
+        return reockWeight;
     }
 
-    public void setBoyceClarkWeight(double boyceClarkWeight) {
-        this.boyceClarkWeight = boyceClarkWeight;
+    public void setReockWeight(double reockWeight) {
+        this.reockWeight = reockWeight;
     }
 
     public double getPopulationEqualityWeight() {

@@ -64,14 +64,14 @@
                         <option value="simulated">Simulated Annealing</option>
                         <option value="region">Region Growing</option>
                     </select>
-                    <input type="submit" class="button" id="select_state" value="Select Algorithm" onclick="algoSelected()">
+                    <input type="submit" class="button" id="select_algo" onclick="algoSelected()" value="Select Algorithm">
                 </div>
                 <div id="algoConfigR">
                     <font size="5">Region Growing</font>
                     <br>
 
                     <!--<form action="/loggedIn" method="POST" th:action="@{/loggedIn}" th:object="${state}">-->
-                    <input type="submit" class="button2" name="start" value="Start" onclick="subscribe('compactness')">
+                    <input type="submit" class="button2" name="start" value="Start" onclick="subscribe()">
                     <input type="submit" class="button2" name="pause" value="Pause">
                     <input type="submit" class="button2" name="step" value="Step">
                     <input type="submit" class="button2" name="stop" value="Stop">
@@ -79,64 +79,27 @@
                     
                     <div class="slidecontainer">
                         Reock Compactness
-                        <input type="range" min="1" max="100" value="50" class="slider" id="compactness">
+                        <input type="range" min="1" max="100" value="50" class="slider" id="reock">
                     </div>
                     
                     <div class="slidecontainer">
                         Polsby-Popper Compactness
-                        <input type="range" min="1" max="100" value="50" class="slider" id="compactness">
+                        <input type="range" min="1" max="100" value="50" class="slider" id="polsbyPopper">
                     </div>
                     
                     <div class="slidecontainer">
                         Convex Hull Compactness
-                        <input type="range" min="1" max="100" value="50" class="slider" id="compactness">
+                        <input type="range" min="1" max="100" value="50" class="slider" id="convexHull">
                     </div>
 
                     <div class="slidecontainer">
                         Political Fairness
-                        <input type="range" min="1" max="100" value="50" class="slider" id="political_fairness">
+                        <input type="range" min="1" max="100" value="50" class="slider" id="politicalFairness">
                     </div>
 
                     <div class="slidecontainer">
                         Population Equality
-                        <input type="range" min="1" max="100" value="50" class="slider" id="population_equality">
-                    </div>
-                    <!--</form>-->
-                </div>
-                <div id="algoConfigS">
-                    <font size="5">Simulated Annealing</font>
-                    <br>
-
-                    <!--<form action="/loggedIn" method="POST" th:action="@{/loggedIn}" th:object="${state}">-->
-                    <input type="submit" class="button2" name="start" value="Start" onclick="subscribe('compactness')">
-                    <input type="submit" class="button2" name="pause" value="Pause">
-                    <input type="submit" class="button2" name="step" value="Step">
-                    <input type="submit" class="button2" name="stop" value="Stop">
-
-                    
-                    <div class="slidecontainer">
-                        Reock Compactness
-                        <input type="range" min="1" max="100" value="50" class="slider" id="compactness">
-                    </div>
-                    
-                    <div class="slidecontainer">
-                        Polsby-Popper Compactness
-                        <input type="range" min="1" max="100" value="50" class="slider" id="compactness">
-                    </div>
-                    
-                    <div class="slidecontainer">
-                        Convex Hull Compactness
-                        <input type="range" min="1" max="100" value="50" class="slider" id="compactness">
-                    </div>
-
-                    <div class="slidecontainer">
-                        Political Fairness
-                        <input type="range" min="1" max="100" value="50" class="slider" id="political_fairness">
-                    </div>
-
-                    <div class="slidecontainer">
-                        Population Equality
-                        <input type="range" min="1" max="100" value="50" class="slider" id="population_equality">
+                        <input type="range" min="1" max="100" value="50" class="slider" id="populationEquality">
                     </div>
                     <!--</form>-->
                 </div>

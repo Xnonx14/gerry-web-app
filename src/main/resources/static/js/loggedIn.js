@@ -1,14 +1,17 @@
+//function algoSelected(){
+//    if(document.getElementById("selected_algo").value == "region"){
+//        document.getElementById("algoConfigR").style = "display: block";
+//        document.getElementById("algoConfigS").style = "display: none";
+//    }else{
+//        document.getElementById("algoConfigS").style = "display: block";
+//        document.getElementById("algoConfigR").style = "display: none";
+//    }
+//}
+
 function algoSelected(){
-    if(document.getElementById("selected_algo").value == "region"){
-        document.getElementById("algoConfigR").style = "display: block";
-        document.getElementById("algoConfigS").style = "display: none";
-    }else{
-        document.getElementById("algoConfigS").style = "display: block";
-        document.getElementById("algoConfigR").style = "display: none";
-    }
-
-
+    document.getElementById("algoConfigR").style = "display: block";
 }
+
 function stateSelected(){
     document.getElementById("selectAlgorithm").style = "visibility: visible";
 }

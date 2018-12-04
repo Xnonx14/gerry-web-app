@@ -37,7 +37,7 @@ public class AlgorithmController {
     
     @GetMapping("/algorithm/feed")
     public SseEmitter getFeed() {
-        SseEmitter emitter = new SseEmitter();
+        SseEmitter emitter = new SseEmitter(86400000L);
         this.emitters.add(emitter);
 
         emitter.onCompletion(() -> this.emitters.remove(emitter));
@@ -78,6 +78,7 @@ public class AlgorithmController {
                 emitter.send(resultData);
                 if(resultData.isLastOne()) {
                     deadEmitters.add(emitter);
+                    emitter.complete();
                 }
             } catch (Exception e) {
                 deadEmitters.add(emitter);

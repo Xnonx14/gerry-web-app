@@ -3,12 +3,14 @@ package app.gerry.Geography;
 import app.gerry.Data.Representative;
 import app.gerry.Constants.PoliticalSubdivision;
 
+import java.util.List;
 import java.util.Set;
 
 public class State {
     private int id;
     private String name;
-    private Set<District> districts;
+    private List<District> districts;
+    private List<Chunk> chunks;
     private Set<Representative> representatives;
     private PoliticalSubdivision restriction;
     private int population;
@@ -35,16 +37,16 @@ public class State {
         // TODO
         return null;
     }
-    public Set<District> getSeedDistricts(int count){
-        // TODO
-        return null;
+    public List<District> getSeedDistricts(){
+        return districts;
     }
 
     public static class Builder {
         private int id;
         private String name;
-        private Set<District> districts;
-        private  Set<Representative> representatives;
+        private List<District> districts;
+        private List<Chunk> chunks;
+        private Set<Representative> representatives;
         private PoliticalSubdivision restriction;
         private int population;
 
@@ -52,8 +54,13 @@ public class State {
             this.name = name;
         }
 
-        public Builder withDistricts(Set<District> districts) {
+        public Builder withDistricts(List<District> districts) {
             this.districts = districts;
+            return this;
+        }
+
+        public Builder withChunks(List<Chunk> chunks) {
+            this.chunks = chunks;
             return this;
         }
 

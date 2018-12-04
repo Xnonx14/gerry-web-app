@@ -18,12 +18,16 @@ var subscribe = function () {
 var startAlgorithm = function () {
     console.log("Entered start algo function.")
     var state = document.getElementById("selected_state").value;
-    var compactness = document.getElementById("compactness").value;
-    var politicalFairness = document.getElementById("political_fairness").value;
-    var populationEquality = document.getElementById("population_equality").value;
+    var reock = document.getElementById("reock").value;
+    var polsbyPopper = document.getElementById("polsbyPopper").value;
+    var convexHull = document.getElementById("convexHull").value;
+    var politicalFairness = document.getElementById("politicalFairness").value;
+    var populationEquality = document.getElementById("populationEquality").value;
     var params = {
         state: state,
-        compactness: compactness,
+        reock: reock,
+        polsbyPopper: polsbyPopper,
+        convexHull: convexHull,
         politicalFairness: politicalFairness,
         populationEquality: populationEquality
     };

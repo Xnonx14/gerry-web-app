@@ -17,7 +17,7 @@ public class PrecinctEntity {
     private Integer countyId;
 
     @Column(name = "NAME")
-    private Integer name;
+    private String name;
 
     @Column(name = "BOUNDARY_DATA")
     private String boundaryData;
@@ -49,11 +49,11 @@ public class PrecinctEntity {
         this.districtId = districtId;
     }
 
-    public Integer getName() {
+    public String getName() {
         return name;
     }
 
-    public void setName(Integer name) {
+    public void setName(String name) {
         this.name = name;
     }
 
