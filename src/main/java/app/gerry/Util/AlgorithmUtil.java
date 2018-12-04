@@ -49,7 +49,7 @@ public class AlgorithmUtil {
         Map<Integer, List<Integer>> adjacentChunkIdMap = constructAdjacentChunkMap(chunks, stateName);
         setAdjacentChunks(idChunkMap, adjacentChunkIdMap);
         List<District> seeds = constructSeedDistrictsRandomly(chunks, numDistricts);
-        
+
         for(int i = 0; i < seeds.size(); i++) {
             seeds.get(i).id = i;
         }
