@@ -2,7 +2,7 @@ from shapely.geometry import Polygon, shape, mapping
 from shapely.ops import cascaded_union
 import json
 
-with open("wv_final.json") as f:
+with open("nh_final.json") as f:
 	data = json.load(f)
 
 counties = dict()
@@ -17,52 +17,53 @@ for feature in data['features']:
 	coordinates = geometry['coordinates']
 	type = geometry['type']
 	if(type == "MultiPolygon"):
-		for coord in coordinates[0][0]:
-			arr.append((coord[0],coord[1]))
-	else:
-		for coord in coordinates[0]:
-			arr.append((coord[0],coord[1]))
-	polygons[precinctName] = (Polygon(arr))
-	if countyName in counties:
-		counties[countyName].append(precinctName);
-	else:
-		counties[countyName] = [precinctName]
+		print len(coordinates[0])
+# 		for coord in coordinates[0][0]:
+# 			arr.append((coord[0],coord[1]))
+# 	else:
+# 		for coord in coordinates[0]:
+# 			arr.append((coord[0],coord[1]))
+# 	polygons[precinctName] = (Polygon(arr))
+# 	if countyName in counties:
+# 		counties[countyName].append(precinctName);
+# 	else:
+# 		counties[countyName] = [precinctName]
 
 
-#print(counties)
-#print(polygons)
-jsonData = {}
-#boundaryCoordinates	cascaded_union(polygons)
-for chunk in counties.keys():
-	precincts = counties[chunk]
-	countyCoordinates = []
-	for temp in precincts:
-		countyCoordinates.append(polygons[temp])
-	boundary = cascaded_union(countyCoordinates)
-	temp = {}
-	temp["precincts"] = counties[chunk]
+# #print(counties)
+# #print(polygons)
+# jsonData = {}
+# #boundaryCoordinates	cascaded_union(polygons)
+# for chunk in counties.keys():
+# 	precincts = counties[chunk]
+# 	countyCoordinates = []
+# 	for temp in precincts:
+# 		countyCoordinates.append(polygons[temp])
+# 	boundary = cascaded_union(countyCoordinates)
+# 	temp = {}
+# 	temp["precincts"] = counties[chunk]
 
-	temp["geometry"] = mapping(boundary)
-	jsonData[chunk] = temp
+# 	temp["geometry"] = mapping(boundary)
+# 	jsonData[chunk] = temp
 
-#adjacencyMap
-adjacencyMap = {}
-for i in polygons.keys():
-	polygonList = []
-	for j in polygons.keys():
-		if i == j: 
-			continue
-		if polygons[i].touches(polygons[j]):
-			polygonList.append(j)
-	adjacencyMap[i] = polygonList
+# #adjacencyMap
+# adjacencyMap = {}
+# for i in polygons.keys():
+# 	polygonList = []
+# 	for j in polygons.keys():
+# 		if i == j: 
+# 			continue
+# 		if polygons[i].touches(polygons[j]):
+# 			polygonList.append(j)
+# 	adjacencyMap[i] = polygonList
 
-file = open("wv_outputAdj", "w")
-# print(adjacencyMap)
-file.write(str(adjacencyMap))
+# file = open("wv_outputAdj", "w")
+# # print(adjacencyMap)
+# file.write(str(adjacencyMap))
 
-f = open("wv_counties.txt", "w")
-for c in counties.keys():
-	f.write(str(c) + ": "+str(counties[c]) + "\n")
+# f = open("wv_counties.txt", "w")
+# for c in counties.keys():
+# 	f.write(str(c) + ": "+str(counties[c]) + "\n")
 		
-with open('wv_counties.json', 'w') as outfile:
-    json.dump(jsonData, outfile)
+# with open('wv_counties.json', 'w') as outfile:
+#     json.dump(jsonData, outfile)
