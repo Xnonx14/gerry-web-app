@@ -16,12 +16,14 @@ public class RegionGrowing extends Algorithm{
     private Stack<Chunk> chunkMoveStack;
     private int iterations;
     private int index;
+    private Set<Chunk> seen;
 
     public RegionGrowing(Map<String, Object> params, AlgorithmUtil algorithmUtil) {
         this.algorithmUtil = algorithmUtil;
         context = algorithmUtil.initializeAlgorithmParameters(params);
         state = algorithmUtil.initializeStateWithRandomSeedDistricts(context.getStateName(), 2);
         chunkMoveStack = new Stack<>();
+        seen = new HashSet<>();
         init();
     }
 
@@ -36,8 +38,15 @@ public class RegionGrowing extends Algorithm{
         List<District> seedDistricts = state.getSeedDistricts();
         District seedDistrict = seedDistricts.get(index);
         List<Chunk> adjacentChunks = new ArrayList<>(seedDistrict.getAdjacentChunks());
-        Chunk selected = adjacentChunks.get(0);
+        int selectedIndex = new Random().nextInt(adjacentChunks.size());
+        Chunk selected = adjacentChunks.get(selectedIndex);
         seedDistrict.addChunk(selected);
+        seen.add(selected);
+        for(int i = 0; i < seedDistricts.size(); i++) {
+            if(i == selectedIndex)
+                continue;
+            seedDistrict.removeChunkFromAdjacencies(seen);
+        }
         chunkMoveStack.push(selected);
         index++;
         index = index % seedDistricts.size();
@@ -46,7 +55,7 @@ public class RegionGrowing extends Algorithm{
 
     @Override
     public boolean isFinished() {
-        return iterations >= 200;
+        return iterations >= 300;
     }
 
     @Override
