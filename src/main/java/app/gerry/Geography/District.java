@@ -17,6 +17,7 @@ public class District {
     public Set<Precinct> precincts;
     public Set<Chunk> chunks;
     public Set<Chunk> adjacentChunks;
+    public Set<Chunk> borderChunks;
     public GeometricData geometricData;
     public double ObjectiveValue;
 
@@ -47,7 +48,8 @@ public class District {
     public void addChunk(Chunk chunk){
         chunk.setParentDistrict(this);
         chunks.add(chunk);
-        adjacentChunks.addAll(chunk.getAdjacentChunks().stream().filter(c -> c.getParentDistrict() == null).collect(Collectors.toList()));
+        List newAdjacentChunks = chunk.getAdjacentChunks().stream().filter(c -> c.getParentDistrict() == null).collect(Collectors.toList());
+        adjacentChunks.addAll(newAdjacentChunks);
         adjacentChunks.remove(chunk);
     }
 
