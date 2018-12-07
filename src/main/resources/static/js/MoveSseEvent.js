@@ -9,6 +9,7 @@ function colorStyle(color){
             };
 }
 
+var isAlgoRunning = false;
 var subscribe = function () {
     var eventSource = new EventSource('algorithm/feed');
 
@@ -23,7 +24,10 @@ var subscribe = function () {
     };
 
     eventSource.onopen = function () {
-        startAlgorithm();
+        if(!isAlgoRunning) {
+            startAlgorithm();
+        }
+        console.log("onopen triggered");
     }
 
     window.onbeforeunload = function () {
@@ -32,6 +36,7 @@ var subscribe = function () {
 }
 
 var startAlgorithm = function () {
+    isAlgoRunning = true;
     console.log("Entered start algo function.")
     var state = document.getElementById("selected_state").value;
     var reock = document.getElementById("reock").value;

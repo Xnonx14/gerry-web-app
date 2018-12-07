@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -21,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @Controller
@@ -28,6 +31,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class AlgorithmController {
 
     private final CopyOnWriteArrayList<SseEmitter> emitters = new CopyOnWriteArrayList<>();
+    private final Map<String, SseEmitter> userEmitters = new ConcurrentHashMap<>();
 
     @Autowired
     AlgorithmMoveService algorithmMoveService;
@@ -37,15 +41,21 @@ public class AlgorithmController {
     
     @GetMapping("/algorithm/feed")
     public SseEmitter getFeed() {
-        SseEmitter emitter = new SseEmitter(86400000L);
-        this.emitters.add(emitter);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUser = authentication.getName();
 
-        emitter.onCompletion(() -> this.emitters.remove(emitter));
-        emitter.onTimeout(() -> {
-            emitter.complete();
-            this.emitters.remove(emitter);
-        });
-        return emitter;
+        if(!userEmitters.containsKey(currentUser)) {
+            SseEmitter emitter = new SseEmitter(86400000L);
+            userEmitters.put(currentUser, emitter);
+
+            emitter.onCompletion(() -> this.emitters.remove(emitter));
+            emitter.onTimeout(() -> {
+                emitter.complete();
+                this.emitters.remove(emitter);
+            });
+            return emitter;
+        }
+        return userEmitters.get(currentUser);
     }
 
 //    @PostMapping("/algorithm/start")
@@ -77,20 +87,47 @@ public class AlgorithmController {
         return new ResponseEntity(HttpStatus.ACCEPTED);
     }
 
+    @PostMapping("/algorithm/stop")
+    @ResponseBody
+    public ResponseEntity stopAlgorithm() {
+
+        return new ResponseEntity(HttpStatus.ACCEPTED);
+    }
+
+//    @EventListener
+//    public void onAlgorithmMov(SseResultData resultData) {
+//        List<SseEmitter> deadEmitters = new ArrayList<>();
+//        this.emitters.forEach(emitter -> {
+//            try {
+//                emitter.send(resultData);
+//                if(resultData.isLastOne()) {
+//                    System.out.println("Algorithm TERMINATED");
+//                    deadEmitters.add(emitter);
+//                    emitter.complete();
+//                }
+//            } catch (Exception e) {
+//                deadEmitters.add(emitter);
+//            }
+//        });
+//        this.emitters.remove(deadEmitters);
+//    }
+
     @EventListener
     public void onAlgorithmMove(SseResultData resultData) {
-        List<SseEmitter> deadEmitters = new ArrayList<>();
-        this.emitters.forEach(emitter -> {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUser = authentication.getName();
+
+        if(userEmitters.containsKey(currentUser)) {
+            SseEmitter emitter = userEmitters.get(currentUser);
             try {
                 emitter.send(resultData);
                 if(resultData.isLastOne()) {
-                    deadEmitters.add(emitter);
                     emitter.complete();
+                    userEmitters.remove(currentUser);
                 }
-            } catch (Exception e) {
-                deadEmitters.add(emitter);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        });
-        this.emitters.remove(deadEmitters);
+        }
     }
 }

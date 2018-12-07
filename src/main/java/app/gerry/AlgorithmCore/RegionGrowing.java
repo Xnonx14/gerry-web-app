@@ -17,6 +17,7 @@ public class RegionGrowing extends Algorithm{
     private int iterations;
     private int index;
     private Set<Chunk> seen;
+    private List<Chunk> unassignedChunks;
 
     public RegionGrowing(Map<String, Object> params, AlgorithmUtil algorithmUtil) {
         this.algorithmUtil = algorithmUtil;
@@ -24,6 +25,10 @@ public class RegionGrowing extends Algorithm{
         state = algorithmUtil.initializeStateWithRandomSeedDistricts(context.getStateName(), 2);
         chunkMoveStack = new Stack<>();
         seen = new HashSet<>();
+        unassignedChunks = new ArrayList<>(state.getChunks());
+        for(District district : state.getSeedDistricts()) {
+            unassignedChunks.removeAll(district.getChunks());
+        }
         init();
     }
 
@@ -36,12 +41,20 @@ public class RegionGrowing extends Algorithm{
     @Override
     public void step() {
         List<District> seedDistricts = state.getSeedDistricts();
+        if(seedDistricts.isEmpty())
+            return;
         District seedDistrict = seedDistricts.get(index);
         List<Chunk> adjacentChunks = new ArrayList<>(seedDistrict.getAdjacentChunks());
+        if(adjacentChunks.isEmpty()) {
+            seedDistricts.remove(seedDistrict);
+            index--;
+            return;
+        }
         int selectedIndex = new Random().nextInt(adjacentChunks.size());
         Chunk selected = adjacentChunks.get(selectedIndex);
         seedDistrict.addChunk(selected);
         seen.add(selected);
+        unassignedChunks.remove(selected);
         for(int i = 0; i < seedDistricts.size(); i++) {
             if(i == selectedIndex)
                 continue;
@@ -55,7 +68,7 @@ public class RegionGrowing extends Algorithm{
 
     @Override
     public boolean isFinished() {
-        return iterations >= 300;
+        return unassignedChunks.isEmpty();
     }
 
     @Override

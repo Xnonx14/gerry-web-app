@@ -13,7 +13,6 @@ import app.repository.DistrictRepository;
 import app.repository.PrecinctRepository;
 import app.repository.StateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -54,6 +53,7 @@ public class AlgorithmUtil {
             seeds.get(i).id = i;
         }
         State state = new State.Builder(stateName)
+                        .withChunks(chunks)
                         .withIdChunkMap(idChunkMap)
                         .withDistricts(seeds)
                         .withAdjacentChunkMap(adjacentChunkIdMap)
