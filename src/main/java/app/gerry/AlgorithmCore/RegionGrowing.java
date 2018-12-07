@@ -44,14 +44,15 @@ public class RegionGrowing extends Algorithm{
         if(seedDistricts.isEmpty())
             return;
         District seedDistrict = seedDistricts.get(index);
-        List<Chunk> adjacentChunks = new ArrayList<>(seedDistrict.getAdjacentChunks());
+        Set<Chunk> adjacentChunks = new HashSet<>(seedDistrict.getAdjacentChunks());
         if(adjacentChunks.isEmpty()) {
             seedDistricts.remove(seedDistrict);
             index--;
             return;
         }
         int selectedIndex = new Random().nextInt(adjacentChunks.size());
-        Chunk selected = adjacentChunks.get(selectedIndex);
+        Iterator chunkIt = adjacentChunks.iterator();
+        Chunk selected = (Chunk)chunkIt.next();
         seedDistrict.addChunk(selected);
         seen.add(selected);
         unassignedChunks.remove(selected);
