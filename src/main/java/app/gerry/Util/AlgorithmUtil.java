@@ -36,6 +36,7 @@ public class AlgorithmUtil {
 
     public Context initializeAlgorithmParameters(Map<String, Object> params) {
         Context context = new Context();
+        context.setSeedCount(Integer.parseInt((String) params.get("seedCount")));
         context.setPoliticalFairnessWeight(toDouble(params, POLITICAL_FAIRNESS));
         context.setPolsbyPopperWeight(toDouble(params, POLSBY_POPPER));
         context.setConvexHullWeight(toDouble(params, CONVEX_HULL));
