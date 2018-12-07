@@ -16,10 +16,12 @@ var subscribe = function () {
         var move = JSON.parse(e.data);
         var precinctId = move.precinctId;
         var districtId = move.districtId;
+        var area = move.area;
         var color = genColor(districtId);
         new_Hampshire.setFeatureStyle(precinctId, colorStyle(color))
         console.log(precinctId);
         console.log(districtId);
+        console.log(area);
     };
 
     eventSource.onopen = function () {

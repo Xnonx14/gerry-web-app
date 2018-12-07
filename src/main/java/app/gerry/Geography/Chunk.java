@@ -4,6 +4,8 @@ import app.gerry.Data.ElectionData;
 import app.gerry.Data.GeometricData;
 import app.gerry.Constants.PoliticalSubdivision;
 
+import org.locationtech.jts.geom.Geometry;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -32,6 +34,7 @@ public class Chunk {
         precincts.add(precinct);
         subdivision = PoliticalSubdivision.PRECINCT;
         id = precinct.getId();
+        cummGeometricData = precinct.getGeometricData();
         //TODO: fill in rest of fields
     }
 
@@ -42,8 +45,22 @@ public class Chunk {
     public Chunk(List<Precinct> precincts) {
         precincts.addAll(precincts);
         subdivision = PoliticalSubdivision.COUNTY;
+        calculateGeometricData();
         //TODO: assign county id to chunk id
         //TODO: fill in rest of fields
+    }
+
+    private void calculateGeometricData() {
+        Geometry base = null;
+        for (Precinct p: precincts){
+            if (base == null){
+                base = p.getGeometricData().getShape();
+            }
+            else{
+                base.union(p.getGeometricData().getShape());
+            }
+        }
+        this.cummGeometricData = new GeometricData(base.getArea(), base.getLength(), base.convexHull(), base);
     }
 
     //I don't think this would work logically
@@ -102,8 +119,7 @@ public class Chunk {
         return cummGeometricData;
     }
 
-    public void setCummGeometricData(GeometricData cummGeometricData) {
-        this.cummGeometricData = cummGeometricData;
+    public void setCummGeometricData(GeometricData cummGeometricData) { this.cummGeometricData = cummGeometricData;
     }
 
     public int getCummPopulation() {

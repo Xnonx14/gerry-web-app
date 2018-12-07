@@ -62,6 +62,7 @@ public class RegionGrowing extends Algorithm{
     public SseResultData getSseResultData() {
         int precinctId = chunkMoveStack.peek().getId();
         int districtId = chunkMoveStack.peek().getParentDistrict().getId();
+        double area = chunkMoveStack.peek().getCummGeometricData().getArea();
 
         return new SseResultData(districtId, precinctId, isFinished());
     }

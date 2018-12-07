@@ -2,6 +2,7 @@ package app.gerry.Geography;
 
 import app.gerry.Data.GeometricData;
 import app.gerry.Data.Representative;
+import org.locationtech.jts.geom.Geometry;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -13,7 +14,6 @@ public class District {
     public int id;
     public String name;
     public State state;
-    public Representative representative;
     public Set<Precinct> precincts;
     public Set<Chunk> chunks;
     public Set<Chunk> adjacentChunks;
@@ -29,7 +29,7 @@ public class District {
         chunks = new HashSet<>();
         adjacentChunks = new HashSet<>();
         addChunk(chunk);
-
+        geometricData = chunk.getCummGeometricData();
         //TODO: Add Chunk to chunks and update geometric data, etc...
     }
 
@@ -42,15 +42,28 @@ public class District {
     }
 
     public void removeChunk(Chunk c){
-        return;
+        chunks.remove(c);
     }
 
     public void addChunk(Chunk chunk){
         chunk.setParentDistrict(this);
+        updateGeometricData(chunk);
         chunks.add(chunk);
         List newAdjacentChunks = chunk.getAdjacentChunks().stream().filter(c -> c.getParentDistrict() == null).collect(Collectors.toList());
         adjacentChunks.addAll(newAdjacentChunks);
         adjacentChunks.remove(chunk);
+    }
+
+    private void updateGeometricData(Chunk chunk) {
+        Geometry other = chunk.getCummGeometricData().getShape();
+        Geometry updatedShape = getGeometricData().getShape().union(other);
+        double updatedArea = updatedShape.getArea();
+        double updatedPerimeter = updatedShape.getLength();
+        Geometry convexHull = updatedShape.convexHull();
+        this.geometricData.setArea(updatedArea);
+        this.geometricData.setPerimeter(updatedPerimeter);
+        this.geometricData.setConvexHull(convexHull);
+        this.geometricData.setShape(updatedShape);
     }
 
     public void removeChunkFromAdjacencies(Set<Chunk> chunk) {
@@ -75,14 +88,6 @@ public class District {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Representative getRepresentative() {
-        return representative;
-    }
-
-    public void setRepresentative(Representative representative) {
-        this.representative = representative;
     }
 
     public Set<Precinct> getPrecincts() {

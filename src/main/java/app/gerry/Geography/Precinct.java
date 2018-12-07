@@ -2,8 +2,12 @@ package app.gerry.Geography;
 
 import app.gerry.Data.Boundary;
 import app.gerry.Data.ElectionData;
+import app.gerry.Data.GeometricData;
 import app.gerry.Data.YearData;
 import app.gerry.Constants.PoliticalSubdivision;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.io.ParseException;
+import org.locationtech.jts.io.WKTReader;
 
 import java.util.Map;
 import java.util.Set;
@@ -16,10 +20,12 @@ public class Precinct {
     private Map<PoliticalSubdivision, String> restrictionData;
     private Set<Boundary> borderingLandmark;
     private Map<Integer, ElectionData> electionData;
+    private GeometricData geometricData;
 
-    public Precinct(Builder builder) {
+    public Precinct(Builder builder){
         this.id = builder.id;
         this.adjacentPrecincts = builder.adjacentPrecincts;
+        this.setGeometricData(builder.boundaryData);
     }
 
     public District getRandomAdjacentDistrict(){
@@ -38,6 +44,7 @@ public class Precinct {
         private Map<PoliticalSubdivision, String> restrictionData;
         private Set<Boundary> borderingLandmark;
         private Map<Integer, ElectionData> electionData;
+        private String boundaryData;
 
         public Builder() {
 
@@ -48,12 +55,15 @@ public class Precinct {
             return this;
         }
 
+        public Builder withBoundaryData(String boundaryData){
+            this.boundaryData = boundaryData;
+            return this;
+        }
+
         public Builder withAdjacentPrecincts(Set<Precinct> adjacentPrecincts) {
             this.adjacentPrecincts = adjacentPrecincts;
             return this;
         }
-
-
 
         public Precinct build() {
             return new Precinct(this);
@@ -102,6 +112,23 @@ public class Precinct {
 
     public Set<Boundary> getBorderingLandmark() {
         return borderingLandmark;
+    }
+
+    public GeometricData getGeometricData() {
+        return geometricData;
+    }
+
+    public void setGeometricData(String boundaryData){
+        WKTReader wktReader = new WKTReader();
+        try {
+            Geometry geom = wktReader.read(boundaryData);
+            double area = geom.getArea();
+            double perimeter = geom.getLength();
+            Geometry convexHull = geom.convexHull();
+            this.geometricData =  new GeometricData(area, perimeter, convexHull, geom);
+        }
+        catch (ParseException p){
+        }
     }
 
     public void setBorderingLandmark(Set<Boundary> borderingLandmark) {

@@ -1,6 +1,7 @@
 package app.gerry.Util;
 
 import app.gerry.AlgorithmCore.Context;
+import app.gerry.Data.GeometricData;
 import app.gerry.Geography.Chunk;
 import app.gerry.Geography.District;
 import app.gerry.Geography.Precinct;
@@ -12,6 +13,9 @@ import app.model.StateEntity;
 import app.repository.DistrictRepository;
 import app.repository.PrecinctRepository;
 import app.repository.StateRepository;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.io.ParseException;
+import org.locationtech.jts.io.WKTReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
@@ -134,6 +138,7 @@ public class AlgorithmUtil {
                 )
                 .collect(Collectors.toList());
     }
+
 
     private Double toDouble(Map<String, Object> params, String key) {
         if(!params.containsKey(key)) {
