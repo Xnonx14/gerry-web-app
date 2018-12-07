@@ -22,7 +22,7 @@ public class RegionGrowing extends Algorithm{
     public RegionGrowing(Map<String, Object> params, AlgorithmUtil algorithmUtil) {
         this.algorithmUtil = algorithmUtil;
         context = algorithmUtil.initializeAlgorithmParameters(params);
-        state = algorithmUtil.initializeStateWithRandomSeedDistricts(context.getStateName(), 2);
+        state = algorithmUtil.initializeStateWithRandomSeedDistricts(context.getStateName(), context.getSeedCount());
         chunkMoveStack = new Stack<>();
         seen = new HashSet<>();
         unassignedChunks = new ArrayList<>(state.getChunks());
@@ -44,14 +44,15 @@ public class RegionGrowing extends Algorithm{
         if(seedDistricts.isEmpty())
             return;
         District seedDistrict = seedDistricts.get(index);
-        List<Chunk> adjacentChunks = new ArrayList<>(seedDistrict.getAdjacentChunks());
+        Set<Chunk> adjacentChunks = new HashSet<>(seedDistrict.getAdjacentChunks());
         if(adjacentChunks.isEmpty()) {
             seedDistricts.remove(seedDistrict);
             index--;
             return;
         }
         int selectedIndex = new Random().nextInt(adjacentChunks.size());
-        Chunk selected = adjacentChunks.get(selectedIndex);
+        Iterator chunkIt = adjacentChunks.iterator();
+        Chunk selected = (Chunk)chunkIt.next();
         seedDistrict.addChunk(selected);
         seen.add(selected);
         unassignedChunks.remove(selected);

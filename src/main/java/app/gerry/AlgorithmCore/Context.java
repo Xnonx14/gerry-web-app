@@ -7,6 +7,15 @@ public class Context {
     private double reockWeight;
     private double populationEqualityWeight;
     private double politicalFairnessWeight;
+    private int seedCount;
+    
+    public void setSeedCount(int count){
+        this.seedCount = count;
+    }
+    
+    public int getSeedCount(){
+        return seedCount;
+    }
 
     public String getStateName() {
         return stateName;
