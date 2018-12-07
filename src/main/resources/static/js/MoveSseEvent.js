@@ -15,7 +15,9 @@ var move;
 var init = false;
 
 var subscribe = function () {
-    isPaused = false;
+    if(init == true){
+        isPaused = false;
+    }
     var eventSource = new EventSource('algorithm/feed');
 
     eventSource.onmessage = function (e) {
@@ -27,8 +29,6 @@ var subscribe = function () {
             var districtId = move.districtId;
             var color = genColor(districtId);
             new_Hampshire.setFeatureStyle(precinctId, colorStyle(color))
-            console.log(precinctId);
-            console.log(districtId);
         }
     };
 
@@ -46,8 +46,24 @@ var subscribe = function () {
 var pause = function () {
     if(isPaused == false){
         isPaused  = true;
+        queue = [];
     }
 }
+
+var make_step = function(){
+    if(init == false){
+        isPaused = true;
+        subscribe();
+    }
+    if(isPaused == true && queue.length > 0){
+            move = queue.shift();
+            var precinctId = move.precinctId;
+            var districtId = move.districtId;
+            var color = genColor(districtId);
+            new_Hampshire.setFeatureStyle(precinctId, colorStyle(color))
+    }
+}
+
 var startAlgorithm = function () {
     console.log("Entered start algo function.")
     var state = document.getElementById("selected_state").value;
