@@ -10,28 +10,64 @@ function colorStyle(color){
 }
 
 var isAlgoRunning = false;
+var queue = [];
+var isPaused = false;
+var move;
+var init = false;
 var subscribe = function () {
+    if(init == true){
+        isPaused = false;
+    }
     var eventSource = new EventSource('algorithm/feed');
 
     eventSource.onmessage = function (e) {
         var move = JSON.parse(e.data);
-        var precinctId = move.precinctId;
-        var districtId = move.districtId;
-        var color = genColor(districtId);
-        new_Hampshire.setFeatureStyle(precinctId, colorStyle(color))
-        console.log(precinctId);
-        console.log(districtId);
+        queue.push(move);
+        if(isPaused == false && queue.length > 0){
+            move = queue.shift();
+            var precinctId = move.precinctId;
+            var districtId = move.districtId;
+            var color = genColor(districtId);
+            new_Hampshire.setFeatureStyle(precinctId, colorStyle(color))
+        }
     };
 
     eventSource.onopen = function () {
+<<<<<<< HEAD
         if(!isAlgoRunning) {
             startAlgorithm();
         }
         console.log("onopen triggered");
+=======
+        if(init == false){
+            init = true;
+            startAlgorithm();
+        }
+>>>>>>> 64cbcb10ee6fb89963b30be0cb9ac397a0e2d37d
     }
 
     window.onbeforeunload = function () {
         eventSource.close();
+    }
+}
+var pause = function () {
+    if(isPaused == false){
+        isPaused  = true;
+        queue = [];
+    }
+}
+
+var make_step = function(){
+    if(init == false){
+        isPaused = true;
+        subscribe();
+    }
+    if(isPaused == true && queue.length > 0){
+            move = queue.shift();
+            var precinctId = move.precinctId;
+            var districtId = move.districtId;
+            var color = genColor(districtId);
+            new_Hampshire.setFeatureStyle(precinctId, colorStyle(color))
     }
 }
 

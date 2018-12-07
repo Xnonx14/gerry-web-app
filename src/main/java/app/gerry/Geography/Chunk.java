@@ -57,8 +57,9 @@ public class Chunk {
     public Set<Chunk> getAdjacentChunks(){
         return adjacentChunks;
     }
+
     public void populateChunk(Precinct p){
-        return;
+        precincts.add(p);
     }
 
     public int getId() {
@@ -81,7 +82,7 @@ public class Chunk {
         return precincts;
     }
 
-    public void setPrecients(List<Precinct> precincts) {
+    public void setPrecincts(List<Precinct> precincts) {
         this.precincts = precincts;
     }
 
