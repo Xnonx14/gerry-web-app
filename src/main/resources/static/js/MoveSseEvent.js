@@ -73,13 +73,15 @@ var startAlgorithm = function () {
     var convexHull = document.getElementById("convexHull").value;
     var politicalFairness = document.getElementById("politicalFairness").value;
     var populationEquality = document.getElementById("populationEquality").value;
+	var seedCount = document.getElementById("seedCount").value;
     var params = {
         state: state,
         reock: reock,
         polsbyPopper: polsbyPopper,
         convexHull: convexHull,
         politicalFairness: politicalFairness,
-        populationEquality: populationEquality
+        populationEquality: populationEquality,
+		seedCount: seedCount
     };
 
     var xhr = new XMLHttpRequest();
