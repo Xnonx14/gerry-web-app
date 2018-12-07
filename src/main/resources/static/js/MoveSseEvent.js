@@ -9,11 +9,11 @@ function colorStyle(color){
             };
 }
 
-var isAlgoRunning = false;
 var queue = [];
 var isPaused = false;
 var move;
 var init = false;
+
 var subscribe = function () {
     if(init == true){
         isPaused = false;
@@ -33,17 +33,10 @@ var subscribe = function () {
     };
 
     eventSource.onopen = function () {
-<<<<<<< HEAD
-        if(!isAlgoRunning) {
-            startAlgorithm();
-        }
-        console.log("onopen triggered");
-=======
         if(init == false){
             init = true;
             startAlgorithm();
         }
->>>>>>> 64cbcb10ee6fb89963b30be0cb9ac397a0e2d37d
     }
 
     window.onbeforeunload = function () {
