@@ -9,28 +9,45 @@ function colorStyle(color){
             };
 }
 
+var queue = [];
+var isPaused = false;
+var move;
+var init = false;
+
 var subscribe = function () {
+    isPaused = false;
     var eventSource = new EventSource('algorithm/feed');
 
     eventSource.onmessage = function (e) {
         var move = JSON.parse(e.data);
-        var precinctId = move.precinctId;
-        var districtId = move.districtId;
-        var color = genColor(districtId);
-        new_Hampshire.setFeatureStyle(precinctId, colorStyle(color))
-        console.log(precinctId);
-        console.log(districtId);
+        queue.push(move);
+        if(isPaused == false && queue.length > 0){
+            move = queue.shift();
+            var precinctId = move.precinctId;
+            var districtId = move.districtId;
+            var color = genColor(districtId);
+            new_Hampshire.setFeatureStyle(precinctId, colorStyle(color))
+            console.log(precinctId);
+            console.log(districtId);
+        }
     };
 
     eventSource.onopen = function () {
-        startAlgorithm();
+        if(init == false){
+            init = true;
+            startAlgorithm();
+        }
     }
 
     window.onbeforeunload = function () {
         eventSource.close();
     }
 }
-
+var pause = function () {
+    if(isPaused == false){
+        isPaused  = true;
+    }
+}
 var startAlgorithm = function () {
     console.log("Entered start algo function.")
     var state = document.getElementById("selected_state").value;
