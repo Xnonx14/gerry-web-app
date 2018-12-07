@@ -11,6 +11,7 @@ public class State {
     private int id;
     private String name;
     private List<District> districts;
+    private List<Chunk> chunks;
     private Map<Integer, Chunk> idChunkMap;
     private Map<Integer, List<Integer>> adjacentChunkIdMap;
     private Set<Representative> representatives;
@@ -26,6 +27,7 @@ public class State {
         this.population = builder.population;
         this.adjacentChunkIdMap = builder.adjacentChunkIdMap;
         this.idChunkMap = builder.idChunkMap;
+        this.chunks = builder.chunks;
     }
 
     public Set<Precinct> getAllPrecincts(){
@@ -69,10 +71,27 @@ public class State {
         this.adjacentChunkIdMap = adjacentChunkIdMap;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<Chunk> getChunks() {
+        return chunks;
+    }
+
+    public void setChunks(List<Chunk> chunks) {
+        this.chunks = chunks;
+    }
+
     public static class Builder {
         private int id;
         private String name;
         private List<District> districts;
+        private List<Chunk> chunks;
         private Map<Integer, Chunk> idChunkMap;
         private Map<Integer, List<Integer>> adjacentChunkIdMap;
         private Set<Representative> representatives;
@@ -81,6 +100,11 @@ public class State {
 
         public Builder(String name) {
             this.name = name;
+        }
+
+        public Builder withChunks(List<Chunk> chunks) {
+            this.chunks = chunks;
+            return this;
         }
 
         public Builder withDistricts(List<District> districts) {

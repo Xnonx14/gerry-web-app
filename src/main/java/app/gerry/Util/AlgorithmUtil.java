@@ -17,7 +17,6 @@ import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.io.ParseException;
 import org.locationtech.jts.io.WKTReader;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -58,6 +57,7 @@ public class AlgorithmUtil {
             seeds.get(i).id = i;
         }
         State state = new State.Builder(stateName)
+                        .withChunks(chunks)
                         .withIdChunkMap(idChunkMap)
                         .withDistricts(seeds)
                         .withAdjacentChunkMap(adjacentChunkIdMap)
@@ -134,6 +134,7 @@ public class AlgorithmUtil {
         return precinctEntities.stream()
                 .map(p -> new Precinct.Builder()
                             .withId(p.getId())
+                            .withBoundaryData(p.getBoundaryData())
                             .build()
                 )
                 .collect(Collectors.toList());

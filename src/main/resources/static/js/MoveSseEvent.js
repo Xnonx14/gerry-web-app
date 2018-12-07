@@ -9,7 +9,15 @@ function colorStyle(color){
             };
 }
 
+var isAlgoRunning = false;
+var queue = [];
+var isPaused = false;
+var move;
+var init = false;
 var subscribe = function () {
+    if(init == true){
+        isPaused = false;
+    }
     var eventSource = new EventSource('algorithm/feed');
 
     eventSource.onmessage = function (e) {
@@ -22,18 +30,51 @@ var subscribe = function () {
         console.log(precinctId);
         console.log(districtId);
         console.log(area);
+
+        queue.push(move);
+        if(isPaused == false && queue.length > 0){
+            move = queue.shift();
+            var precinctId = move.precinctId;
+            var districtId = move.districtId;
+            var color = genColor(districtId);
+            new_Hampshire.setFeatureStyle(precinctId, colorStyle(color))
+        }
     };
 
     eventSource.onopen = function () {
-        startAlgorithm();
+        if(init == false){
+            init = true;
+            startAlgorithm();
+        }
     }
 
     window.onbeforeunload = function () {
         eventSource.close();
     }
 }
+var pause = function () {
+    if(isPaused == false){
+        isPaused  = true;
+        queue = [];
+    }
+}
+
+var make_step = function(){
+    if(init == false){
+        isPaused = true;
+        subscribe();
+    }
+    if(isPaused == true && queue.length > 0){
+            move = queue.shift();
+            var precinctId = move.precinctId;
+            var districtId = move.districtId;
+            var color = genColor(districtId);
+            new_Hampshire.setFeatureStyle(precinctId, colorStyle(color))
+    }
+}
 
 var startAlgorithm = function () {
+    isAlgoRunning = true;
     console.log("Entered start algo function.")
     var state = document.getElementById("selected_state").value;
     var reock = document.getElementById("reock").value;

@@ -57,8 +57,7 @@ public class PrecinctEntity {
         this.name = name;
     }
 
-    public String getBoundaryData() {
-        return boundaryData;
+    public String getBoundaryData() {return boundaryData;
     }
 
     public void setBoundaryData(String boundaryData) {

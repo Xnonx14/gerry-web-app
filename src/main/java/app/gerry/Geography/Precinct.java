@@ -20,12 +20,13 @@ public class Precinct {
     private Map<PoliticalSubdivision, String> restrictionData;
     private Set<Boundary> borderingLandmark;
     private Map<Integer, ElectionData> electionData;
+    private String boundaryData;
     private GeometricData geometricData;
 
     public Precinct(Builder builder){
         this.id = builder.id;
         this.adjacentPrecincts = builder.adjacentPrecincts;
-        this.setGeometricData(builder.boundaryData);
+        setGeometricData(builder.boundaryData);
     }
 
     public District getRandomAdjacentDistrict(){
@@ -121,11 +122,13 @@ public class Precinct {
     public void setGeometricData(String boundaryData){
         WKTReader wktReader = new WKTReader();
         try {
-            Geometry geom = wktReader.read(boundaryData);
-            double area = geom.getArea();
-            double perimeter = geom.getLength();
-            Geometry convexHull = geom.convexHull();
-            this.geometricData =  new GeometricData(area, perimeter, convexHull, geom);
+            if (boundaryData != null) {
+                Geometry geom = wktReader.read(boundaryData);
+                double area = geom.getArea();
+                double perimeter = geom.getLength();
+                Geometry convexHull = geom.convexHull();
+                this.geometricData = new GeometricData(area, perimeter, convexHull, geom);
+            }
         }
         catch (ParseException p){
         }

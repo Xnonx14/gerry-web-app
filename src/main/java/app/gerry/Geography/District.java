@@ -55,15 +55,17 @@ public class District {
     }
 
     private void updateGeometricData(Chunk chunk) {
-        Geometry other = chunk.getCummGeometricData().getShape();
-        Geometry updatedShape = getGeometricData().getShape().union(other);
-        double updatedArea = updatedShape.getArea();
-        double updatedPerimeter = updatedShape.getLength();
-        Geometry convexHull = updatedShape.convexHull();
-        this.geometricData.setArea(updatedArea);
-        this.geometricData.setPerimeter(updatedPerimeter);
-        this.geometricData.setConvexHull(convexHull);
-        this.geometricData.setShape(updatedShape);
+        if (chunk.getCummGeometricData() != null && getGeometricData()!= null) {
+            Geometry other = chunk.getCummGeometricData().getShape();
+            Geometry updatedShape = getGeometricData().getShape().union(other);
+            double updatedArea = updatedShape.getArea();
+            double updatedPerimeter = updatedShape.getLength();
+            Geometry convexHull = updatedShape.convexHull();
+            this.geometricData.setArea(updatedArea);
+            this.geometricData.setPerimeter(updatedPerimeter);
+            this.geometricData.setConvexHull(convexHull);
+            this.geometricData.setShape(updatedShape);
+        }
     }
 
     public void removeChunkFromAdjacencies(Set<Chunk> chunk) {
