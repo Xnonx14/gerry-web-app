@@ -9,6 +9,12 @@ import app.gerry.Constants.Position;
 @Entity
 @Table(name = "ELECTION_DATA")
 public class ElectionData {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+
     @Column(name = "DATE")
     private Date date;
 
