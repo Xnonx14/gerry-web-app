@@ -20,6 +20,12 @@ var subscribe = function () {
     eventSource.onmessage = function (e) {
         var move = JSON.parse(e.data);
         queue.push(move);
+        if(state == "CLOSED"){
+           state = "NOT_INIT";
+           elem.value = "Pause";
+           queue = [];
+           eventSource.close();
+        }
         if(state == "NORMAL" && queue.length > 0){
             move = queue.shift();
             var precinctId = move.precinctId;
@@ -71,6 +77,15 @@ var make_step = function(){
             var districtId = move.districtId;
             var color = genColor(districtId);
             new_Hampshire.setFeatureStyle(precinctId, colorStyle(color))
+    }
+}
+
+var stop = function(){
+    if(state == "NORMAL" || state == "PAUSED"){
+        for(var i = 17; i <= 345; i++){
+            new_Hampshire.resetFeatureStyle(i);
+        }
+        state = "CLOSED";
     }
 }
 
