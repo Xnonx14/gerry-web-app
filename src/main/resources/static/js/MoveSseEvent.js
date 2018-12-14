@@ -10,20 +10,17 @@ function colorStyle(color){
 }
 
 var queue = [];
-var isPaused = false;
+var state = "NOT_INIT";
 var move;
-var init = false;
 
 var subscribe = function () {
-    if(init == true){
-        isPaused = false;
-    }
     var eventSource = new EventSource('algorithm/feed');
+    var elem = document.getElementById("pause_button");
 
     eventSource.onmessage = function (e) {
         var move = JSON.parse(e.data);
         queue.push(move);
-        if(isPaused == false && queue.length > 0){
+        if(state == "NORMAL" && queue.length > 0){
             move = queue.shift();
             var precinctId = move.precinctId;
             var districtId = move.districtId;
@@ -33,8 +30,13 @@ var subscribe = function () {
     };
 
     eventSource.onopen = function () {
-        if(init == false){
-            init = true;
+        if(state == "NOT_INIT"){
+            state = "NORMAL";
+            startAlgorithm();
+        }
+        else if(state == "INIT_FROM_STEP"){
+            state = "PAUSED";
+            elem.value = "Unpause";
             startAlgorithm();
         }
     }
@@ -44,18 +46,26 @@ var subscribe = function () {
     }
 }
 var pause = function () {
-    if(isPaused == false){
-        isPaused  = true;
-        queue = [];
+    var elem = document.getElementById("pause_button");
+    if(state == "NOT_INIT"){
+
+    }
+    else if(state == "NORMAL"){
+        state  = "PAUSED";
+        elem.value = "Unpause";
+    }
+    else if(state == "PAUSED"){
+        state  = "NORMAL";
+        elem.value = "Pause";
     }
 }
 
 var make_step = function(){
-    if(init == false){
-        isPaused = true;
+    if(state == "NOT_INIT"){
+        state = "INIT_FROM_STEP"
         subscribe();
     }
-    if(isPaused == true && queue.length > 0){
+    if(state == "PAUSED" && queue.length > 0){
             move = queue.shift();
             var precinctId = move.precinctId;
             var districtId = move.districtId;
