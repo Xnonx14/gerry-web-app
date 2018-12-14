@@ -1,5 +1,6 @@
 package app.gerry.Geography;
 
+import app.gerry.AlgorithmCore.ObjectiveFunction;
 import app.gerry.Data.GeometricData;
 import app.gerry.Data.Representative;
 
