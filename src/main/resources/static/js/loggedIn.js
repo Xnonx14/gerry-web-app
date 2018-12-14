@@ -197,7 +197,7 @@ onEachFeature: onEachFeature,
 //	}
 //}
 //}).addTo(map);
-    new_Hampshire = L.vectorGrid.slicer(nH_data, {
+var new_Hampshire = L.vectorGrid.slicer(nH_data, {
 	minZoom: 7,
 	rendererFactory: L.svg.tile,
 	vectorTileLayerStyles: {

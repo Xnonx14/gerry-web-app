@@ -48,6 +48,7 @@ public class AlgorithmUtil {
 
     public State initializeStateWithRandomSeedDistricts(String stateName, int numDistricts) {
         List<Precinct> precincts = aggregatePrecinctsInState(stateName);
+        //
         Map<Integer, Chunk> idChunkMap = toIdChunkMap(precincts);
         List<Chunk> chunks = new ArrayList<>(idChunkMap.values());
         Map<Integer, List<Integer>> adjacentChunkIdMap = constructAdjacentChunkMap(chunks, stateName);

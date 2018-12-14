@@ -1,5 +1,6 @@
 package app.gerry.Geography;
 
+import app.gerry.AlgorithmCore.ObjectiveFunction;
 import app.gerry.Data.GeometricData;
 import app.gerry.Data.Representative;
 import org.locationtech.jts.geom.Geometry;
@@ -88,8 +89,17 @@ public class District {
         return name;
     }
 
+    public State getState(){return state;}
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Representative getRepresentative() {
+        return representative;
+    }
+
+    public void setRepresentative(Representative representative) {
+        this.representative = representative;
     }
 
     public Set<Precinct> getPrecincts() {
