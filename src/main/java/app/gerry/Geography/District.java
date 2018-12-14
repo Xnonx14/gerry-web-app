@@ -25,6 +25,36 @@ public class District {
      * Construct a district that contains one chunk (Seed district)
      * @param chunk
      */
+    public static class Builder {
+        public int id;
+        public String name;
+        public State state;
+        public Representative representative;
+        public Set<Precinct> precincts;
+        public Set<Chunk> chunks;
+        public Set<Chunk> adjacentChunks;
+        public Set<Chunk> borderChunks;
+        public GeometricData geometricData;
+        public double ObjectiveValue;
+
+        public Builder() {
+
+        }
+
+        public Builder withId(int id) {
+            this.id = id;
+            return this;
+        }
+
+        public District build() {
+            return new District(this);
+        }
+    }
+    
+    public District(Builder builder) {
+        this.id = builder.id;
+    }
+    
     public District(Chunk chunk) {
         chunks = new HashSet<>();
         adjacentChunks = new HashSet<>();
@@ -34,7 +64,8 @@ public class District {
     }
 
     public Chunk getRandomBorderChunk(){
-        return null;
+        int index = (int)(Math.random()*borderChunks.size());
+        return (Chunk)(borderChunks.toArray())[index];
     }
 
     public Set<Chunk> getAdjacentChunks(){

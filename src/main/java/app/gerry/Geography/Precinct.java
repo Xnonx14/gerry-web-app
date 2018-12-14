@@ -10,6 +10,16 @@ import java.util.Set;
 
 public class Precinct {
     private int id;
+    private int parentDistrictID;
+
+    public int getParentDistrictID() {
+        return parentDistrictID;
+    }
+    
+    public void setParentDistrictID(int id) {
+        parentDistrictID = id;
+    }
+    
     private Set<Precinct> adjacentPrecincts;
     private Map<String, YearData> yearData;
     private boolean isBorderPrecinct;
@@ -20,6 +30,7 @@ public class Precinct {
     public Precinct(Builder builder) {
         this.id = builder.id;
         this.adjacentPrecincts = builder.adjacentPrecincts;
+        this.parentDistrictID = builder.parentDistrictID;
     }
 
     public District getRandomAdjacentDistrict(){
@@ -32,6 +43,7 @@ public class Precinct {
 
     public static class Builder {
         private int id;
+        private int parentDistrictID;
         private Set<Precinct> adjacentPrecincts;
         private Map<String, YearData> yearData;
         private boolean isBorderPrecinct;
@@ -45,6 +57,11 @@ public class Precinct {
 
         public Builder withId(int id) {
             this.id = id;
+            return this;
+        }
+        
+        public Builder withDistrictID(int id) {
+            this.parentDistrictID = id;
             return this;
         }
 

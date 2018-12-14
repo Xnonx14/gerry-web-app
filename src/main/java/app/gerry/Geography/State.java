@@ -30,18 +30,9 @@ public class State {
         this.chunks = builder.chunks;
     }
 
-    public Set<Precinct> getAllPrecincts(){
-        // TODO
-        return null;
-
-    }
-    public Set<String> getSubdivisionNames(){
-        // TODO
-        return null;
-    }
     public District getRandomDistrict(){
-        // TODO
-        return null;
+        int index = (int)(districts.size() * Math.random());
+        return districts.get(index);
     }
     public List<District> getSeedDistricts(){
         return districts;
@@ -79,6 +70,10 @@ public class State {
         this.name = name;
     }
 
+    public List<District> getDistricts(){
+        return districts;
+    }
+    
     public List<Chunk> getChunks() {
         return chunks;
     }

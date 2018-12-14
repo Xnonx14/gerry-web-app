@@ -41,7 +41,42 @@ public class AlgorithmUtil {
         context.setStateName(toString(params, STATE_NAME));
         return context;
     }
-
+    
+    public State initializeStateWithAllDistricts(String stateName) {
+        List<PrecinctEntity> precinctEntities = aggregatePrecinctEntitiesInState(stateName);
+        List<Precinct> precincts = convertPrecinctEntitiesToPrecinctsSA(precinctEntities);
+        Map<Integer, Chunk> idChunkMap = toIdChunkMap(precincts);
+        List<Chunk> chunks = new ArrayList<>(idChunkMap.values());
+        for (Precinct p: precincts){
+            int id = p.getId();
+            idChunkMap.get(id).setParentDistrictID(p.getParentDistrictID());
+        }
+        
+        Map<Integer, List<Integer>> adjacentChunkIdMap = constructAdjacentChunkMap(chunks, stateName);
+        setAdjacentChunks(idChunkMap, adjacentChunkIdMap);
+        StateEntity stateEntity = stateRepository.findByName(stateName);
+        List<DistrictEntity> districtEntities =  districtRepository.findByStateId(stateEntity.getId());
+        
+        List<District> districtList = convertDistrictsEntitiesToDistricts(districtEntities);
+        
+        for(District d: districtList){
+            d.chunks = new HashSet<>();
+            for(Chunk c: chunks){
+                if(c.getParentDistrictID() == d.getId()){
+                    d.getChunks().add(c);
+                }
+            }
+        }
+        
+        State state = new State.Builder(stateName)
+                        .withChunks(chunks)
+                        .withIdChunkMap(idChunkMap)
+                        .withDistricts(districtList)
+                        .withAdjacentChunkMap(adjacentChunkIdMap)
+                        .build();
+        return state;
+    }
+    
     public State initializeStateWithRandomSeedDistricts(String stateName, int numDistricts) {
         List<Precinct> precincts = aggregatePrecinctsInState(stateName);
         Map<Integer, Chunk> idChunkMap = toIdChunkMap(precincts);
@@ -127,10 +162,29 @@ public class AlgorithmUtil {
         return result;
     }
 
+    private List<Precinct> convertPrecinctEntitiesToPrecinctsSA(List<PrecinctEntity> precinctEntities) {
+        return precinctEntities.stream()
+                .map(p -> new Precinct.Builder()
+                            .withId(p.getId())
+                            .withDistrictID(p.getDistrictId())
+                            .build()
+                )
+                .collect(Collectors.toList());
+    }
+    
     private List<Precinct> convertPrecinctEntitiesToPrecincts(List<PrecinctEntity> precinctEntities) {
         return precinctEntities.stream()
                 .map(p -> new Precinct.Builder()
                             .withId(p.getId())
+                            .build()
+                )
+                .collect(Collectors.toList());
+    }
+    
+    private List<District> convertDistrictsEntitiesToDistricts(List<DistrictEntity> districtEntities) {
+        return districtEntities.stream()
+                .map(d -> new District.Builder()
+                            .withId(d.getId())
                             .build()
                 )
                 .collect(Collectors.toList());

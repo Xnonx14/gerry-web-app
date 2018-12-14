@@ -20,6 +20,16 @@ public class Chunk {
     private PoliticalSubdivision subdivision;
     private boolean isFinalized;
     private District parentDistrict;
+    private int parentDistrictID;
+
+    public int getParentDistrictID() {
+        return parentDistrictID;
+    }
+
+    public void setParentDistrictID(int parentID) {
+        this.parentDistrictID = parentID;
+    }
+    
     private boolean isBorderChunk;
 
     /**

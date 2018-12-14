@@ -4,6 +4,7 @@ import app.SseTesting.Notification;
 import app.SseTesting.NotificationJobService;
 import app.gerry.AlgorithmCore.Algorithm;
 import app.gerry.AlgorithmCore.RegionGrowing;
+import app.gerry.AlgorithmCore.SimulatedAnnealing;
 import app.gerry.Sse.AlgorithmMoveService;
 import app.gerry.Sse.SseResultData;
 import app.gerry.Sse.TestAlgorithm;
@@ -82,7 +83,8 @@ public class AlgorithmController {
     @PostMapping("/algorithm/start")
     @ResponseBody
     public ResponseEntity initiateAlgorithm(@RequestBody Map<String, Object> params) {
-        Algorithm algorithm = new RegionGrowing(params, algorithmUtil);
+        //Algorithm algorithm = new RegionGrowing(params, algorithmUtil);
+        Algorithm algorithm = new SimulatedAnnealing(params, algorithmUtil);
         algorithmMoveService.runAlgorithm(algorithm);
         return new ResponseEntity(HttpStatus.ACCEPTED);
     }
