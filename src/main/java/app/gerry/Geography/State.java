@@ -17,6 +17,7 @@ public class State {
     private Set<Representative> representatives;
     private PoliticalSubdivision restriction;
     private int population;
+    private int averagePopulation;
 
     private State(Builder builder) {
         this.id = builder.id;
@@ -141,4 +142,13 @@ public class State {
             return new State(this);
         }
     }
+
+    public int getPopulation() {
+        return population;
+    }
+
+    public int getAveragePopulation() {
+        return averagePopulation;
+    }
+
 }

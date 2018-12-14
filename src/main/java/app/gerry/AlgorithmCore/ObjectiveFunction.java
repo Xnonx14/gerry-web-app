@@ -2,6 +2,7 @@ package app.gerry.AlgorithmCore;
 
 import app.gerry.Data.GeometricData;
 import app.gerry.Geography.District;
+import app.gerry.Geography.State;
 
 import java.util.HashMap;
 
@@ -9,12 +10,13 @@ public class ObjectiveFunction {
 
     public static double getObjectiveValue(District d, HashMap<String, Double> weights){
         GeometricData data = d.getGeometricData();
+        State s = d.getState();
 //      double Reock_value = calculate_Reock(data.area, data.minBoundingCircleArea);
 //      double Polsby_value = calculate_Polsby(data.area, data.perimeter);
 //      double Convex_value = calculate_Convex(data.area, data.convexHullArea);
 //      double Political_value = calculate_Political();
-        double Population_value = calculate_Population(data.population, data.averagePopulation, data.totalPopulation);
-        return normalize(Population_value,0 , (data.totalPopulation- data.averagePopulation)/data.totalPopulation);
+        double Population_value = calculate_Population(data.population, s.getAveragePopulation(), s.getPopulation());
+        return normalize(Population_value,0 , (s.getPopulation()- s.getAveragePopulation())/s.getPopulation());
     }
 
     private static double calculate_Reock(double area, double minBoundingCircleArea) {

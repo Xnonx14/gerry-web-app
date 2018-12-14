@@ -8,8 +8,6 @@ public class GeometricData {
     public double area;
     public Set<Point> convexHull;
     public double population;
-    public double averagePopulation;
-    public double totalPopulation;
     public double minBoundingCircleArea;
     public double convexHullArea;
 }

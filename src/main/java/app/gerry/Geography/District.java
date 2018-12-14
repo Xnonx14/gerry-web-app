@@ -74,9 +74,11 @@ public class District {
         return name;
     }
 
+    public State getState(){return state;}
     public void setName(String name) {
         this.name = name;
     }
+
 
     public Representative getRepresentative() {
         return representative;
