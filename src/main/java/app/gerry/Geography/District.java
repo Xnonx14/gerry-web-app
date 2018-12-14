@@ -1,5 +1,6 @@
 package app.gerry.Geography;
 
+import app.gerry.AlgorithmCore.ObjectiveFunction;
 import app.gerry.Data.GeometricData;
 import app.gerry.Data.Representative;
 
@@ -104,9 +105,11 @@ public class District {
         return name;
     }
 
+    public State getState(){return state;}
     public void setName(String name) {
         this.name = name;
     }
+
 
     public Representative getRepresentative() {
         return representative;
