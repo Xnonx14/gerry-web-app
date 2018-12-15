@@ -32,6 +32,6 @@ public class TestAlgorithm extends Algorithm {
 
     @Override
     public SseResultData getSseResultData() {
-        return new SseResultData(lastMove, isFinished());
+        return new SseResultData(null, isFinished());
     }
 }

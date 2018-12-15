@@ -88,7 +88,7 @@ public class GreetingController {
     public String loggedInState(@ModelAttribute("state") SliderDao state) {
         System.out.println("Compactness is " + state.getCompactness());
         System.out.println("Political Fairness is " + state.getPolitical());
-        System.out.println("Population is " + state.getPopulation());
+        System.out.println("PopulationEntity is " + state.getPopulation());
 
         return "loggedIn";
     }

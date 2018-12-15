@@ -1,24 +1,56 @@
 package app.gerry.Sse;
 
+import app.gerry.AlgorithmCore.Move;
+
 import java.util.Date;
 
 public class SseResultData {
-    private int districtId;
+    private int srcDistrictId;
+    private int destDistrictId;
     private int precinctId;
+    private int population;
     private String data;
     private Date dateSent;
     private boolean isLastOne;
 
-    public SseResultData(int districtId, int precinctId, boolean isLastOne) {
-        this.districtId = districtId;
-        this.precinctId = precinctId;
-        this.isLastOne = isLastOne;
+    public SseResultData(Move move, boolean isLastOne) {
+        srcDistrictId = move.getSrcDistrictId();
+        destDistrictId = move.getDestDistrictId();
+        precinctId = move.getChunkId();
+        population = move.getChunkPopulation();
+        dateSent = new Date();
     }
 
-    public SseResultData(String data, boolean isLastOne) {
-        dateSent = new Date();
-        this.data = data;
-        this.isLastOne = isLastOne;
+    public int getSrcDistrictId() {
+        return srcDistrictId;
+    }
+
+    public void setSrcDistrictId(int srcDistrictId) {
+        this.srcDistrictId = srcDistrictId;
+    }
+
+    public int getDestDistrictId() {
+        return destDistrictId;
+    }
+
+    public void setDestDistrictId(int destDistrictId) {
+        this.destDistrictId = destDistrictId;
+    }
+
+    public int getPrecinctId() {
+        return precinctId;
+    }
+
+    public void setPrecinctId(int precinctId) {
+        this.precinctId = precinctId;
+    }
+
+    public int getPopulation() {
+        return population;
+    }
+
+    public void setPopulation(int population) {
+        this.population = population;
     }
 
     public String getData() {
@@ -43,21 +75,5 @@ public class SseResultData {
 
     public void setLastOne(boolean lastOne) {
         isLastOne = lastOne;
-    }
-
-    public int getDistrictId() {
-        return districtId;
-    }
-
-    public void setDistrictId(int districtId) {
-        this.districtId = districtId;
-    }
-
-    public int getPrecinctId() {
-        return precinctId;
-    }
-
-    public void setPrecinctId(int precinctId) {
-        this.precinctId = precinctId;
     }
 }

@@ -3,6 +3,8 @@ package app.gerry.Geography;
 import app.gerry.Data.ElectionData;
 import app.gerry.Data.GeometricData;
 import app.gerry.Constants.PoliticalSubdivision;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.Polygon;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,7 +17,7 @@ public class Chunk {
     private List<Precinct> precincts;
     private Set<Chunk> adjacentChunks;
     private ElectionData cummElectionData;
-    private GeometricData cummGeometricData;
+    private Geometry cummGeometricData;
     private int cummPopulation;
     private PoliticalSubdivision subdivision;
     private boolean isFinalized;
@@ -42,6 +44,8 @@ public class Chunk {
         precincts.add(precinct);
         subdivision = PoliticalSubdivision.PRECINCT;
         id = precinct.getId();
+        cummPopulation = precinct.getPopulation();
+        cummGeometricData = precinct.getBoundary();
         //TODO: fill in rest of fields
     }
 
@@ -108,11 +112,11 @@ public class Chunk {
         this.cummElectionData = cummElectionData;
     }
 
-    public GeometricData getCummGeometricData() {
+    public Geometry getCummGeometricData() {
         return cummGeometricData;
     }
 
-    public void setCummGeometricData(GeometricData cummGeometricData) {
+    public void setCummGeometricData(Geometry cummGeometricData) {
         this.cummGeometricData = cummGeometricData;
     }
 

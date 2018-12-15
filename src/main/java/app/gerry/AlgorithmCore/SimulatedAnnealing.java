@@ -40,11 +40,11 @@ public class SimulatedAnnealing extends Algorithm{
     public void step() {
         iterations--;
         //1) Choose a random sourceDistrict: srcDistrict
-        District srcDistrict = state.getRandomDistrict();
+        /*
+        District srcDistrict = state.getWorstDistrict();
         //2) Get a chunk inside the srcDistrict along the border (to be moved): Chunk 
-        Chunk movingChunk = srcDistrict.getRandomBorderChunk();
         //3) Get the Districts adjacent to the srcDistrict from step 1: destDistricts
-        Set<Chunk> chunks = movingChunk.getAdjacentChunks();
+        Set<Chunk> movingChunk = srcDistrict.getAdjacentChunks();
         HashSet<District> destDistricts = new HashSet<>();
         for(Chunk ck: chunks){
             District temp = ck.getDistrict();
@@ -58,7 +58,7 @@ public class SimulatedAnnealing extends Algorithm{
         //5) Iterate through all moves until you find a move that increases objective
         //6) finalize that move. 
         
-        
+        */
     }
 
     
