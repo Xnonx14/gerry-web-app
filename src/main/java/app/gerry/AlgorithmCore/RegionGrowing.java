@@ -14,7 +14,7 @@ public class RegionGrowing extends Algorithm{
     private Context context;
     private State state;
     private Stack<Chunk> chunkMoveStack;
-    private int iterations;
+    private Stack<Move> moveStack;
     private int index;
     private Set<Chunk> seen;
     private List<Chunk> unassignedChunks;
@@ -24,47 +24,45 @@ public class RegionGrowing extends Algorithm{
         context = algorithmUtil.initializeAlgorithmParameters(params);
         state = algorithmUtil.initializeStateWithRandomSeedDistricts(context.getStateName(), context.getSeedCount());
         chunkMoveStack = new Stack<>();
+        moveStack = new Stack<>();
         seen = new HashSet<>();
         unassignedChunks = new ArrayList<>(state.getChunks());
         for(District district : state.getSeedDistricts()) {
-            unassignedChunks.removeAll(district.getChunks());
+            seen.addAll(district.getChunks());
         }
-        init();
     }
 
-    /**
-     * For each seed district:
-     *  get adjacent chunks
-     *  pick best chunk(random for now)
-     *  finalize the move (update movestack)
-     */
+//    /**
+//     * For each seed district:
+//     *  get adjacent chunks
+//     *  pick best chunk(random for now)
+//     *  finalize the move (update movestack)
+//     */
+//    @Override
+//    public void step() {
+//        List<District> seedDistricts = state.getSeedDistricts();
+//        if(seedDistricts.isEmpty())
+//            return;
+//        District seedDistrict = seedDistricts.get(index);
+//        Set<Chunk> adjacentChunks = new HashSet<>(seedDistrict.getAdjacentChunks());
+//        if(adjacentChunks.isEmpty()) {
+//            seedDistricts.remove(seedDistrict);
+//            index--;
+//            return;
+//        }
+//        int selectedIndex = getBestChunkIndex(adjacentChunks);
+//        Iterator chunkIt = adjacentChunks.iterator();
+//        Chunk selected = (Chunk)chunkIt.next();
+//        seedDistrict.addChunk(selected);
+//        updateState(selected, seedDistricts, selectedIndex);
+//    }
+
     @Override
     public void step() {
-        List<District> seedDistricts = state.getSeedDistricts();
-        if(seedDistricts.isEmpty())
-            return;
-        District seedDistrict = seedDistricts.get(index);
-        Set<Chunk> adjacentChunks = new HashSet<>(seedDistrict.getAdjacentChunks());
-        if(adjacentChunks.isEmpty()) {
-            seedDistricts.remove(seedDistrict);
-            index--;
-            return;
-        }
-        int selectedIndex = new Random().nextInt(adjacentChunks.size());
-        Iterator chunkIt = adjacentChunks.iterator();
-        Chunk selected = (Chunk)chunkIt.next();
-        seedDistrict.addChunk(selected);
-        seen.add(selected);
-        unassignedChunks.remove(selected);
-        for(int i = 0; i < seedDistricts.size(); i++) {
-            if(i == selectedIndex)
-                continue;
-            seedDistrict.removeChunkFromAdjacencies(seen);
-        }
-        chunkMoveStack.push(selected);
-        index++;
-        index = index % seedDistricts.size();
-        iterations++;
+        District worstDistrict = getWorstDistrict();
+        Move bestMove = getBestMove(worstDistrict);
+        bestMove.execute();
+        updateState(bestMove);
     }
 
     @Override
@@ -74,15 +72,50 @@ public class RegionGrowing extends Algorithm{
 
     @Override
     public SseResultData getSseResultData() {
-        int precinctId = chunkMoveStack.peek().getId();
-        int districtId = chunkMoveStack.peek().getParentDistrict().getId();
-
-        return new SseResultData(districtId, precinctId, isFinished());
+        Move move = moveStack.peek();
+        return new SseResultData(move, isFinished());
     }
 
-    private void init() {
-        //
-        List<District> seedDistricts = state.getSeedDistricts();
+    private Move getBestMove(District district) {
+        List<Chunk> adjacentChunks = new ArrayList<>(district.getAdjacentChunks());
+        double initVal = ObjectiveFunction.getObjectiveValue(district, context);
+        double maxGain = Double.MIN_VALUE;
+        Move bestMove = null;
+        for(Chunk chunk : adjacentChunks) {
+            if(seen.contains(chunk)) {
+                continue;
+            }
+            Move move = new Move(chunk, district);
+            move.execute();
+            double val = ObjectiveFunction.getObjectiveValue(district, context);
+            double gain = val - initVal;
+            if(gain > maxGain) {
+                maxGain =  gain;
+                bestMove = move;
+            }
+            move.undo();
+        }
+        return bestMove;
+    }
+
+    private District getWorstDistrict() {
+        List<District> districts = state.getSeedDistricts();
+        District worstDistrict = districts.get(0);
+        for(District district : districts) {
+            double worstDistrictValue = ObjectiveFunction.getObjectiveValue(worstDistrict, context);
+            double currDistrictValue = ObjectiveFunction.getObjectiveValue(district, context);
+            if(currDistrictValue < worstDistrictValue) {
+                worstDistrict = district;
+            }
+        }
+        return worstDistrict;
+    }
+
+    private Move createMove(Chunk chunk, District district) {
+        return null;
+    }
+
+    private void executeMove(Move move) {
 
     }
 
@@ -92,5 +125,29 @@ public class RegionGrowing extends Algorithm{
 
     public void setContext(Context context) {
         this.context = context;
+    }
+
+    private int getBestChunkIndex(Set<Chunk> adjacentChunks) {
+        return new Random().nextInt(adjacentChunks.size());
+    }
+
+//    private void updateState(Chunk selected, List<District> seedDistricts, int selectedIndex) {
+//        seen.add(selected);
+//        unassignedChunks.remove(selected);
+//        for(int i = 0; i < seedDistricts.size(); i++) {
+//            if(i == selectedIndex)
+//                continue;
+//            seedDistricts.get(i).removeChunkFromAdjacencies(seen);
+//        }
+//        chunkMoveStack.push(selected);
+//        index++;
+//        index = index % seedDistricts.size();
+//    }
+
+    private void updateState(Move move) {
+        int chunkId = move.getChunkId();
+        Chunk chunk = state.getIdChunkMap().get(chunkId);
+        seen.add(chunk);
+        moveStack.push(move);
     }
 }

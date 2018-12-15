@@ -17,7 +17,7 @@ public class State {
     private Set<Representative> representatives;
     private PoliticalSubdivision restriction;
     private int population;
-    private int averagePopulation;
+    private double averageDistrictPopulation;
 
     private State(Builder builder) {
         this.id = builder.id;
@@ -29,6 +29,14 @@ public class State {
         this.adjacentChunkIdMap = builder.adjacentChunkIdMap;
         this.idChunkMap = builder.idChunkMap;
         this.chunks = builder.chunks;
+
+        //set district state to this state
+        for(District district : districts) {
+            district.setState(this);
+        }
+
+        //calculate average population
+        averageDistrictPopulation = (double) population / districts.size();
     }
 
     public District getRandomDistrict(){
@@ -142,8 +150,35 @@ public class State {
         return population;
     }
 
-    public int getAveragePopulation() {
-        return averagePopulation;
+    public double getAverageDistrictPopulation() {
+        return averageDistrictPopulation;
     }
 
+    public void setDistricts(List<District> districts) {
+        this.districts = districts;
+    }
+
+    public Set<Representative> getRepresentatives() {
+        return representatives;
+    }
+
+    public void setRepresentatives(Set<Representative> representatives) {
+        this.representatives = representatives;
+    }
+
+    public PoliticalSubdivision getRestriction() {
+        return restriction;
+    }
+
+    public void setRestriction(PoliticalSubdivision restriction) {
+        this.restriction = restriction;
+    }
+
+    public void setPopulation(int population) {
+        this.population = population;
+    }
+
+    public void setAverageDistrictPopulation(double averageDistrictPopulation) {
+        this.averageDistrictPopulation = averageDistrictPopulation;
+    }
 }

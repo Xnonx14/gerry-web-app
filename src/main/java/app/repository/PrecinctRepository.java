@@ -2,6 +2,7 @@ package app.repository;
 
 import app.model.PrecinctEntity;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
