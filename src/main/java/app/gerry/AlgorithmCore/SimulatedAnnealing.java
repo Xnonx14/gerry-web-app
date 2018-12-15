@@ -26,7 +26,6 @@ public class SimulatedAnnealing extends Algorithm{
     public SimulatedAnnealing(Map<String, Object> params, AlgorithmUtil algorithmUtil) {
         this.algorithmUtil = algorithmUtil;
         context = algorithmUtil.initializeAlgorithmParameters(params);
-        state = algorithmUtil.initializeStateWithAllDistricts(context.getStateName());
 //        chunkMoveStack = new Stack<>();
 //        seen = new HashSet<>();
 //        unassignedChunks = new ArrayList<>(state.getChunks());

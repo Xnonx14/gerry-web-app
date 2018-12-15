@@ -5,6 +5,10 @@ import app.SseTesting.NotificationJobService;
 import app.gerry.AlgorithmCore.Algorithm;
 import app.gerry.AlgorithmCore.RegionGrowing;
 import app.gerry.AlgorithmCore.SimulatedAnnealing;
+import app.gerry.Geography.Chunk;
+import app.gerry.Geography.District;
+import app.gerry.Geography.Precinct;
+import app.gerry.Geography.State;
 import app.gerry.Sse.AlgorithmMoveService;
 import app.gerry.Sse.SseResultData;
 import app.gerry.Sse.TestAlgorithm;
@@ -22,10 +26,14 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 
 @Controller
 @CrossOrigin
@@ -87,6 +95,20 @@ public class AlgorithmController {
         Algorithm algorithm = new SimulatedAnnealing(params, algorithmUtil);
         algorithmMoveService.runAlgorithm(algorithm);
         return new ResponseEntity(HttpStatus.ACCEPTED);
+    }
+    
+    @PostMapping("/setupState")
+    @ResponseBody
+    public HashMap initState(@RequestBody Map<String, String> params) {
+        State state = algorithmUtil.initializeStateWithAllDistricts(params.get("state"));
+        HashMap hm = new HashMap();
+        for(District d: state.getDistricts()){
+            for(Precinct p: d.getPrecincts()){
+                hm.put(p.getId(), p.getParentDistrictID());
+            }
+        }
+        
+        return hm;
     }
 
     @PostMapping("/algorithm/stop")
