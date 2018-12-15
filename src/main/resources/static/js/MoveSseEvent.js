@@ -99,6 +99,8 @@ var startAlgorithm = function () {
     var politicalFairness = document.getElementById("politicalFairness").value;
     var populationEquality = document.getElementById("populationEquality").value;
 	var seedCount = document.getElementById("seedCount").value;
+	var algo = document.getElementById("selected_algo").value;
+	//algo can be "region" or "simulated"
     var params = {
         state: state,
         reock: reock,
@@ -106,7 +108,8 @@ var startAlgorithm = function () {
         convexHull: convexHull,
         politicalFairness: politicalFairness,
         populationEquality: populationEquality,
-		seedCount: seedCount
+		seedCount: seedCount,
+		mode: algo
     };
 
     var xhr = new XMLHttpRequest();
