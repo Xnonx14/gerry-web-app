@@ -49,6 +49,7 @@ public class AlgorithmUtil {
     public State initializeStateWithRandomSeedDistricts(String stateName, int numDistricts) {
         List<Precinct> precincts = aggregatePrecinctsInState(stateName);
         setPrecinctData(precincts);
+        int totalPopulation = sumPrecinctsPopulation(precincts);
         Map<Integer, Chunk> idChunkMap = toIdChunkMap(precincts);
         List<Chunk> chunks = new ArrayList<>(idChunkMap.values());
         Map<Integer, List<Integer>> adjacentChunkIdMap = constructAdjacentChunkMap(chunks, stateName);
@@ -56,19 +57,26 @@ public class AlgorithmUtil {
         List<District> seeds = constructSeedDistrictsRandomly(chunks, numDistricts);
 
         for(int i = 0; i < seeds.size(); i++) {
-            seeds.get(i).id = i;
+            seeds.get(i).setId(i);
         }
         State state = new State.Builder(stateName)
                 .withChunks(chunks)
                 .withIdChunkMap(idChunkMap)
                 .withDistricts(seeds)
                 .withAdjacentChunkMap(adjacentChunkIdMap)
+                .withPopulation(totalPopulation)
                 .build();
         return state;
     }
 
     private void setPrecinctData(List<Precinct> precincts) {
         setPrecinctPopulationData(precincts);
+    }
+
+    private int sumPrecinctsPopulation(List<Precinct> precincts) {
+        return precincts.stream()
+                .map(p -> p.getPopulation())
+                .reduce(0, (p1, p2) -> p1 + p2);
     }
 
     private void setPrecinctPopulationData(List<Precinct> precincts) {

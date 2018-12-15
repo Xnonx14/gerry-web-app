@@ -1,5 +1,6 @@
 package app.gerry.Geography;
 
+import app.gerry.AlgorithmCore.ObjectiveFunction;
 import app.gerry.Data.GeometricData;
 import app.gerry.Data.Representative;
 import org.locationtech.jts.geom.Geometry;
@@ -20,6 +21,7 @@ public class District {
     private Geometry geometricData;
     private int population;
     private double ObjectiveValue;
+    private State state;
 
     /**
      * Construct a district that contains one chunk (Seed district)
@@ -113,6 +115,34 @@ public class District {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public State getState() {
+        return state;
+    }
+
+    public void setState(State state) {
+        this.state = state;
+    }
+
+    public void setAdjacentChunks(Set<Chunk> adjacentChunks) {
+        this.adjacentChunks = adjacentChunks;
+    }
+
+    public Set<Chunk> getBorderChunks() {
+        return borderChunks;
+    }
+
+    public void setBorderChunks(Set<Chunk> borderChunks) {
+        this.borderChunks = borderChunks;
+    }
+
+    public int getPopulation() {
+        return population;
+    }
+
+    public void setPopulation(int population) {
+        this.population = population;
     }
 
     public Representative getRepresentative() {
