@@ -1,3 +1,18 @@
+function displayStateData(){
+	if(document.getElementById("innerData").style['display'] != "block"){
+        document.getElementById("innerData").style = "display: block";
+		document.getElementById("data").style="width: 15%"
+		document.getElementById("displayBtn").value = "-";
+		document.getElementById("first").style = "width: 65%";
+    }else{
+        document.getElementById("innerData").style = "display: none";
+		document.getElementById("data").style="width: 3%"
+		document.getElementById("displayBtn").value = "+";
+		document.getElementById("first").style = "width: 77%";
+    }
+	
+}
+
 function algoSelected(){
     if(document.getElementById("selected_algo").value === "region"){
         document.getElementById("algoTitle").innerHTML = "Region Growing";
