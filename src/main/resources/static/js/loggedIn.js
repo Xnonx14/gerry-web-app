@@ -10,7 +10,7 @@ function algoSelected(){
     document.getElementById("algoConfigR").style = "display: block";
 }
 
-function stateSelected(){
+function stateSelected(){0
     document.getElementById("selectAlgorithm").style = "visibility: visible";
 	var state = document.getElementById("selected_state").value;
 	
@@ -21,18 +21,18 @@ function stateSelected(){
         state: state
     };
 	
-	xhr.onreadystatechange = function() {        
-		console.log(Object.keys(xhr));
-		console.log(Object.values(xhr));
-		console.log(xhr);
+	xhr.onreadystatechange = function() {
+	if (this.readyState == 4 && this.status == 200) {
+	    var precinct_data = JSON.parse(xhr.responseText);
+	    for (var key in precinct_data) {
+	        var districtId = precinct_data[key];
+	        var precinctId = key;
+	        var color = genColor(districtId);
+	        new_Hampshire.setFeatureStyle(precinctId, colorStyle(color))
+	    }
     }
-	
+    }
     xhr.send(JSON.stringify(params));
-	
-	
-	
-	
-	
 }
 // Create variable to hold map element, give initial settings to map
 var mapboxAccessToken = "pk.eyJ1IjoiZGNib3k2ODY4IiwiYSI6ImNqbXBlbG5wejB6M3kzcHFjZDN0dDg1N2wifQ.fv6q_orjFeF9Vcx5nLEu3w";

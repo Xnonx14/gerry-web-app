@@ -103,11 +103,10 @@ public class AlgorithmController {
         State state = algorithmUtil.initializeStateWithAllDistricts(params.get("state"));
         HashMap hm = new HashMap();
         for(District d: state.getDistricts()){
-            for(Precinct p: d.getPrecincts()){
-                hm.put(p.getId(), p.getParentDistrictID());
+            for(Chunk c: d.getChunks()){
+                hm.put(c.getId(),d.getId());
             }
         }
-        
         return hm;
     }
 
