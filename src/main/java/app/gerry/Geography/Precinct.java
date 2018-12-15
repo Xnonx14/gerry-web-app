@@ -4,6 +4,9 @@ import app.gerry.Data.Boundary;
 import app.gerry.Data.ElectionData;
 import app.gerry.Data.YearData;
 import app.gerry.Constants.PoliticalSubdivision;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.Polygon;
+import org.locationtech.jts.io.WKTReader;
 
 import java.util.Map;
 import java.util.Set;
@@ -12,6 +15,8 @@ public class Precinct {
     private int id;
     private Set<Precinct> adjacentPrecincts;
     private Map<String, YearData> yearData;
+    private int population;
+    private Geometry boundary;
     private boolean isBorderPrecinct;
     private Map<PoliticalSubdivision, String> restrictionData;
     private Set<Boundary> borderingLandmark;
@@ -19,6 +24,7 @@ public class Precinct {
 
     public Precinct(Builder builder) {
         this.id = builder.id;
+        this.boundary = builder.boundary;
         this.adjacentPrecincts = builder.adjacentPrecincts;
     }
 
@@ -34,6 +40,8 @@ public class Precinct {
         private int id;
         private Set<Precinct> adjacentPrecincts;
         private Map<String, YearData> yearData;
+        private int population;
+        private Geometry boundary;
         private boolean isBorderPrecinct;
         private Map<PoliticalSubdivision, String> restrictionData;
         private Set<Boundary> borderingLandmark;
@@ -45,6 +53,18 @@ public class Precinct {
 
         public Builder withId(int id) {
             this.id = id;
+            return this;
+        }
+
+        public Builder withBoundary(String boundaryData) {
+            WKTReader reader = new WKTReader();
+            try {
+                Geometry polygon = reader.read(boundaryData);
+                this.boundary = polygon;
+            }
+            catch(Exception e) {
+                e.printStackTrace();
+            }
             return this;
         }
 
@@ -60,12 +80,28 @@ public class Precinct {
         }
     }
 
+    public Geometry getBoundary() {
+        return boundary;
+    }
+
+    public void setBoundary(Geometry boundary) {
+        this.boundary = boundary;
+    }
+
     public int getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getPopulation() {
+        return population;
+    }
+
+    public void setPopulation(int population) {
+        this.population = population;
     }
 
     public Set<Precinct> getAdjacentPrecincts() {

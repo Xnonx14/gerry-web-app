@@ -7,9 +7,11 @@ import app.gerry.Geography.Precinct;
 import app.gerry.Geography.State;
 import app.gerry.Json.ChunkJson;
 import app.model.DistrictEntity;
+import app.model.PopulationEntity;
 import app.model.PrecinctEntity;
 import app.model.StateEntity;
 import app.repository.DistrictRepository;
+import app.repository.PopulationRepository;
 import app.repository.PrecinctRepository;
 import app.repository.StateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,8 @@ public class AlgorithmUtil {
     private DistrictRepository districtRepository;
     @Autowired
     private PrecinctRepository precinctRepository;
+    @Autowired
+    private PopulationRepository populationRepository;
 
     public Context initializeAlgorithmParameters(Map<String, Object> params) {
         Context context = new Context();
@@ -44,6 +48,7 @@ public class AlgorithmUtil {
 
     public State initializeStateWithRandomSeedDistricts(String stateName, int numDistricts) {
         List<Precinct> precincts = aggregatePrecinctsInState(stateName);
+        setPrecinctData(precincts);
         Map<Integer, Chunk> idChunkMap = toIdChunkMap(precincts);
         List<Chunk> chunks = new ArrayList<>(idChunkMap.values());
         Map<Integer, List<Integer>> adjacentChunkIdMap = constructAdjacentChunkMap(chunks, stateName);
@@ -54,12 +59,24 @@ public class AlgorithmUtil {
             seeds.get(i).id = i;
         }
         State state = new State.Builder(stateName)
-                        .withChunks(chunks)
-                        .withIdChunkMap(idChunkMap)
-                        .withDistricts(seeds)
-                        .withAdjacentChunkMap(adjacentChunkIdMap)
-                        .build();
+                .withChunks(chunks)
+                .withIdChunkMap(idChunkMap)
+                .withDistricts(seeds)
+                .withAdjacentChunkMap(adjacentChunkIdMap)
+                .build();
         return state;
+    }
+
+    private void setPrecinctData(List<Precinct> precincts) {
+        setPrecinctPopulationData(precincts);
+    }
+
+    private void setPrecinctPopulationData(List<Precinct> precincts) {
+        for(Precinct precinct : precincts) {
+            List<PopulationEntity> populationEntities = populationRepository.findByPrecinctId(precinct.getId());
+            if(populationEntities != null && !populationEntities.isEmpty())
+                precinct.setPopulation(populationEntities.get(0).getPopulation());
+        }
     }
 
     private void setAdjacentChunks(Map<Integer, Chunk> idChunkMap, Map<Integer, List<Integer>> adjacentChunkIdMap) {
@@ -131,6 +148,7 @@ public class AlgorithmUtil {
         return precinctEntities.stream()
                 .map(p -> new Precinct.Builder()
                             .withId(p.getId())
+                            .withBoundary(p.getBoundaryData())
                             .build()
                 )
                 .collect(Collectors.toList());

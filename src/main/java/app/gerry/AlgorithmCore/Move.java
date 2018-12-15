@@ -4,19 +4,56 @@ import app.gerry.Geography.Chunk;
 import app.gerry.Geography.District;
 
 public class Move {
-    public Chunk moveable;
-    public District sourceDistrict;
-    public District destinationDistrict;
-    public double newSrcVal;
-    public double newDestVal;
 
-    public void Move(Chunk moveable , District src, District dest){
-        return;
+    private Chunk chunk;
+    private District district;
+    private int chunkId;
+    private int srcDistrictId;
+    private int destDistrictId;
+    private int chunkPopulation;
+
+    public Move(Chunk chunk, District district) {
+        this.chunk = chunk;
+        this.district = district;
     }
-    public double getGain(){
-        return 0;
+
+    public void execute() {
+
     }
-    public void setValues(double src, double dest){
-        return;
+
+    public void undo() {
+
+    }
+
+    public int getChunkId() {
+        return chunkId;
+    }
+
+    public void setChunkId(int chunkId) {
+        this.chunkId = chunkId;
+    }
+
+    public int getSrcDistrictId() {
+        return srcDistrictId;
+    }
+
+    public void setSrcDistrictId(int srcDistrictId) {
+        this.srcDistrictId = srcDistrictId;
+    }
+
+    public int getDestDistrictId() {
+        return destDistrictId;
+    }
+
+    public void setDestDistrictId(int destDistrictId) {
+        this.destDistrictId = destDistrictId;
+    }
+
+    public int getChunkPopulation() {
+        return chunkPopulation;
+    }
+
+    public void setChunkPopulation(int chunkPopulation) {
+        this.chunkPopulation = chunkPopulation;
     }
 }

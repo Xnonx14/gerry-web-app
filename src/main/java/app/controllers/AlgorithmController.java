@@ -90,6 +90,13 @@ public class AlgorithmController {
     @PostMapping("/algorithm/stop")
     @ResponseBody
     public ResponseEntity stopAlgorithm() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUser = authentication.getName();
+
+        if(userEmitters.containsKey(currentUser)) {
+            SseEmitter emitter = userEmitters.get(currentUser);
+            emitter.complete();
+        }
 
         return new ResponseEntity(HttpStatus.ACCEPTED);
     }
@@ -126,7 +133,7 @@ public class AlgorithmController {
                     userEmitters.remove(currentUser);
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
         }
     }
