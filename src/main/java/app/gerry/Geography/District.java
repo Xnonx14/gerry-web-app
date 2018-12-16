@@ -78,6 +78,35 @@ public class District {
      *  - population data
      * @param chunk
      */
+
+    public void testRemoveChunk(Chunk chunk){
+        //update adjacencies
+        District parentDist = chunk.getParentDistrict();
+        Set<Chunk> firstBorder = chunk.getAdjacentChunks();
+        chunk.setParentDistrict(null);
+        chunks.remove(chunk);
+        //firstBorder are the only ones that may need to be removed from the adjacency list
+        for(Chunk ch: firstBorder){
+            Set<Chunk> secondBorder = ch.getAdjacentChunks();
+            boolean removeCH = true;
+            for(Chunk temp: secondBorder){
+                if(temp.getParentDistrict() == parentDist){
+                    removeCH = false;
+                }
+            }
+            if(ch.getParentDistrict() == parentDist){
+                removeCH = false;
+            }
+            //if secondBorder and ch are ALL not part of original srcDistrict, remove ch from adjacency list
+            if(removeCH && this.adjacentChunks.containsKey(ch)){
+                adjacentChunks.remove(ch);
+            }
+        }
+        updateBoundaryData(chunk, true);
+        updateElectionData(chunk);
+        updatePopulationData(chunk, true);
+    }
+
     public void addChunk(Chunk chunk){
         updateAdjacentChunks(chunk, false);
         updateBoundaryData(chunk, false);

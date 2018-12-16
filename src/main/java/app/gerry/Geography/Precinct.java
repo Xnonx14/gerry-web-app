@@ -80,7 +80,7 @@ public class Precinct {
                 this.boundary = polygon;
             }
             catch(Exception e) {
-                e.printStackTrace();
+                System.out.println("This precinct is missing boundary data");
             }
             return this;
         }

@@ -23,11 +23,13 @@ public class SimulatedAnnealing extends Algorithm{
     private int index;
     private Set<Chunk> seen;
     private List<Chunk> unassignedChunks;
+    private Boolean isFinished = false;
+    private Move currentMove;
     
     public SimulatedAnnealing(Map<String, Object> params, AlgorithmUtil algorithmUtil, State state) {
         this.algorithmUtil = algorithmUtil;
         context = algorithmUtil.initializeAlgorithmParameters(params);
-        iterations = 10;
+        iterations = 500;
         this.state = state;
     }
     
@@ -35,22 +37,25 @@ public class SimulatedAnnealing extends Algorithm{
     public void step() {
         iterations--;
         //1) Choose a random sourceDistrict: srcDistrict
-
         District destDistrict = state.getRandomDistrict();
         Set<Chunk> moveableChunks = destDistrict.getAdjacentChunks();
         Iterator<Chunk> iter = moveableChunks.iterator();
+        isFinished = true;
         while(iter.hasNext()){
             Chunk chunk = iter.next();
+            if(chunk.isFinalized()) continue;
             District srcDistrict = chunk.getDistrict();
-            double sum = ObjectiveFunction.getObjectiveValue(destDistrict, context) + ObjectiveFunction.getObjectiveValue(srcDistrict, context);
+            //double sum = ObjectiveFunction.getObjectiveValue(destDistrict, context) + ObjectiveFunction.getObjectiveValue(srcDistrict, context);
             Move m = new Move(chunk, destDistrict);
             m.execute();
-            double sumEnd = ObjectiveFunction.getObjectiveValue(destDistrict, context) + ObjectiveFunction.getObjectiveValue(srcDistrict, context);
-            if(sumEnd > sum){
-                break;
-            }else{
-                m.undo();
-            }
+            currentMove = m;
+            //double sumEnd = ObjectiveFunction.getObjectiveValue(destDistrict, context) + ObjectiveFunction.getObjectiveValue(srcDistrict, context);
+            //if(sumEnd > sum){
+            isFinished = false;
+            break;
+            //}else{
+            //    m.undo();
+            //}
         }
     }
 
@@ -65,6 +70,6 @@ public class SimulatedAnnealing extends Algorithm{
 
     @Override
     public SseResultData getSseResultData() {
-        return null;
+        return new SseResultData(currentMove, isFinished());
     }
 }

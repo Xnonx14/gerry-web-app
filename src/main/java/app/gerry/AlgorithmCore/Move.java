@@ -21,9 +21,10 @@ public class Move {
 
     public void execute() {
         if(srcDistrict != null) {
-            srcDistrict.removeChunk(chunk);
+            srcDistrict.testRemoveChunk(chunk);
         }
         destDistrict.addChunk(chunk);
+        chunk.setFinalized(true);
     }
 
     public void undo() {
@@ -31,6 +32,7 @@ public class Move {
             srcDistrict.addChunk(chunk);
         }
         destDistrict.removeChunk(chunk);
+        chunk.setFinalized(false);
     }
 
     public District getDestDistrict() {
