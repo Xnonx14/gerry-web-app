@@ -61,13 +61,17 @@ public class RegionGrowing extends Algorithm{
     public void step() {
         District worstDistrict = getWorstDistrict();
         Move bestMove = getBestMove(worstDistrict);
+        if(bestMove == null) {
+            state.getSeedDistricts().remove(worstDistrict);
+            return;
+        }
         bestMove.execute();
         updateState(bestMove);
     }
 
     @Override
     public boolean isFinished() {
-        return unassignedChunks.isEmpty();
+        return state.getSeedDistricts().isEmpty();
     }
 
     @Override

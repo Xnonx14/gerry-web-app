@@ -21,7 +21,8 @@ public class Move {
 
     public void execute() {
         if(srcDistrict != null) {
-            srcDistrict.testRemoveChunk(chunk);
+            //srcDistrict.testRemoveChunk(chunk);
+            srcDistrict.removeChunk(chunk);
         }
         destDistrict.addChunk(chunk);
         chunk.setFinalized(true);
