@@ -14,6 +14,16 @@ var state = "NOT_INIT";
 var move;
 
 var subscribe = function () {
+    var selectedAlgo = document.getElementById("selected_algo");
+    if(selectedAlgo.value === "region") {
+        for (var key in precinct_data) {
+            var districtId = precinct_data[key];
+            var precinctId = key;
+            var color = 'white';
+            new_Hampshire.setFeatureStyle(precinctId, colorStyle(color))
+        }
+    }
+
     var eventSource = new EventSource('algorithm/feed');
     var elem = document.getElementById("pause_button");
 
@@ -29,7 +39,7 @@ var subscribe = function () {
         if(state == "NORMAL" && queue.length > 0){
             move = queue.shift();
             var precinctId = move.precinctId;
-            var districtId = move.districtId;
+            var districtId = move.destDistrictId;
             var color = genColor(districtId);
             new_Hampshire.setFeatureStyle(precinctId, colorStyle(color))
         }

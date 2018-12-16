@@ -33,6 +33,30 @@ public class Move {
         destDistrict.removeChunk(chunk);
     }
 
+    public District getDestDistrict() {
+        return destDistrict;
+    }
+
+    public void setDestDistrict(District destDistrict) {
+        this.destDistrict = destDistrict;
+    }
+
+    public District getSrcDistrict() {
+        return srcDistrict;
+    }
+
+    public void setSrcDistrict(District srcDistrict) {
+        this.srcDistrict = srcDistrict;
+    }
+
+    public int getChunkId() {
+        return chunkId;
+    }
+
+    public void setChunkId(int chunkId) {
+        this.chunkId = chunkId;
+    }
+
     public Chunk getChunk() {
         return chunk;
     }
