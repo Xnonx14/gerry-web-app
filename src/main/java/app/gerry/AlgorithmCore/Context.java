@@ -1,5 +1,7 @@
 package app.gerry.AlgorithmCore;
 
+import app.gerry.Geography.State;
+
 public class Context {
     private String stateName;
     private double polsbyPopperWeight;
@@ -8,6 +10,7 @@ public class Context {
     private double populationEqualityWeight;
     private double politicalFairnessWeight;
     private int seedCount;
+    private State state;
     
     public void setSeedCount(int count){
         this.seedCount = count;

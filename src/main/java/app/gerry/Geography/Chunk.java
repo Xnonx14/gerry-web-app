@@ -72,6 +72,10 @@ public class Chunk {
         return adjacentChunks;
     }
 
+    public void printChunk(){
+        System.out.println(this.getId());
+    }
+    
     public void populateChunk(Precinct p){
         precincts.add(p);
     }
