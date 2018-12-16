@@ -33,12 +33,12 @@ public class Move {
         destDistrict.removeChunk(chunk);
     }
 
-    public int getChunkId() {
-        return chunkId;
+    public Chunk getChunk() {
+        return chunk;
     }
 
-    public void setChunkId(int chunkId) {
-        this.chunkId = chunkId;
+    public void setChunk(Chunk chunk) {
+        this.chunk = chunk;
     }
 
     public int getSrcDistrictId() {

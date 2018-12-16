@@ -16,7 +16,7 @@ public class SseResultData {
     public SseResultData(Move move, boolean isLastOne) {
         srcDistrictId = move.getSrcDistrictId();
         destDistrictId = move.getDestDistrictId();
-        precinctId = move.getChunkId();
+        precinctId = move.getChunk().getId();
         population = move.getChunkPopulation();
         dateSent = new Date();
     }

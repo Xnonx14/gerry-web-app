@@ -79,21 +79,21 @@ public class District {
      * @param chunk
      */
     public void addChunk(Chunk chunk){
-        chunks.add(chunk);
-        chunk.setParentDistrict(this);
         updateAdjacentChunks(chunk, false);
         updateBoundaryData(chunk, false);
         updateElectionData(chunk);
         updatePopulationData(chunk, false);
+        chunks.add(chunk);
+        chunk.setParentDistrict(this);
     }
 
     public void removeChunk(Chunk chunk) {
-        chunks.remove(chunk);
-        chunk.setParentDistrict(null);
         updateAdjacentChunks(chunk, true);
         updateBoundaryData(chunk, true);
         updateElectionData(chunk);
         updatePopulationData(chunk, true);
+        chunk.setParentDistrict(null);
+        chunks.remove(chunk);
     }
 
     private void updateAdjacentChunks(Chunk chunk, boolean isRemove) {
@@ -103,7 +103,7 @@ public class District {
         List<Chunk> newAdjacentChunks = chunk.
                 getAdjacentChunks().
                 stream()
-                .filter(c -> c.getParentDistrictID() != this.getId())
+                .filter(c -> c.getParentDistrict() == null ? true : c.getParentDistrict().getId() != this.getId())
                 .collect(Collectors.toList());
         if(isRemove){
             for(Chunk c : newAdjacentChunks) {
@@ -114,7 +114,7 @@ public class District {
                 }
             }
             List<Chunk> oldAdjacentChunks = chunk.getAdjacentChunks().stream()
-                    .filter(c -> c.getParentDistrict().getId() == this.getId())
+                    .filter(c -> c.getParentDistrict() != null)
                     .collect(Collectors.toList());
             adjacentChunks.put(chunk, oldAdjacentChunks.size());
         }

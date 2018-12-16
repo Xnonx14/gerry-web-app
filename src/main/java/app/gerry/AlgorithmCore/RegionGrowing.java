@@ -79,7 +79,7 @@ public class RegionGrowing extends Algorithm{
     private Move getBestMove(District district) {
         List<Chunk> adjacentChunks = new ArrayList<>(district.getAdjacentChunks());
         double initVal = ObjectiveFunction.getObjectiveValue(district, context);
-        double maxGain = Double.MIN_VALUE;
+        double maxGain = - Double.MAX_VALUE;
         Move bestMove = null;
         for(Chunk chunk : adjacentChunks) {
             if(seen.contains(chunk)) {
@@ -145,7 +145,7 @@ public class RegionGrowing extends Algorithm{
 //    }
 
     private void updateState(Move move) {
-        int chunkId = move.getChunkId();
+        int chunkId = move.getChunk().getId();
         Chunk chunk = state.getIdChunkMap().get(chunkId);
         seen.add(chunk);
         moveStack.push(move);
