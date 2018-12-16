@@ -39,7 +39,8 @@
             </nav>
             <div id="container" style="width: 100%">
 				<div id="data">
-					<input type="submit" id="displayBtn" onclick="displayStateData()" value="-" style="float:left">
+					<input type="submit" id="displayBtn" onclick="displayStateData()" value="-" style="width: 30px;float:left">
+                    <br><br>
 					<div id="innerData" style="display:block">
 						<div class="dataField" id="dataTitle">
 							<h4> Data </h4>
@@ -60,6 +61,10 @@
 						<div class ="dataField">
 							Election
 						</div>
+                        <div style="float:left">
+                            <br><br>
+                            <textarea id="console" style="width: 226px; resize: none; height: 300px;"></textarea>
+                        </div>
 					</div>
 				</div>
                 
@@ -137,9 +142,6 @@
                 </div>
             </div>
         </div>
-
-        <h1>Notifications: </h1>
-        <div id="notificationDiv"></div>
     </body>
     <script th:src="@{js/loggedIn.js}" src="../static/js/loggedIn.js"></script>
         <script id="changeColor" src="js/changeColor.js"> </script>

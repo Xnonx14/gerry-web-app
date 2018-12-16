@@ -10,21 +10,19 @@ public class ObjectiveFunction {
 
     public static double getObjectiveValue(District district, Context context){
         Geometry geometricData = district.getGeometricData();
-
         double reockWeight = context.getReockWeight();
         double polsbyWeight = context.getPolsbyPopperWeight();
         double convexWeight = context.getConvexHullWeight();
         double populationWeight = context.getPopulationEqualityWeight();
-
         double reockValue = calculateReock(geometricData);
         double polsbyValue = calculatePolsby(geometricData);
         double convexValue = calculateConvex(geometricData);
 //      double fairnessValue = calculate_Political();
         double populationValue = calculatePopulation(district);
-
-        double result = (populationValue * populationWeight) + (convexValue * convexWeight);
-        if(true)
+        double result = (populationValue * populationWeight) + (convexValue * convexWeight) + (polsbyValue * polsbyWeight);
+        if(true) {
             return result;
+        }
 
         return (reockWeight * reockValue)
                 + (polsbyWeight * polsbyValue)

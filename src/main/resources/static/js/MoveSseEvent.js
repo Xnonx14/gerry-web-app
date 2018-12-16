@@ -30,6 +30,8 @@ var subscribe = function () {
     eventSource.onmessage = function (e) {
         var move = JSON.parse(e.data);
         queue.push(move);
+        console.log(move);
+        document.getElementById("console").innerHTML = move.objectiveValue + "\n" + document.getElementById("console").innerHTML;
         if(state == "CLOSED"){
            state = "NOT_INIT";
            elem.value = "Pause";

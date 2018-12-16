@@ -194,6 +194,7 @@ public class AlgorithmUtil {
                 .map(p -> new Precinct.Builder()
                             .withId(p.getId())
                             .withDistrictID(p.getDistrictId())
+                            .withBoundary(p.getBoundaryData())
                             .build()
                 )
                 .collect(Collectors.toList());
