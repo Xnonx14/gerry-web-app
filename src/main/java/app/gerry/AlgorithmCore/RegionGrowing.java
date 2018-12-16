@@ -61,8 +61,8 @@ public class RegionGrowing extends Algorithm{
     public void step() {
         District worstDistrict = getWorstDistrict();
         Move bestMove = getBestMove(worstDistrict);
-        //bestMove.execute();
-        //updateState(bestMove);
+        bestMove.execute();
+        updateState(bestMove);
     }
 
     @Override

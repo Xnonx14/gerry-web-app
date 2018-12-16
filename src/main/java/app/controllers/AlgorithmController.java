@@ -83,8 +83,8 @@ public class AlgorithmController {
     @PostMapping("/algorithm/start")
     @ResponseBody
     public ResponseEntity initiateAlgorithm(@RequestBody Map<String, Object> params) {
-        //Algorithm algorithm = new RegionGrowing(params, algorithmUtil);
-        Algorithm algorithm = new SimulatedAnnealing(params, algorithmUtil);
+        Algorithm algorithm = new RegionGrowing(params, algorithmUtil);
+        //Algorithm algorithm = new SimulatedAnnealing(params, algorithmUtil);
         algorithmMoveService.runAlgorithm(algorithm);
         return new ResponseEntity(HttpStatus.ACCEPTED);
     }

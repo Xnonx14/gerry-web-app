@@ -6,23 +6,31 @@ import app.gerry.Geography.District;
 public class Move {
 
     private Chunk chunk;
-    private District district;
+    private District destDistrict;
+    private District srcDistrict;
     private int chunkId;
     private int srcDistrictId;
     private int destDistrictId;
     private int chunkPopulation;
 
-    public Move(Chunk chunk, District district) {
+    public Move(Chunk chunk, District destDistrict) {
         this.chunk = chunk;
-        this.district = district;
+        this.destDistrict = destDistrict;
+        this.srcDistrict = chunk.getDistrict();
     }
 
     public void execute() {
-
+        if(srcDistrict != null) {
+            srcDistrict.removeChunk(chunk);
+        }
+        destDistrict.addChunk(chunk);
     }
 
     public void undo() {
-
+        if(srcDistrict != null) {
+            srcDistrict.addChunk(chunk);
+        }
+        destDistrict.removeChunk(chunk);
     }
 
     public int getChunkId() {
