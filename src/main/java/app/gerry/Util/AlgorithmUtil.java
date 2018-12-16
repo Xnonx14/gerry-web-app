@@ -156,7 +156,22 @@ public class AlgorithmUtil {
 
     private List<District> constructSeedDistrictsRandomly(List<Chunk> chunks, int numDistricts) {
         List<Integer> seedIndices = getRandomIndices(chunks.size(), numDistricts);
+        while (areAdjacentSeeds(chunks, seedIndices)) {
+            seedIndices = getRandomIndices(chunks.size(), numDistricts);
+        }
         return constructSeedDistricts(chunks, seedIndices);
+    }
+
+    private boolean areAdjacentSeeds(List<Chunk> chunks, List<Integer> seedIndices) {
+        for (Integer seedIndex : seedIndices){
+            for (Integer index: seedIndices){
+                if (seedIndex == index){ continue; }
+                else if (chunks.get(seedIndex).getAdjacentChunks().contains(chunks.get(index))) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private List<District> constructSeedDistricts(List<Chunk> chunks, List<Integer> indices) {
