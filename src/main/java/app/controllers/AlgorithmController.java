@@ -124,7 +124,9 @@ public class AlgorithmController {
         if(userEmitters.containsKey(currentUser)) {
             SseEmitter emitter = userEmitters.get(currentUser);
             emitter.complete();
+            userEmitters.remove(currentUser);
         }
+        algorithmMoveService.endAlgorithm();
 
         return new ResponseEntity(HttpStatus.ACCEPTED);
     }

@@ -9,13 +9,13 @@ import org.springframework.stereotype.Service;
 public class AlgorithmMoveService {
 
     public final ApplicationEventPublisher eventPublisher;
-
+    private boolean endAlgorithm = false;
     public AlgorithmMoveService(ApplicationEventPublisher eventPublisher) {
         this.eventPublisher = eventPublisher;
     }
 
     public void runAlgorithm(Algorithm algorithm) {
-        while(!algorithm.isFinished()) {
+        while(!algorithm.isFinished() && !endAlgorithm) {
             algorithm.step();
             try {
                 Thread.sleep(10);
@@ -24,5 +24,9 @@ public class AlgorithmMoveService {
             }
             eventPublisher.publishEvent(algorithm.getSseResultData());
         }
+        endAlgorithm = false;
+    }
+    public void endAlgorithm(){
+        endAlgorithm = true;
     }
 }

@@ -23,6 +23,7 @@ public class RegionGrowing extends Algorithm{
     public RegionGrowing(Map<String, Object> params, AlgorithmUtil algorithmUtil) {
         this.algorithmUtil = algorithmUtil;
         context = algorithmUtil.initializeAlgorithmParameters(params);
+        System.out.println(context.getSeedCount());
         state = algorithmUtil.initializeStateWithRandomSeedDistricts(context.getStateName(), context.getSeedCount());
         chunkMoveStack = new Stack<>();
         moveStack = new Stack<>();
