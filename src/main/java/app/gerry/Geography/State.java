@@ -39,18 +39,9 @@ public class State {
         averageDistrictPopulation = (double) population / districts.size();
     }
 
-    public Set<Precinct> getAllPrecincts(){
-        // TODO
-        return null;
-
-    }
-    public Set<String> getSubdivisionNames(){
-        // TODO
-        return null;
-    }
     public District getRandomDistrict(){
-        // TODO
-        return null;
+        int index = (int)(districts.size() * Math.random());
+        return districts.get(index);
     }
     public List<District> getSeedDistricts(){
         return districts;
@@ -88,6 +79,10 @@ public class State {
         this.name = name;
     }
 
+    public List<District> getDistricts(){
+        return districts;
+    }
+    
     public List<Chunk> getChunks() {
         return chunks;
     }
@@ -159,9 +154,6 @@ public class State {
         return averageDistrictPopulation;
     }
 
-    public List<District> getDistricts() {
-        return districts;
-    }
 
     public void setDistricts(List<District> districts) {
         this.districts = districts;
