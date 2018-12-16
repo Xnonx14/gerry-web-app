@@ -76,8 +76,7 @@ public class ObjectiveFunction {
     }
 
     private static double getMinBoundingCircleArea(Geometry geometricData) {
-        double area = geometricData.getArea();
         MinimumBoundingCircle mbc = new MinimumBoundingCircle(geometricData);
-        return area/(mbc.getCircle().getArea());
+        return mbc.getCircle().getArea();
     }
 }
