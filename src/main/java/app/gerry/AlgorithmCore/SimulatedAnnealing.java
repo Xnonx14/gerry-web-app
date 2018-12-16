@@ -46,12 +46,12 @@ public class SimulatedAnnealing extends Algorithm{
             Move m = new Move(chunk, destDistrict);
             m.execute();
             double sumEnd = ObjectiveFunction.getObjectiveValue(destDistrict, context) + ObjectiveFunction.getObjectiveValue(srcDistrict, context);
+            if(sumEnd > sum){
+                break;
+            }else{
+                m.undo();
+            }
         }
-        
-        //5) Iterate through all moves until you find a move that increases objective
-        //6) finalize that move. 
-        
-
     }
 
     
