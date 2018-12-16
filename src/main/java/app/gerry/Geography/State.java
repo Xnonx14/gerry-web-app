@@ -154,7 +154,6 @@ public class State {
         return averageDistrictPopulation;
     }
 
-
     public void setDistricts(List<District> districts) {
         this.districts = districts;
     }

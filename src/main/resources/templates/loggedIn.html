@@ -38,27 +38,30 @@
                 </div>
             </nav>
             <div id="container" style="width: 100%">
-                <div id="data">
-                    <div id="dataTitle">
-                        <h4> Data </h4>
-                    </div>
-                    
-                    <div id ="dataField">
-                        Name
-                    </div>
-                    <div id ="dataField">
-                        Constitution Text
-                    </div>
-                    <div id ="dataField">
-                        Total Population
-                    </div>
-                    <div id ="dataField">
-                        # of CD
-                    </div>
-                    <div id ="dataField">
-                        Election
-                    </div>
-                </div>
+				<div id="data">
+					<input type="submit" id="displayBtn" onclick="displayStateData()" value="-" style="float:left">
+					<div id="innerData" style="display:block">
+						<div class="dataField" id="dataTitle">
+							<h4> Data </h4>
+						</div>
+						
+						<div class="dataField" id ="Name">
+							Name
+						</div>
+						<div class="dataField" id ="dataField">
+							Constitution Text
+						</div>
+						<div class="dataField" id ="Population">
+							Total Population
+						</div>
+						<div class="dataField" id ="dataField">
+							# of CD
+						</div>
+						<div class ="dataField">
+							Election
+						</div>
+					</div>
+				</div>
                 
                 
                 <div id="first">
@@ -89,15 +92,14 @@
                     <input type="submit" class="button" id="select_algo" onclick="algoSelected()" value="Select Algorithm">
                 </div>
                 <div id="algoConfigR">
-                    <div id = "algoTitle">Region Growing </div>
+                    <div id = "algoTitle">Region Growing</div>
                     <br>
 
                     <!--<form action="/loggedIn" method="POST" th:action="@{/loggedIn}" th:object="${state}">-->
                     <div>
                         <input type="submit" class="button2" name="start" value="Start" onclick="subscribe()">
                         <input type="submit" class="button2" name="pause" value="Pause" onclick="pause()" id = "pause_button">
-                        <input type="submit" class="button2" name="step" value="Step" onclick="make_step
-                        ()">
+                        <input type="submit" class="button2" name="step" value="Step" onclick="make_step()">
                         <input type="submit" class="button2" name="stop" value="Stop" onclick ="stop()">
                     </div>
                     <br>

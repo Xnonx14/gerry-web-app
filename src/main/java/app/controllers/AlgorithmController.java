@@ -5,6 +5,10 @@ import app.SseTesting.NotificationJobService;
 import app.gerry.AlgorithmCore.Algorithm;
 import app.gerry.AlgorithmCore.RegionGrowing;
 import app.gerry.AlgorithmCore.SimulatedAnnealing;
+import app.gerry.Geography.Chunk;
+import app.gerry.Geography.District;
+import app.gerry.Geography.Precinct;
+import app.gerry.Geography.State;
 import app.gerry.Sse.AlgorithmMoveService;
 import app.gerry.Sse.SseResultData;
 import app.gerry.Sse.TestAlgorithm;
@@ -22,10 +26,14 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 
 @Controller
 @CrossOrigin
@@ -33,7 +41,7 @@ public class AlgorithmController {
 
     private final CopyOnWriteArrayList<SseEmitter> emitters = new CopyOnWriteArrayList<>();
     private final Map<String, SseEmitter> userEmitters = new ConcurrentHashMap<>();
-
+    private State state;
     @Autowired
     AlgorithmMoveService algorithmMoveService;
 
@@ -83,10 +91,28 @@ public class AlgorithmController {
     @PostMapping("/algorithm/start")
     @ResponseBody
     public ResponseEntity initiateAlgorithm(@RequestBody Map<String, Object> params) {
-        Algorithm algorithm = new RegionGrowing(params, algorithmUtil);
         //Algorithm algorithm = new SimulatedAnnealing(params, algorithmUtil);
+        Algorithm algorithm;
+        if(params.get("mode").equals("simulated")){
+            algorithm = new SimulatedAnnealing(params, algorithmUtil, state);
+        }else{
+            algorithm = new RegionGrowing(params, algorithmUtil);
+        }
         algorithmMoveService.runAlgorithm(algorithm);
         return new ResponseEntity(HttpStatus.ACCEPTED);
+    }
+
+    @PostMapping("/setupState")
+    @ResponseBody
+    public HashMap initState(@RequestBody Map<String, String> params) {
+        state = algorithmUtil.initializeStateWithAllDistricts(params.get("state"));
+        HashMap hm = new HashMap();
+        for(District d: state.getDistricts()){
+            for(Chunk c: d.getChunks()){
+                hm.put(c.getId(),d.getId());
+            }
+        }
+        return hm;
     }
 
     @PostMapping("/algorithm/stop")

@@ -23,10 +23,6 @@ public class District {
     private double ObjectiveValue;
     private State state;
 
-    /**
-     * Construct a district that contains one chunk (Seed district)
-     * @param chunk
-     */
     public static class Builder {
         public int id;
         public String name;
@@ -101,8 +97,13 @@ public class District {
     }
 
     private void updateAdjacentChunks(Chunk chunk, boolean isRemove) {
-        List<Chunk> newAdjacentChunks = chunk.getAdjacentChunks().stream()
-                .filter(c -> c.getParentDistrict().getId() != this.getId())
+        if(chunk.getAdjacentChunks() == null){
+            return;
+        }
+        List<Chunk> newAdjacentChunks = chunk.
+                getAdjacentChunks().
+                stream()
+                .filter(c -> c.getParentDistrictID() != this.getId())
                 .collect(Collectors.toList());
         if(isRemove){
             for(Chunk c : newAdjacentChunks) {
@@ -124,6 +125,7 @@ public class District {
             }
             adjacentChunks.remove(chunk);
         }
+
     }
 
     private void updateBoundaryData(Chunk chunk, boolean isRemove) {

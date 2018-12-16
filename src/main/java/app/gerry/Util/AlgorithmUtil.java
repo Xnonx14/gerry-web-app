@@ -65,12 +65,14 @@ public class AlgorithmUtil {
         
         for(District d: districtList){
             d.setChunks(new HashSet<>());
+            d.setAdjacentChunks(new HashMap<>());
             for(Chunk c: chunks){
                 if(c.getParentDistrictID() == d.getId()){
-                    d.getChunks().add(c);
+                    d.addChunk(c);
                 }
             }
         }
+        
         
         State state = new State.Builder(stateName)
                         .withChunks(chunks)

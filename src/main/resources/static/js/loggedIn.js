@@ -1,3 +1,18 @@
+function displayStateData(){
+	if(document.getElementById("innerData").style['display'] != "block"){
+        document.getElementById("innerData").style = "display: block";
+		document.getElementById("data").style="width: 15%"
+		document.getElementById("displayBtn").value = "-";
+		document.getElementById("first").style = "width: 65%";
+    }else{
+        document.getElementById("innerData").style = "display: none";
+		document.getElementById("data").style="width: 3%"
+		document.getElementById("displayBtn").value = "+";
+		document.getElementById("first").style = "width: 77%";
+    }
+	
+}
+
 function algoSelected(){
     if(document.getElementById("selected_algo").value === "region"){
         document.getElementById("algoTitle").innerHTML = "Region Growing";
@@ -10,8 +25,30 @@ function algoSelected(){
     document.getElementById("algoConfigR").style = "display: block";
 }
 
+var precinct_data;
 function stateSelected(){
     document.getElementById("selectAlgorithm").style = "visibility: visible";
+	var state = document.getElementById("selected_state").value;
+
+	var xhr = new XMLHttpRequest();
+    xhr.open("POST", '/setupState', true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    var params = {
+        state: state
+    };
+
+	xhr.onreadystatechange = function() {
+	if (this.readyState == 4 && this.status == 200) {
+	    precinct_data = JSON.parse(xhr.responseText);
+	    for (var key in precinct_data) {
+	        var districtId = precinct_data[key];
+	        var precinctId = key;
+	        var color = genColor(districtId);
+	        new_Hampshire.setFeatureStyle(precinctId, colorStyle(color))
+	    }
+    }
+    }
+    xhr.send(JSON.stringify(params));
 }
 // Create variable to hold map element, give initial settings to map
 var mapboxAccessToken = "pk.eyJ1IjoiZGNib3k2ODY4IiwiYSI6ImNqbXBlbG5wejB6M3kzcHFjZDN0dDg1N2wifQ.fv6q_orjFeF9Vcx5nLEu3w";
@@ -111,7 +148,7 @@ return this._div;
 // method that we will use to update the control based on feature properties passed
 info.update = function (props) {
 this._div.innerHTML = '<h4>Data</h4>' +  (props ?
-    '<b>' + props.name + '</b><br />' + props.density + ' people / mi<sup>2</sup>'
+    '<b>' + "ID" + '</b><br />' + props
     : 'Hover over a state');
 };
 
@@ -197,6 +234,8 @@ onEachFeature: onEachFeature,
 //	}
 //}
 //}).addTo(map);
+
+
 var new_Hampshire = L.vectorGrid.slicer(nH_data, {
 	minZoom: 7,
 	rendererFactory: L.svg.tile,
@@ -218,12 +257,15 @@ var new_Hampshire = L.vectorGrid.slicer(nH_data, {
 		return f.properties.PRECINCT_ID;
 	}
 })
-		.on('click', function(e) {
+		.on('mouseover', function(e) {
 			var properties = e.layer.properties;
-			L.popup()
-				.setContent(properties.VTDST10)
-				.setLatLng(e.latlng)
-				.openOn(map);
+			info.update(properties.PRECINCT_ID);
+			document.getElementById("Name").innerHTML = "Precinct ID: "+ properties.PRECINCT_ID;
+            document.getElementById("Population").innerHTML = "Population/Parent ID: "+precinct_data[properties.PRECINCT_ID];
+//			L.popup()
+//				.setContent("My parent district ID is: " + precinct_data[properties.PRECINCT_ID])
+//				.setLatLng(e.latlng)
+//				.openOn(map);
 		})
 .addTo(map);
 
