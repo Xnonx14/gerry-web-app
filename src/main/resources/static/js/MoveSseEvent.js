@@ -13,7 +13,19 @@ var queue = [];
 var state = "NOT_INIT";
 var move;
 
+var eventSource = null;
+
 var subscribe = function () {
+    document.getElementById("console").innerHTML = "";
+    if(state == "CLOSED"){
+        if(state == "NORMAL" || state == "PAUSED"){
+            for(var i = 17; i <= 345; i++){
+                new_Hampshire.resetFeatureStyle(i);
+            }
+        }
+        state = "NOT_INIT";
+    }
+
     var selectedAlgo = document.getElementById("selected_algo");
     if(selectedAlgo.value === "region") {
         for (var key in precinct_data) {
@@ -24,8 +36,8 @@ var subscribe = function () {
         }
     }
 
-    var eventSource = new EventSource('algorithm/feed');
-    var elem = document.getElementById("pause_button");
+    eventSource = new EventSource('algorithm/feed');
+    var elem = document.getElementById("pauseBtnID");
 
     eventSource.onmessage = function (e) {
         var move = JSON.parse(e.data);
@@ -38,6 +50,7 @@ var subscribe = function () {
         }
         if(state == "NORMAL" && queue.length > 0){
             move = queue.shift();
+            document.getElementById("console").innerHTML = move.objectiveValue + "\n" + document.getElementById("console").innerHTML;
             var precinctId = move.precinctId;
             var districtId = move.destDistrictId;
             var color = genColor(districtId);
@@ -62,13 +75,13 @@ var subscribe = function () {
     }
 }
 var pause = function () {
-    var elem = document.getElementById("pause_button");
+    var elem = document.getElementById("pauseBtnID");
     if(state == "NOT_INIT"){
 
     }
     else if(state == "NORMAL"){
         state  = "PAUSED";
-        elem.value = "Unpause";
+        elem.value = "Resume";
     }
     else if(state == "PAUSED"){
         state  = "NORMAL";
@@ -83,6 +96,7 @@ var make_step = function(){
     }
     if(state == "PAUSED" && queue.length > 0){
             move = queue.shift();
+            document.getElementById("console").innerHTML = move.objectiveValue + "\n" + document.getElementById("console").innerHTML;
             var precinctId = move.precinctId;
             var districtId = move.districtId;
             var color = genColor(districtId);
@@ -91,12 +105,14 @@ var make_step = function(){
 }
 
 var stop = function(){
-    if(state == "NORMAL" || state == "PAUSED"){
-        for(var i = 17; i <= 345; i++){
-            new_Hampshire.resetFeatureStyle(i);
-        }
-        state = "CLOSED";
-    }
+    state = "CLOSED";
+    eventSource.close();
+    queue = [];
+    eventSource = null;
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", '/algorithm/stop', true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.send();
 }
 
 var startAlgorithm = function () {

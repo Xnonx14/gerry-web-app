@@ -6,6 +6,7 @@ import app.gerry.Geography.State;
 import app.gerry.Sse.SseResultData;
 import app.gerry.Util.AlgorithmUtil;
 
+import java.text.DecimalFormat;
 import java.util.*;
 
 public class RegionGrowing extends Algorithm{
@@ -22,6 +23,7 @@ public class RegionGrowing extends Algorithm{
     public RegionGrowing(Map<String, Object> params, AlgorithmUtil algorithmUtil) {
         this.algorithmUtil = algorithmUtil;
         context = algorithmUtil.initializeAlgorithmParameters(params);
+        System.out.println(context.getSeedCount());
         state = algorithmUtil.initializeStateWithRandomSeedDistricts(context.getStateName(), context.getSeedCount());
         chunkMoveStack = new Stack<>();
         moveStack = new Stack<>();
@@ -31,31 +33,6 @@ public class RegionGrowing extends Algorithm{
             seen.addAll(district.getChunks());
         }
     }
-
-//    /**
-//     * For each seed district:
-//     *  get adjacent chunks
-//     *  pick best chunk(random for now)
-//     *  finalize the move (update movestack)
-//     */
-//    @Override
-//    public void step() {
-//        List<District> seedDistricts = state.getSeedDistricts();
-//        if(seedDistricts.isEmpty())
-//            return;
-//        District seedDistrict = seedDistricts.get(index);
-//        Set<Chunk> adjacentChunks = new HashSet<>(seedDistrict.getAdjacentChunks());
-//        if(adjacentChunks.isEmpty()) {
-//            seedDistricts.remove(seedDistrict);
-//            index--;
-//            return;
-//        }
-//        int selectedIndex = getBestChunkIndex(adjacentChunks);
-//        Iterator chunkIt = adjacentChunks.iterator();
-//        Chunk selected = (Chunk)chunkIt.next();
-//        seedDistrict.addChunk(selected);
-//        updateState(selected, seedDistricts, selectedIndex);
-//    }
 
     @Override
     public void step() {
@@ -96,6 +73,9 @@ public class RegionGrowing extends Algorithm{
             if(gain > maxGain) {
                 maxGain =  gain;
                 bestMove = move;
+                DecimalFormat df = new DecimalFormat("#.00000");
+                String objValue = "District "+district.getId() + ": " + df.format(val )+ " ("+df.format(gain)+")";
+                bestMove.setObjectiveValue(objValue);
             }
             move.undo();
         }

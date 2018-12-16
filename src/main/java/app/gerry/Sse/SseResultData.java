@@ -12,6 +12,7 @@ public class SseResultData {
     private String data;
     private Date dateSent;
     private boolean isLastOne;
+    private String objectiveString;
 
     public SseResultData(Move move, boolean isLastOne) {
         //srcDistrictId = move.getSrcDistrict().getId();
@@ -19,7 +20,11 @@ public class SseResultData {
         precinctId = move.getChunk().getId();
         population = move.getChunkPopulation();
         dateSent = new Date();
+        objectiveString = move.getObjectiveValue();
     }
+
+    public String getObjectiveValue() { return objectiveString;}
+    public void setObjectiveValue(String val) { objectiveString = val;}
 
     public int getSrcDistrictId() {
         return srcDistrictId;

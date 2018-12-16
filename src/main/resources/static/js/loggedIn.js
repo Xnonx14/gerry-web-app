@@ -1,3 +1,27 @@
+function foolproofStart(){
+    document.getElementById("startBtnID").disabled = true;
+    document.getElementById("startBtnID").className = "disabledBtn";
+    document.getElementById("pauseBtnID").className = "button2";
+    document.getElementById("pauseBtnID").disabled = false;
+    document.getElementById("stepBtnID").className = "button2";
+    document.getElementById("stepBtnID").disabled = false;
+    document.getElementById("stopBtnID").className = "button2";
+    document.getElementById("stopBtnID").disabled = false;
+    subscribe();
+}
+
+function foolproofStop(){
+    document.getElementById("startBtnID").className = "button2";
+    document.getElementById("startBtnID").disabled = false;
+    document.getElementById("pauseBtnID").className = "disabledBtn";
+    document.getElementById("pauseBtnID").disabled = true;
+    document.getElementById("stepBtnID").className = "disabledBtn";
+    document.getElementById("stepBtnID").disabled = true;
+    document.getElementById("stopBtnID").className = "disabledBtn";
+    document.getElementById("stopBtnID").disabled = true;
+    stop();
+}
+
 function displayStateData(){
 	if(document.getElementById("innerData").style['display'] != "block"){
         document.getElementById("innerData").style = "display: block";

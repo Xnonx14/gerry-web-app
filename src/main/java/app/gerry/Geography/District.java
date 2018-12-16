@@ -177,7 +177,11 @@ public class District {
             this.geometricData = districtPolygon.difference(chunkPolygon);
             return;
         }
-        this.geometricData = new UnaryUnionOp(polygons).union();
+        try{
+            this.geometricData = new UnaryUnionOp(polygons).union();
+        }catch(Exception e){
+
+        }
     }
 
     private void updateElectionData(Chunk chunk) {
