@@ -11,14 +11,18 @@ public class Move {
     private int srcDistrictId;
     private int destDistrictId;
     private int chunkPopulation;
-
+    
     public Move(Chunk chunk, District district) {
         this.chunk = chunk;
         this.district = district;
     }
 
     public void execute() {
-
+        District src = chunk.getParentDistrict();
+        if(src == null){
+            src.removeChunk(chunk);
+        }
+        district.addChunk(chunk);
     }
 
     public void undo() {

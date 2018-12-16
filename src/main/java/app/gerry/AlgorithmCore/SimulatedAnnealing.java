@@ -8,6 +8,7 @@ import app.gerry.Sse.SseResultData;
 import app.gerry.Util.AlgorithmUtil;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -26,12 +27,6 @@ public class SimulatedAnnealing extends Algorithm{
     public SimulatedAnnealing(Map<String, Object> params, AlgorithmUtil algorithmUtil) {
         this.algorithmUtil = algorithmUtil;
         context = algorithmUtil.initializeAlgorithmParameters(params);
-//        chunkMoveStack = new Stack<>();
-//        seen = new HashSet<>();
-//        unassignedChunks = new ArrayList<>(state.getChunks());
-//        for(District district : state.getSeedDistricts()) {
-//            unassignedChunks.removeAll(district.getChunks());
-//        }
         iterations = 10;
     }
     
@@ -39,20 +34,17 @@ public class SimulatedAnnealing extends Algorithm{
     public void step() {
         iterations--;
         //1) Choose a random sourceDistrict: srcDistrict
-        District srcDistrict = state.getRandomDistrict();
-        //2) Get a chunk inside the srcDistrict along the border (to be moved): Chunk 
-        Chunk movingChunk = srcDistrict.getRandomBorderChunk();
-        //3) Get the Districts adjacent to the srcDistrict from step 1: destDistricts
-        Set<Chunk> chunks = movingChunk.getAdjacentChunks();
-        HashSet<District> destDistricts = new HashSet<>();
-        for(Chunk ck: chunks){
-            District temp = ck.getDistrict();
-            if(temp != srcDistrict && !destDistricts.contains(temp)){
-                destDistricts.add(ck.getDistrict());
-            }   
+        District destDistrict = state.getRandomDistrict();
+        Set<Chunk> moveableChunks = destDistrict.getAdjacentChunks();
+        Iterator<Chunk> iter = moveableChunks.iterator();
+        while(iter.hasNext()){
+            Chunk chunk = iter.next();
+            District srcDistrict = chunk.getDistrict();
+            double sum = ObjectiveFunction.getObjectiveValue(destDistrict, context) + ObjectiveFunction.getObjectiveValue(srcDistrict, context);
+            Move m = new Move(chunk, destDistrict);
+            m.execute();
+            double sumEnd = ObjectiveFunction.getObjectiveValue(destDistrict, context) + ObjectiveFunction.getObjectiveValue(srcDistrict, context);
         }
-        //4) createAllMoves(chunk,srcDistrict,destDistricts): array[moves]
-        //mm.createAllMoves(movingChunk, srcDistrict, destDistricts);
         
         //5) Iterate through all moves until you find a move that increases objective
         //6) finalize that move. 

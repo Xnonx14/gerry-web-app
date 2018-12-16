@@ -75,7 +75,8 @@ public class District {
     }
 
     public void removeChunk(Chunk c){
-        return;
+        this.chunks.remove(c);
+        this.adjacentChunks.add(c);
     }
 
     /**
@@ -96,9 +97,19 @@ public class District {
     private void updateAdjacentChunks(Chunk chunk) {
         chunk.setParentDistrict(this);
         chunks.add(chunk);
-        List newAdjacentChunks = chunk.getAdjacentChunks().stream().filter(c -> c.getParentDistrict() == null).collect(Collectors.toList());
+        
+        if(chunk.getAdjacentChunks() == null){
+            return;
+        }
+        List newAdjacentChunks = chunk.getAdjacentChunks()
+                .stream()
+                .filter(c -> c.getParentDistrictID() != this.getId())
+                .collect(Collectors.toList());
         adjacentChunks.addAll(newAdjacentChunks);
-        adjacentChunks.remove(chunk);
+        if(!adjacentChunks.isEmpty()){
+            adjacentChunks.remove(chunk);
+        }
+        
     }
 
     private void updateBoundaryData(Chunk chunk) {
