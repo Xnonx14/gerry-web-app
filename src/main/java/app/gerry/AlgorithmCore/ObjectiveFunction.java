@@ -22,6 +22,10 @@ public class ObjectiveFunction {
 //      double fairnessValue = calculate_Political();
         double populationValue = calculatePopulation(district);
 
+        double result = (populationValue * populationWeight) + (convexValue * convexWeight);
+        if(true)
+            return result;
+
         return (reockWeight * reockValue)
                 + (polsbyWeight * polsbyValue)
                 + (convexWeight * convexValue)

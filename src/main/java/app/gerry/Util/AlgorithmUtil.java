@@ -223,7 +223,7 @@ public class AlgorithmUtil {
             System.out.println("Key: " + key + " not found.");
             return 0.0;
         }
-        return Double.parseDouble((String)params.get(key));
+        return Double.parseDouble((String)params.get(key)) / 100.0;
     }
 
     private String toString(Map<String, Object> params, String key) {

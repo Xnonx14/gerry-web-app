@@ -18,7 +18,7 @@ public class AlgorithmMoveService {
         while(!algorithm.isFinished()) {
             algorithm.step();
             try {
-                Thread.sleep(200);
+                Thread.sleep(10);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
