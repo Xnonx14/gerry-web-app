@@ -41,7 +41,7 @@ public class AlgorithmController {
 
     private final CopyOnWriteArrayList<SseEmitter> emitters = new CopyOnWriteArrayList<>();
     private final Map<String, SseEmitter> userEmitters = new ConcurrentHashMap<>();
-
+    private State state;
     @Autowired
     AlgorithmMoveService algorithmMoveService;
 
@@ -93,7 +93,7 @@ public class AlgorithmController {
     public ResponseEntity initiateAlgorithm(@RequestBody Map<String, Object> params) {
         Algorithm algorithm;
         if(params.get("mode").equals("simulated")){
-            algorithm = new SimulatedAnnealing(params, algorithmUtil);
+            algorithm = new SimulatedAnnealing(params, algorithmUtil, state);
         }else{
             algorithm = new RegionGrowing(params, algorithmUtil);
         }
@@ -101,11 +101,11 @@ public class AlgorithmController {
         algorithmMoveService.runAlgorithm(algorithm);
         return new ResponseEntity(HttpStatus.ACCEPTED);
     }
-    
+
     @PostMapping("/setupState")
     @ResponseBody
     public HashMap initState(@RequestBody Map<String, String> params) {
-        State state = algorithmUtil.initializeStateWithAllDistricts(params.get("state"));
+        state = algorithmUtil.initializeStateWithAllDistricts(params.get("state"));
         HashMap hm = new HashMap();
         for(District d: state.getDistricts()){
             for(Chunk c: d.getChunks()){

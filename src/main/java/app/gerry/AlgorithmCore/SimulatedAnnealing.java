@@ -24,10 +24,11 @@ public class SimulatedAnnealing extends Algorithm{
     private Set<Chunk> seen;
     private List<Chunk> unassignedChunks;
     
-    public SimulatedAnnealing(Map<String, Object> params, AlgorithmUtil algorithmUtil) {
+    public SimulatedAnnealing(Map<String, Object> params, AlgorithmUtil algorithmUtil, State state) {
         this.algorithmUtil = algorithmUtil;
         context = algorithmUtil.initializeAlgorithmParameters(params);
         iterations = 10;
+        this.state = state;
     }
     
     @Override
