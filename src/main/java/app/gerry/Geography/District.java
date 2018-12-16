@@ -114,7 +114,7 @@ public class District {
                 }
             }
             List<Chunk> oldAdjacentChunks = chunk.getAdjacentChunks().stream()
-                    .filter(c -> c.getParentDistrict() != null)
+                    .filter(c -> c.getParentDistrict() != null && c.getParentDistrict().getId() == this.getId())
                     .collect(Collectors.toList());
             adjacentChunks.put(chunk, oldAdjacentChunks.size());
         }
