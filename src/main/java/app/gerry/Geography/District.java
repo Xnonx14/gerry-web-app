@@ -16,7 +16,7 @@ public class District {
     private Representative representative;
     private Set<Precinct> precincts;
     private Set<Chunk> chunks;
-    private Set<Chunk> adjacentChunks;
+    private Map<Chunk, Integer> adjacentChunks;
     private Set<Chunk> borderChunks;
     private Geometry geometricData;
     private int population;
@@ -29,7 +29,7 @@ public class District {
      */
     public District(Chunk chunk) {
         chunks = new HashSet<>();
-        adjacentChunks = new HashSet<>();
+        adjacentChunks = new HashMap<>();
         addChunk(chunk);
 
         //TODO: Add Chunk to chunks and update geometric data, etc...
@@ -40,11 +40,7 @@ public class District {
     }
 
     public Set<Chunk> getAdjacentChunks(){
-        return adjacentChunks;
-    }
-
-    public void removeChunk(Chunk c){
-        return;
+        return adjacentChunks.keySet();
     }
 
     /**
@@ -56,24 +52,56 @@ public class District {
      * @param chunk
      */
     public void addChunk(Chunk chunk){
-        updateAdjacentChunks(chunk);
-        updateBoundaryData(chunk);
-        updateElectionData(chunk);
-        updatePopulationData(chunk);
-    }
-
-    private void updateAdjacentChunks(Chunk chunk) {
-        chunk.setParentDistrict(this);
         chunks.add(chunk);
-        List newAdjacentChunks = chunk.getAdjacentChunks().stream().filter(c -> c.getParentDistrict() == null).collect(Collectors.toList());
-        adjacentChunks.addAll(newAdjacentChunks);
-        adjacentChunks.remove(chunk);
+        chunk.setParentDistrict(this);
+        updateAdjacentChunks(chunk, false);
+        updateBoundaryData(chunk, false);
+        updateElectionData(chunk);
+        updatePopulationData(chunk, false);
     }
 
-    private void updateBoundaryData(Chunk chunk) {
+    public void removeChunk(Chunk chunk) {
+        chunks.remove(chunk);
+        chunk.setParentDistrict(null);
+        updateAdjacentChunks(chunk, true);
+        updateBoundaryData(chunk, true);
+        updateElectionData(chunk);
+        updatePopulationData(chunk, true);
+    }
+
+    private void updateAdjacentChunks(Chunk chunk, boolean isRemove) {
+        List<Chunk> newAdjacentChunks = chunk.getAdjacentChunks().stream()
+                .filter(c -> c.getParentDistrict().getId() != this.getId())
+                .collect(Collectors.toList());
+        if(isRemove){
+            for(Chunk c : newAdjacentChunks) {
+                int oldCount = adjacentChunks.get(c);
+                adjacentChunks.put(c, oldCount - 1);
+                if(oldCount == 1) {
+                    adjacentChunks.remove(c);
+                }
+            }
+            List<Chunk> oldAdjacentChunks = chunk.getAdjacentChunks().stream()
+                    .filter(c -> c.getParentDistrict().getId() == this.getId())
+                    .collect(Collectors.toList());
+            adjacentChunks.put(chunk, oldAdjacentChunks.size());
+        }
+        else{
+            for(Chunk c : newAdjacentChunks) {
+                int oldCount = adjacentChunks.getOrDefault(c, 0);
+                adjacentChunks.put(c, oldCount + 1);
+            }
+            adjacentChunks.remove(chunk);
+        }
+    }
+
+    private void updateBoundaryData(Chunk chunk, boolean isRemove) {
         //If this is the first time we're setting the boundary data
         if(geometricData == null) {
-            geometricData = chunk.getCummGeometricData();
+            if(!isRemove)
+                geometricData = chunk.getCummGeometricData();
+            else
+                System.out.println("Can't remove this district");
             return;
         }
         //Otherwise we have to incrementally adjust our boundary data with each chunk
@@ -82,6 +110,11 @@ public class District {
         Collection<Geometry> polygons = new ArrayList<>();
         polygons.add(districtPolygon);
         polygons.add(chunkPolygon);
+
+        if(isRemove) {
+            this.geometricData = districtPolygon.difference(chunkPolygon);
+            return;
+        }
         this.geometricData = new UnaryUnionOp(polygons).union();
     }
 
@@ -89,12 +122,12 @@ public class District {
         //TODO
     }
 
-    private void updatePopulationData(Chunk chunk) {
+    private void updatePopulationData(Chunk chunk, boolean isRemove) {
+        if(isRemove) {
+            this.population -= chunk.getCummPopulation();
+            return;
+        }
         this.population += chunk.getCummPopulation();
-    }
-
-    public void removeChunkFromAdjacencies(Set<Chunk> chunk) {
-        adjacentChunks.removeAll(chunk);
     }
 
     public Precinct getRandomBordering(){
@@ -125,7 +158,7 @@ public class District {
         this.state = state;
     }
 
-    public void setAdjacentChunks(Set<Chunk> adjacentChunks) {
+    public void setAdjacentChunks(Map<Chunk, Integer> adjacentChunks) {
         this.adjacentChunks = adjacentChunks;
     }
 
