@@ -97,13 +97,13 @@ public class AlgorithmController {
     @PostMapping("/setupState")
     @ResponseBody
     public HashMap initState(@RequestBody Map<String, String> params) {
-        state = algorithmUtil.initializeStateWithAllDistricts(params.get("state"));
+        //state = algorithmUtil.initializeStateWithAllDistricts(params.get("state"));
         HashMap hm = new HashMap();
-        for(District d: state.getDistricts()){
-            for(Chunk c: d.getChunks()){
-                hm.put(c.getId(),d.getId());
-            }
-        }
+//        for(District d: state.getDistricts()){
+//            for(Chunk c: d.getChunks()){
+//                hm.put(c.getId(),d.getId());
+//            }
+//        }
         return hm;
     }
 

@@ -9,6 +9,7 @@ public class SseResultData {
     private int srcDistrictId;
     private int destDistrictId;
     private int precinctId;
+    private int[] precinctIds;
     private int srcDistrictPopulation;
     private int destDistrictPopulation;
     private String data;
@@ -25,6 +26,7 @@ public class SseResultData {
         destDistrictId = destDistrict == null ? -1 : destDistrict.getId();
         destDistrictPopulation = destDistrict == null ? -1 :  destDistrict.getPopulation();
         precinctId = move.getChunk().getId();
+        precinctIds = move.getChunk().getPrecincts().stream().mapToInt(p -> p.getId()).toArray();
         dateSent = new Date();
         objectiveValue = move.getObjectiveValue();
         objectiveGain = move.getObjectiveGain();

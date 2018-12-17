@@ -39,6 +39,7 @@ public class Precinct {
     private ElectionData electionData;
 
     public Precinct(Builder builder) {
+        System.out.println("Building precinct :" + builder.id);
         this.id = builder.id;
         this.boundary = builder.boundary;
         this.adjacentPrecincts = builder.adjacentPrecincts;

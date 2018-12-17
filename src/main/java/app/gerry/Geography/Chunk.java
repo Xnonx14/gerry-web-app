@@ -63,11 +63,11 @@ public class Chunk {
     public Chunk(int countyId, List<Precinct> precincts, List<Integer> adjCountyIds) {
         id = countyId;
         this.precincts = precincts;
+        this.adjChunkIds = adjCountyIds;
         subdivision = PoliticalSubdivision.COUNTY;
         cummPopulation = 0;
         cummGeometricData = null;
-        cummElectionData = null;
-        cummWastedVotes = null;
+        cummWastedVotes = new HashMap<>();
         for(Precinct precinct : precincts) {
             addPrecinct(precinct);
         }
@@ -78,7 +78,12 @@ public class Chunk {
     public void addPrecinct(Precinct precinct) {
         updateBoundary(precinct);
         updateWastedVotes(precinct);
+        updateTotalVotes(precinct);
         updatePopulationData(precinct);
+    }
+
+    private void updateTotalVotes(Precinct precinct) {
+        totalVotes += precinct.getTotalVotes();
     }
 
     private void updateBoundary(Precinct precinct) {
@@ -106,7 +111,18 @@ public class Chunk {
     }
 
     private void updateWastedVotes(Precinct precinct) {
-        //TODO
+        Map<Party, Integer> chunkCummWastedVotes = precinct.getWastedVotesMap();
+
+        for (Party p : chunkCummWastedVotes.keySet()) {
+            int chunkWastedVotes = chunkCummWastedVotes.get(p);
+            int total = 0;
+            if (cummWastedVotes.containsKey(p)) {
+                total = cummWastedVotes.get(p) + chunkWastedVotes;
+            } else {
+                total = chunkWastedVotes;
+            }
+            cummWastedVotes.put(p, total);
+        }
     }
 
     private void updatePopulationData(Precinct precinct) {

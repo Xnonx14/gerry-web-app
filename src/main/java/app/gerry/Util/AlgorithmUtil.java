@@ -108,11 +108,14 @@ public class AlgorithmUtil {
             //construct county chunks
             //read in county chunk json
             //for each county chunk json, construct chunk with county id, precincts
-            String filepath = "./preprocessing/wv/id_CountyAdj.json";
+            String filepath = "./preprocessing/wv/idCountyAdj.json";
 
             List<Chunk> countyChunks = new ArrayList<>();
             List<CountyChunkJson> chunkJsons = createCountyChunkJsons(filepath);
             for(CountyChunkJson chunkJson : chunkJsons) {
+                if(chunkJson == null) {
+                    System.out.println("chunk json null");
+                }
                 int countyId = chunkJson.getId();
                 int[] precinctIds = chunkJson.getPrecincts();
                 Map<Integer, Precinct> precinctMap = precincts.stream()
