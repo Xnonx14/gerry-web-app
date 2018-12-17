@@ -286,9 +286,12 @@ var new_Hampshire = L.vectorGrid.slicer(nH_data, {
 		.on('mouseover', function(e) {
 			var properties = e.layer.properties;
 			info.update(properties.PRECINCT_ID);
-			document.getElementById("tfPrecinctID").value= "Precinct ID: "+ properties.PRECINCT_ID;
-			console.log(precinct_data);
-            document.getElementById("tfDistrictID").value = "Parent District ID: "+precinct_data[properties.PRECINCT_ID];
+			document.getElementById("tfPrecinctID").value= properties.PRECINCT_ID;
+            document.getElementById("tfDistrictID").value = precinct_data[properties.PRECINCT_ID];
+            document.getElementById("tfTotalPop").value = districtMap[parseInt(precinct_data[properties.PRECINCT_ID])];
+            //parseInt(precinct_data[properties.PRECINCT_ID])
+            console.log(districtMap);
+
 //			L.popup()
 //				.setContent("My parent district ID is: " + precinct_data[properties.PRECINCT_ID])
 //				.setLatLng(e.latlng)
