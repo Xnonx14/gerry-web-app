@@ -64,10 +64,20 @@ var subscribe = function () {
         if(state == "NORMAL" && queue.length > 0){
             move = queue.shift();
             document.getElementById("tfObjectiveFunction").value = move.objectiveValue;
+            if(selected_state == "West Virginia"){
+                var districtId = move.destDistrictId;
+                var Ids = move.precinctIds;
+                var color = genColor(districtId);
+                Ids.forEach(function(precinctId) {
+                     StateMap[selected_state].setFeatureStyle(precinctId, colorStyle(color))
+                });
+            }
+            else{
             var precinctId = move.precinctId;
             var districtId = move.destDistrictId;
             var color = genColor(districtId);
             StateMap[selected_state].setFeatureStyle(precinctId, colorStyle(color))
+            }
         }
     };
     eventSource.onopen = function () {
