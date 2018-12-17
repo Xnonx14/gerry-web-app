@@ -26,6 +26,12 @@ var subscribe = function () {
 //                StateMap[state].resetFeatureStyle(i);
 //            }
 //        }
+        for (var key in precinct_data) {
+            var districtId = precinct_data[key];
+            var precinctId = key;
+            var color = 'white';
+            StateMap[selected_state].setFeatureStyle(precinctId, colorStyle(color))
+        }
         state = "NOT_INIT";
     }
 
