@@ -1,7 +1,7 @@
 package app.gerry.Constants;
 
 public enum Position {
-    PRESIDENT,
+    President,
     SENATOR,
-    REPRESENTATIVE
+    Representative
 }
