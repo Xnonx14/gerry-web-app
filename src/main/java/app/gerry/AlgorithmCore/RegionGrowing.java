@@ -74,8 +74,8 @@ public class RegionGrowing extends Algorithm{
                 maxGain =  gain;
                 bestMove = move;
                 DecimalFormat df = new DecimalFormat("#.00000");
-                String objValue = "District "+district.getId() + ": " + df.format(val )+ " ("+df.format(gain)+")";
-                bestMove.setObjectiveValue(objValue);
+                bestMove.setObjectiveValue(df.format(val));
+                bestMove.setObjectiveGain(df.format(gain));
             }
             move.undo();
         }
@@ -133,5 +133,13 @@ public class RegionGrowing extends Algorithm{
         Chunk chunk = state.getIdChunkMap().get(chunkId);
         seen.add(chunk);
         moveStack.push(move);
+    }
+
+    public State getState() {
+        return state;
+    }
+
+    public void setState(State state) {
+        this.state = state;
     }
 }
