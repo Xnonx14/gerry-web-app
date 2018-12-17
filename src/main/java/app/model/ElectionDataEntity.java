@@ -8,7 +8,7 @@ import app.gerry.Constants.Position;
 
 @Entity
 @Table(name = "ELECTION_DATA")
-public class ElectionData {
+public class ElectionDataEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
