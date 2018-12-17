@@ -41,29 +41,50 @@
 				<div id="data">
 					<input type="submit" id="displayBtn" onclick="displayStateData()" value="-" style="width: 30px;float:left">
                     <br><br>
-					<div id="innerData" style="display:block">
-						<div class="dataField" id="dataTitle">
-							<h4> Data </h4>
+					<div id="innerData" style="display:block; float:left; width:49%;">
+						<div class="dataField">
+							<h4> District Data </h4>
 						</div>
-						
-						<div class="dataField" id ="Name">
-							Name
+                        <div class="dataField">
+                            <h4> District ID </h4>
+                            <input type="text" id="tfDistrictID" value="">
+                        </div>
+
+						<div class="dataField">
+                            <h4> Total Population </h4>
+                            <input type="text" id="tfTotalPop" value="">
 						</div>
-						<div class="dataField" id ="dataField">
-							Constitution Text
+						<div class="dataField">
+                            <h4>Objective Function</h4>
+                            <input type="text" id="tfObjectiveFunction" value="">
 						</div>
-						<div class="dataField" id ="Population">
-							Total Population
+						<div class="dataField">
+                            <h4># of Precincts</h4>
+                            <input type="text" id="tfPrecincts" value="">
 						</div>
-						<div class="dataField" id ="dataField">
-							# of CD
-						</div>
-						<div class ="dataField">
-							Election
-						</div>
-                        <div style="float:left; width: 100%;">
-                            <br><br>
-                            <textarea id="console" style="width: 100%; resize: none; height: 300px;"></textarea>
+                    </div>
+                    <div id="precinctDataID" style="float:left; width: 50%;">
+                        <div class="dataField" id="dataTitle">
+                            <h4> Precinct Data </h4>
+                        </div>
+
+                        <div class="dataField" id ="precinctID">
+                            <h4>PrecinctID</h4>
+                            <input type="text" id="tf1" value="">
+                        </div>
+                        <div class="dataField" id ="precinctPopulation">
+                            <h4>Population</h4>
+                            <input type="text" id="tf3" value="">
+                        </div>
+                        <div class="dataField" id ="precinctArea">
+                            <h4>Area</h4>
+                            <input type="text" id="tf2" value="">
+                        </div>
+                        <div class ="dataField">
+                            <h4>Election</h4>
+                            <select>
+                                <option value="default">Choose a Year</option>
+                            </select>
                         </div>
 					</div>
 				</div>
