@@ -72,11 +72,10 @@ var subscribe = function () {
         if(state == "NORMAL" && queue.length > 0){
             move = queue.shift();
             var district_data = {
-                population: move.destDistrictPopulation,
-                gain: move.objectiveGain,
-                value: move.objectiveValue
-            };
-            districtMap[move.precinctId] = move.destDistrictId;
+                 population: move.destDistrictPopulation,
+                 gain: move.objectiveGain,
+                 value: move.objectiveValue
+             };
             dataMap[move.destDistrictId] = district_data;
             document.getElementById("tfObjectiveFunction").value = move.objectiveValue;
             if(selected_state == "West Virginia"){
@@ -85,10 +84,12 @@ var subscribe = function () {
                 console.log(Ids);
                 var color = genColor(districtId);
                 Ids.forEach(function(precinctId) {
+                     districtMap[precinctId] = move.destDistrictId;
                      StateMap[selected_state].setFeatureStyle(precinctId, colorStyle(color))
                 });
             }
             else{
+                districtMap[move.precinctId] = move.destDistrictId;
                 var precinctId = move.precinctId;
                 var districtId = move.destDistrictId;
                 var color = genColor(districtId);
@@ -163,7 +164,7 @@ var stop = function(){
 
 var startAlgorithm = function () {
     isAlgoRunning = true;
-    console.log("Entered start algo function.")
+    console.log("Entered start algo function.");
     var state = document.getElementById("selected_state").value;
     var reock = document.getElementById("reock").value;
     var polsbyPopper = document.getElementById("polsbyPopper").value;
@@ -190,7 +191,7 @@ var startAlgorithm = function () {
     xhr.onreadystatechange = function() {
         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
             // Request finished. Do processing here.
-            console.log("Algorithm ")
+            console.log("Algorithm ");
         }
     }
     xhr.send(JSON.stringify(params));
