@@ -166,10 +166,6 @@ public class District {
                 .filter(c -> c.getParentDistrict() == null ? true : c.getParentDistrict().getId() != this.getId())
                 .collect(Collectors.toList());
         if(isRemove){
-            for(Chunk temp: newAdjacentChunks){
-                System.out.print(temp.getId() + ",");
-            }
-            System.out.println();
             for(Chunk c : newAdjacentChunks) {
                 if(adjacentChunks.get(c) == null){
                     continue;
