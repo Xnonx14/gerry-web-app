@@ -24,7 +24,7 @@ public class Chunk {
     private int parentDistrictID;
 
     public int getParentDistrictID() {
-        return parentDistrictID;
+        return getPrecincts().get(0).getParentDistrictID();
     }
 
     public void setParentDistrictID(int parentID) {

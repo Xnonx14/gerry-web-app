@@ -39,15 +39,17 @@ public class RegionGrowing extends Algorithm{
     public void step() {
         District worstDistrict = getWorstDistrict();
         Move bestMove = getBestMove(worstDistrict);
-        if(bestMove != null){
-            bestMove.execute();
-            updateState(bestMove);
+        if(bestMove == null) {
+            state.getSeedDistricts().remove(worstDistrict);
+            return;
         }
+        bestMove.execute();
+        updateState(bestMove);
     }
 
     @Override
     public boolean isFinished() {
-        return unassignedChunks.isEmpty();
+        return state.getSeedDistricts().isEmpty();
     }
 
     @Override
@@ -73,8 +75,8 @@ public class RegionGrowing extends Algorithm{
                 maxGain =  gain;
                 bestMove = move;
                 DecimalFormat df = new DecimalFormat("#.00000");
-                String objValue = "District "+district.getId() + ": " + df.format(val )+ " ("+df.format(gain)+")";
-                bestMove.setObjectiveValue(objValue);
+                bestMove.setObjectiveValue(df.format(val));
+                bestMove.setObjectiveGain(df.format(gain));
             }
             move.undo();
         }
@@ -132,5 +134,13 @@ public class RegionGrowing extends Algorithm{
         Chunk chunk = state.getIdChunkMap().get(chunkId);
         seen.add(chunk);
         moveStack.push(move);
+    }
+
+    public State getState() {
+        return state;
+    }
+
+    public void setState(State state) {
+        this.state = state;
     }
 }

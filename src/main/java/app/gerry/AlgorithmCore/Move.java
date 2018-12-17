@@ -13,6 +13,7 @@ public class Move {
     private int destDistrictId;
     private int chunkPopulation;
     private String objectiveValue;
+    private String objectiveGain;
 
     public void setObjectiveValue(String val){
         objectiveValue = val;
@@ -30,7 +31,8 @@ public class Move {
 
     public void execute() {
         if(srcDistrict != null) {
-            srcDistrict.testRemoveChunk(chunk);
+//        srcDistrict.testRemoveChunk(chunk);
+          srcDistrict.removeChunk(chunk);
         }
         destDistrict.addChunk(chunk);
         chunk.setFinalized(true);
@@ -98,5 +100,13 @@ public class Move {
 
     public void setChunkPopulation(int chunkPopulation) {
         this.chunkPopulation = chunkPopulation;
+    }
+
+    public String getObjectiveGain() {
+        return objectiveGain;
+    }
+
+    public void setObjectiveGain(String objectiveGain) {
+        this.objectiveGain = objectiveGain;
     }
 }

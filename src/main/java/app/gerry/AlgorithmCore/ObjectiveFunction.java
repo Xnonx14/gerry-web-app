@@ -12,6 +12,9 @@ import java.util.Map;
 public class ObjectiveFunction {
 
     public static double getObjectiveValue(District district, Context context){
+        if(district == null){
+            return 0;
+        }
         Geometry geometricData = district.getGeometricData();
         Map<Party, Integer> wastedVotes = district.getCummWastedVotes();
         int totalVotes = district.getTotalVotes();

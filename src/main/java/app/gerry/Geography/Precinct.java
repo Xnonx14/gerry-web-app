@@ -111,7 +111,7 @@ public class Precinct {
                 this.boundary = polygon;
             }
             catch(Exception e) {
-                System.out.println("This precinct is missing boundary data");
+                System.out.println("This precinct is missing boundary data: " + this.id);
             }
             return this;
         }
