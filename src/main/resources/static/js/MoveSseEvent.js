@@ -13,6 +13,7 @@ var queue = [];
 var state = "NOT_INIT";
 var move;
 var districtMap = {};
+var dataMap = {};
 
 var eventSource = null;
 
@@ -42,13 +43,13 @@ var subscribe = function () {
 
     eventSource.onmessage = function (e) {
         var move = JSON.parse(e.data);
-        var object = {
-            id: move.destDistrictId,
+        var district_data = {
             population: move.destDistrictPopulation,
             gain: move.objectiveGain,
             value: move.objectiveValue
         };
-        districtMap[move.destDistrictId] = object;
+        districtMap[move.precinctId] = move.destDistrictId;
+        dataMap[move.destDistrictId] = district_data;
         queue.push(move);
         if(state == "CLOSED"){
            state = "NOT_INIT";

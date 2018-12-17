@@ -40,7 +40,8 @@ public class District {
         public Set<Chunk> borderChunks;
         public GeometricData geometricData;
         public double ObjectiveValue;
-        private Integer totalVotes;
+        private Integer totalVotes = 0;
+        private Map<Party, Integer> cummWastedVotes = new HashMap<>();
 
         public Builder() {
 
@@ -58,12 +59,17 @@ public class District {
     
     public District(Builder builder) {
         this.id = builder.id;
+        this.cummWastedVotes = builder.cummWastedVotes;
+        this.totalVotes = builder.totalVotes;
     }
     
     public District(Chunk chunk) {
         chunks = new HashSet<>();
         adjacentChunks = new HashMap<>();
+        cummWastedVotes = new HashMap<>();
+        totalVotes = 0;
         addChunk(chunk);
+
 
         //TODO: Add Chunk to chunks and update geometric data, etc...
     }
@@ -117,6 +123,7 @@ public class District {
         updateAdjacentChunks(chunk, false);
         updateBoundaryData(chunk, false);
         updateWastedVotes(chunk, false);
+        updateTotalVotes(chunk, false);
         updatePopulationData(chunk, false);
         chunks.add(chunk);
         chunk.setParentDistrict(this);
@@ -132,6 +139,15 @@ public class District {
         chunks.remove(chunk);
     }
 
+    private void updateTotalVotes(Chunk chunk, boolean isRemove){
+        if (isRemove){
+            totalVotes -= chunk.getTotalVotes();
+        }
+        else{
+            totalVotes += chunk.getTotalVotes();
+        }
+    }
+
     private void updateAdjacentChunks(Chunk chunk, boolean isRemove) {
         if(chunk.getAdjacentChunks() == null){
             return;
@@ -142,10 +158,6 @@ public class District {
                 .filter(c -> c.getParentDistrict() == null ? true : c.getParentDistrict().getId() != this.getId())
                 .collect(Collectors.toList());
         if(isRemove){
-            for(Chunk temp: newAdjacentChunks){
-                System.out.print(temp.getId() + ",");
-            }
-            System.out.println();
             for(Chunk c : newAdjacentChunks) {
                 if(adjacentChunks.get(c) == null){
                     continue;
@@ -203,15 +215,21 @@ public class District {
     }
 
     private void updateWastedVotes(Chunk chunk, boolean isRemove) {
-        Map<Party, Integer> chunkCummWastedVotes= chunk.getCummWastedVotes();
-        for (Party p : chunkCummWastedVotes.keySet()){
+        Map<Party, Integer> chunkCummWastedVotes = chunk.getCummWastedVotes();
+
+        for (Party p : chunkCummWastedVotes.keySet()) {
             int chunkWastedVotes = chunkCummWastedVotes.get(p);
             int total = 0;
-            if (isRemove) {
-                total = cummWastedVotes.get(p) - chunkWastedVotes;
-            }
-            else{
-                total = cummWastedVotes.get(p) + chunkWastedVotes;
+            if (cummWastedVotes.containsKey(p)) {
+                if (isRemove) {
+                    total = cummWastedVotes.get(p) - chunkWastedVotes;
+                } else {
+                    total = cummWastedVotes.get(p) + chunkWastedVotes;
+                }
+            } else {
+                if (!isRemove) {
+                    total = chunkWastedVotes;
+                }
             }
             cummWastedVotes.put(p, total);
         }

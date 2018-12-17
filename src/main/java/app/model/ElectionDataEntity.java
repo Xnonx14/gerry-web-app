@@ -25,12 +25,14 @@ public class ElectionDataEntity {
     private Integer precinctId;
 
     @Column(name = "PARTY")
+    @Enumerated(EnumType.STRING)
     private Party party;
 
     @Column(name = "VOTE_COUNT")
     private Integer voteCount;
 
     @Column(name = "POSITION")
+    @Enumerated(EnumType.STRING)
     private Position position;
 
     public Integer getId() {

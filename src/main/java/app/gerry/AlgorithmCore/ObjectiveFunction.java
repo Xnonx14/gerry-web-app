@@ -21,12 +21,12 @@ public class ObjectiveFunction {
         double reockWeight = context.getReockWeight();
         double polsbyWeight = context.getPolsbyPopperWeight();
         double convexWeight = context.getConvexHullWeight();
-        double fairnessWeight = context.getPoliticalFairnessWeight(wastedVotes, totalVotes);
+        double fairnessWeight = context.getPoliticalFairnessWeight();
         double populationWeight = context.getPopulationEqualityWeight();
         double reockValue = calculateReock(geometricData);
         double polsbyValue = calculatePolsby(geometricData);
         double convexValue = calculateConvex(geometricData);
-        double fairnessValue = calculate_Political();
+        double fairnessValue = calculate_Political(wastedVotes, totalVotes);
         double populationValue = calculatePopulation(district);
 /*        double result = (populationValue * populationWeight) + (convexValue * convexWeight) + (polsbyValue * polsbyWeight)
                 + (fairnessValue * fairnessWeight);
@@ -74,6 +74,8 @@ public class ObjectiveFunction {
                 otherVotes += wastedVotes.get(p);
             }
         }
+        if (totalVotes == 0)
+            return 0;
         return ((double)(maxWastedVotes-otherVotes))/totalVotes;
     }
 
