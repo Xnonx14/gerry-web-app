@@ -59,8 +59,6 @@ var subscribe = function () {
     var elem = document.getElementById("pauseBtnID");
 
     eventSource.onmessage = function (e) {
-        console.log("running");
-        console.log(e.data);
         var move = JSON.parse(e.data);
         queue.push(move);
         if(state == "CLOSED"){
@@ -77,7 +75,6 @@ var subscribe = function () {
                  value: move.objectiveValue,
                  wastedVotes: move.destDistrictWastedVotes
              };
-             console.log(move.destDistrictWastedVotes);
             dataMap[move.destDistrictId] = district_data;
             document.getElementById("tfObjectiveFunction").value = move.objectiveValue;
             if(selected_state == "West Virginia"){

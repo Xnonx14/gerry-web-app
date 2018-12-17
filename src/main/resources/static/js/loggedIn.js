@@ -243,11 +243,17 @@ var illinois = L.vectorGrid.slicer( illinoisData, {
 		.on('mouseover', function(e) {
 			var properties = e.layer.properties;
 			info.update(properties.PRECINCT_ID);
-			document.getElementById("tfPrecinctID").value= properties.PRECINCT_ID;
-            document.getElementById("tfDistrictID").value = districtMap[parseInt(properties.PRECINCT_ID)];
-            document.getElementById("precinctPopulation").value= properties.POP100;
+			document.getElementById("tfPrecinctID").innerHTML= properties.PRECINCT_ID;
+            document.getElementById("tfDistrictID").innerHTML= districtMap[parseInt(properties.PRECINCT_ID)];
+            document.getElementById("precinctPopulation").innerHTML= properties.POP100;
             if (typeof dataMap[districtMap[parseInt(properties.PRECINCT_ID)]] !== 'undefined'){
-            document.getElementById("tfTotalPop").value = dataMap[districtMap[parseInt(properties.PRECINCT_ID)]].population;
+                document.getElementById("tfTotalPop").innerHTML = dataMap[districtMap[parseInt(properties.PRECINCT_ID)]].population;
+                document.getElementById("tfObjectiveFunction").innerHTML = dataMap[districtMap[parseInt(properties.PRECINCT_ID)]].value;
+                document.getElementById("dem").innerHTML = dataMap[districtMap[parseInt(properties.PRECINCT_ID)]]['wastedVotes']['Democrat'];
+                document.getElementById("gre").innerHTML = dataMap[districtMap[parseInt(properties.PRECINCT_ID)]]['wastedVotes']['Green'];
+                document.getElementById("lib").innerHTML = dataMap[districtMap[parseInt(properties.PRECINCT_ID)]]['wastedVotes']['Libertarian'];
+                document.getElementById("oth").innerHTML = dataMap[districtMap[parseInt(properties.PRECINCT_ID)]]['wastedVotes']['Other'];
+                document.getElementById("rep").innerHTML = dataMap[districtMap[parseInt(properties.PRECINCT_ID)]]['wastedVotes']['Republican'];
             }
             //parseInt(precinct_data[properties.PRECINCT_ID])
 
@@ -282,12 +288,17 @@ var new_Hampshire = L.vectorGrid.slicer(nH_data, {
 		.on('mouseover', function(e) {
 			var properties = e.layer.properties;
 			info.update(properties.PRECINCT_ID);
-			document.getElementById("tfPrecinctID").value= properties.PRECINCT_ID;
-            document.getElementById("tfDistrictID").value = districtMap[parseInt(properties.PRECINCT_ID)];
-            document.getElementById("precinctPopulation").value= properties.POP100;
+			document.getElementById("tfPrecinctID").innerHTML= properties.PRECINCT_ID;
+            document.getElementById("tfDistrictID").innerHTML = districtMap[parseInt(properties.PRECINCT_ID)];
+            document.getElementById("precinctPopulation").innerHTML= properties.POP100;
             if (typeof dataMap[districtMap[parseInt(properties.PRECINCT_ID)]] !== 'undefined'){
-                document.getElementById("tfTotalPop").value = dataMap[districtMap[parseInt(properties.PRECINCT_ID)]].population;
-                document.getElementById("tfObjectiveFunction").value = dataMap[districtMap[parseInt(properties.PRECINCT_ID)]].value;
+                document.getElementById("tfTotalPop").innerHTML = dataMap[districtMap[parseInt(properties.PRECINCT_ID)]].population;
+                document.getElementById("tfObjectiveFunction").innerHTML = dataMap[districtMap[parseInt(properties.PRECINCT_ID)]].value;
+                document.getElementById("dem").innerHTML = dataMap[districtMap[parseInt(properties.PRECINCT_ID)]]['wastedVotes']['Democrat'];
+                document.getElementById("gre").innerHTML = dataMap[districtMap[parseInt(properties.PRECINCT_ID)]]['wastedVotes']['Green'];
+                document.getElementById("lib").innerHTML = dataMap[districtMap[parseInt(properties.PRECINCT_ID)]]['wastedVotes']['Libertarian'];
+                document.getElementById("oth").innerHTML = dataMap[districtMap[parseInt(properties.PRECINCT_ID)]]['wastedVotes']['Other'];
+                document.getElementById("rep").innerHTML = dataMap[districtMap[parseInt(properties.PRECINCT_ID)]]['wastedVotes']['Republican'];
             }
             //parseInt(precinct_data[properties.PRECINCT_ID])
 
@@ -322,11 +333,17 @@ var west_Virginia = L.vectorGrid.slicer(wV_data, {
 		.on('mouseover', function(e) {
 			var properties = e.layer.properties;
 			info.update(properties.PRECINCT_ID);
-			document.getElementById("tfPrecinctID").value= properties.PRECINCT_ID;
-            document.getElementById("tfDistrictID").value = districtMap[parseInt(properties.PRECINCT_ID)];
-            document.getElementById("precinctPopulation").value= properties.POP100;
+			document.getElementById("tfPrecinctID").innerHTML = properties.PRECINCT_ID;
+            document.getElementById("tfDistrictID").innerHTML = districtMap[parseInt(properties.PRECINCT_ID)];
+            document.getElementById("precinctPopulation").innerHTML= properties.POP100;
             if (typeof dataMap[districtMap[parseInt(properties.PRECINCT_ID)]] !== 'undefined'){
-            document.getElementById("tfTotalPop").value = dataMap[districtMap[parseInt(properties.PRECINCT_ID)]].population;
+            document.getElementById("tfTotalPop").innerHTML = dataMap[districtMap[parseInt(properties.PRECINCT_ID)]].population;
+            document.getElementById("tfObjectiveFunction").innerHTML = dataMap[districtMap[parseInt(properties.PRECINCT_ID)]].value;
+            document.getElementById("dem").innerHTML = dataMap[districtMap[parseInt(properties.PRECINCT_ID)]]['wastedVotes']['Democrat'];
+            document.getElementById("gre").innerHTML = dataMap[districtMap[parseInt(properties.PRECINCT_ID)]]['wastedVotes']['Green'];
+            document.getElementById("lib").innerHTML = dataMap[districtMap[parseInt(properties.PRECINCT_ID)]]['wastedVotes']['Libertarian'];
+            document.getElementById("oth").innerHTML = dataMap[districtMap[parseInt(properties.PRECINCT_ID)]]['wastedVotes']['Other'];
+            document.getElementById("rep").innerHTML = dataMap[districtMap[parseInt(properties.PRECINCT_ID)]]['wastedVotes']['Republican'];
             }
             //parseInt(precinct_data[properties.PRECINCT_ID])
 
