@@ -1,15 +1,13 @@
 package app.gerry.Geography;
 
+import app.gerry.Constants.Party;
 import app.gerry.Data.ElectionData;
 import app.gerry.Data.GeometricData;
 import app.gerry.Constants.PoliticalSubdivision;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Polygon;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Chunk {
     private int id;
@@ -17,6 +15,7 @@ public class Chunk {
     private List<Precinct> precincts;
     private Set<Chunk> adjacentChunks;
     private ElectionData cummElectionData;
+    private Map<Party, Integer> cummWastedVotes;
     private Geometry cummGeometricData;
     private int cummPopulation;
     private PoliticalSubdivision subdivision;
@@ -46,7 +45,12 @@ public class Chunk {
         id = precinct.getId();
         cummPopulation = precinct.getPopulation();
         cummGeometricData = precinct.getBoundary();
-        //TODO: fill in rest of fields
+        cummElectionData = precinct.getElectionData();
+        cummWastedVotes = precinct.getWastedVotesMap();
+    }
+
+    public Map<Party, Integer> getCummWastedVotes() {
+        return cummWastedVotes;
     }
 
     /**

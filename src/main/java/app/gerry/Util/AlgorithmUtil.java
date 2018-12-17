@@ -1,21 +1,20 @@
 package app.gerry.Util;
 
 import app.gerry.AlgorithmCore.Context;
+import app.gerry.Constants.Party;
+import app.gerry.Constants.Position;
+import app.gerry.Data.ElectionData;
+import app.gerry.Data.Representative;
 import app.gerry.Geography.Chunk;
 import app.gerry.Geography.District;
 import app.gerry.Geography.Precinct;
 import app.gerry.Geography.State;
 import app.gerry.Json.ChunkJson;
-import app.model.DistrictEntity;
-import app.model.PopulationEntity;
-import app.model.PrecinctEntity;
-import app.model.StateEntity;
-import app.repository.DistrictRepository;
-import app.repository.PopulationRepository;
-import app.repository.PrecinctRepository;
-import app.repository.StateRepository;
+import app.model.*;
+import app.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.sql.Date;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -33,10 +32,16 @@ public class AlgorithmUtil {
     private PrecinctRepository precinctRepository;
     @Autowired
     private PopulationRepository populationRepository;
+    @Autowired
+    private ElectionDataRepository electionDataRepository;
+    @Autowired
+    private RepresentativeRepository representativeRepository;
 
     public Context initializeAlgorithmParameters(Map<String, Object> params) {
         Context context = new Context();
         context.setSeedCount(Integer.parseInt((String) params.get("seedCount")));
+        context.setDate((Date)params.get("date"));
+        context.setPosition((Position)params.get("position"));
         context.setPoliticalFairnessWeight(toDouble(params, POLITICAL_FAIRNESS));
         context.setPolsbyPopperWeight(toDouble(params, POLSBY_POPPER));
         context.setConvexHullWeight(toDouble(params, CONVEX_HULL));
@@ -48,7 +53,10 @@ public class AlgorithmUtil {
     
     public State initializeStateWithAllDistricts(String stateName) {
         List<PrecinctEntity> precinctEntities = aggregatePrecinctEntitiesInState(stateName);
+        Map<Integer, PartyRepresentative> idRepresentativeMap = ((List<PartyRepresentative>)representativeRepository
+                .findAll()).stream().collect(Collectors.toMap(PartyRepresentative::getId, v->v));
         List<Precinct> precincts = convertPrecinctEntitiesToPrecinctsSA(precinctEntities);
+        setPrecinctElectionData(precincts, idRepresentativeMap);
         Map<Integer, Chunk> idChunkMap = toIdChunkMap(precincts);
         List<Chunk> chunks = new ArrayList<>(idChunkMap.values());
         for (Precinct p: precincts){
@@ -83,9 +91,12 @@ public class AlgorithmUtil {
         return state;
     }
     
-    public State initializeStateWithRandomSeedDistricts(String stateName, int numDistricts) {
+    public State initializeStateWithRandomSeedDistricts(String stateName, int numDistricts, Date date, Position position) {
         List<Precinct> precincts = aggregatePrecinctsInState(stateName);
+        Map<Integer, PartyRepresentative> idRepresentativeMap = ((List<PartyRepresentative>)representativeRepository
+                .findAll()).stream().collect(Collectors.toMap(PartyRepresentative::getId, v->v));
         setPrecinctData(precincts);
+        setPrecinctElectionData(precincts, idRepresentativeMap);
         int totalPopulation = sumPrecinctsPopulation(precincts);
         Map<Integer, Chunk> idChunkMap = toIdChunkMap(precincts);
         List<Chunk> chunks = new ArrayList<>(idChunkMap.values());
@@ -121,6 +132,26 @@ public class AlgorithmUtil {
             List<PopulationEntity> populationEntities = populationRepository.findByPrecinctId(precinct.getId());
             if(populationEntities != null && !populationEntities.isEmpty())
                 precinct.setPopulation(populationEntities.get(0).getPopulation());
+        }
+    }
+
+    private void setPrecinctElectionData(List<Precinct> precincts, Map<Integer, PartyRepresentative> idRepresentativeMap){
+        for (Precinct precinct: precincts){
+            List<ElectionDataEntity> electionDataEntities = electionDataRepository.findByPrecinctId(precinct.getId());
+            if (electionDataEntities != null && !electionDataEntities.isEmpty()) {
+                Date date = electionDataEntities.get(0).getDate();
+                Position position = electionDataEntities.get(0).getPosition();
+                List<ElectionDataEntity> ede = electionDataRepository.findByPrecinctIdAndDateAndPosition(
+                        precinct.getId(),date, position);
+                ElectionData ed = new ElectionData();
+                for (ElectionDataEntity e: ede){
+                    Map repVotes = ed.getRepresentativeVotes();
+                    Map repParty = ed.getRepresentativePartyMap();
+                    repVotes.put(idRepresentativeMap.get(e.getRepresentativeId()), e.getVoteCount());
+                    repParty.put(idRepresentativeMap.get(e.getRepresentativeId()), e.getParty());
+                }
+                precinct.setElectionData(ed);
+            }
         }
     }
 
@@ -249,4 +280,5 @@ public class AlgorithmUtil {
         }
         return params.get(key).toString();
     }
+
 }
