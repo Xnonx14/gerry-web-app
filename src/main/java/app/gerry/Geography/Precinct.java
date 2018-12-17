@@ -70,8 +70,22 @@ public class Precinct {
             }
             total += votes;
         }
-        wastedVotesMap.put(winner, wastedVotesMap.get(winner) + (total/2 + 1));
+        if (winner != null) {
+            if (wastedVotesMap.containsKey(winner))
+                wastedVotesMap.put(winner, wastedVotesMap.get(winner) + (total / 2 + 1));
+            else
+                wastedVotesMap.put(winner, total / 2 + 1);
+        }
         return wastedVotesMap;
+    }
+
+    public int getTotalVotes(){
+        int totalVotes = 0;
+        for (PartyRepresentative r: electionData.getRepresentativeVotes().keySet()) {
+            Party party = electionData.getRepresentativePartyMap().get(r);
+            totalVotes += electionData.getRepresentativeVotes().get(r);
+        }
+        return totalVotes;
     }
 
     public String getSubdivisionName(PoliticalSubdivision ps){

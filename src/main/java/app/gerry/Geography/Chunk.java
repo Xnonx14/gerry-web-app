@@ -16,6 +16,7 @@ public class Chunk {
     private Set<Chunk> adjacentChunks;
     private ElectionData cummElectionData;
     private Map<Party, Integer> cummWastedVotes;
+    private int totalVotes;
     private Geometry cummGeometricData;
     private int cummPopulation;
     private PoliticalSubdivision subdivision;
@@ -47,6 +48,7 @@ public class Chunk {
         cummGeometricData = precinct.getBoundary();
         cummElectionData = precinct.getElectionData();
         cummWastedVotes = precinct.getWastedVotesMap();
+        totalVotes = precinct.getTotalVotes();
     }
 
     public Map<Party, Integer> getCummWastedVotes() {
@@ -158,6 +160,10 @@ public class Chunk {
 
     public void setParentDistrict(District parentDistrict) {
         this.parentDistrict = parentDistrict;
+    }
+
+    public int getTotalVotes(){
+        return totalVotes;
     }
 
     public boolean isBorderChunk() {
