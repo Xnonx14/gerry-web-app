@@ -12,6 +12,16 @@ public class Move {
     private int srcDistrictId;
     private int destDistrictId;
     private int chunkPopulation;
+    private String objectiveValue;
+    private String objectiveGain;
+
+    public void setObjectiveValue(String val){
+        objectiveValue = val;
+    }
+
+    public String getObjectiveValue(){
+        return objectiveValue;
+    }
 
     public Move(Chunk chunk, District destDistrict) {
         this.chunk = chunk;
@@ -90,5 +100,13 @@ public class Move {
 
     public void setChunkPopulation(int chunkPopulation) {
         this.chunkPopulation = chunkPopulation;
+    }
+
+    public String getObjectiveGain() {
+        return objectiveGain;
+    }
+
+    public void setObjectiveGain(String objectiveGain) {
+        this.objectiveGain = objectiveGain;
     }
 }

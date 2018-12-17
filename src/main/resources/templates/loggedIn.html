@@ -39,7 +39,8 @@
             </nav>
             <div id="container" style="width: 100%">
 				<div id="data">
-					<input type="submit" id="displayBtn" onclick="displayStateData()" value="-" style="float:left">
+					<input type="submit" id="displayBtn" onclick="displayStateData()" value="-" style="width: 30px;float:left">
+                    <br><br>
 					<div id="innerData" style="display:block">
 						<div class="dataField" id="dataTitle">
 							<h4> Data </h4>
@@ -60,6 +61,10 @@
 						<div class ="dataField">
 							Election
 						</div>
+                        <div style="float:left; width: 100%;">
+                            <br><br>
+                            <textarea id="console" style="width: 100%; resize: none; height: 300px;"></textarea>
+                        </div>
 					</div>
 				</div>
                 
@@ -97,10 +102,10 @@
 
                     <!--<form action="/loggedIn" method="POST" th:action="@{/loggedIn}" th:object="${state}">-->
                     <div>
-                        <input type="submit" class="button2" name="start" value="Start" onclick="subscribe()">
-                        <input type="submit" class="button2" name="pause" value="Pause" onclick="pause()" id = "pause_button">
-                        <input type="submit" class="button2" name="step" value="Step" onclick="make_step()">
-                        <input type="submit" class="button2" name="stop" value="Stop" onclick ="stop()">
+                        <input type="submit" class="button2" name="start" value="Start" id = "startBtnID" onclick="foolproofStart()">
+                        <input type="submit" class="disabledBtn" name="pause" value="Pause" id = "pauseBtnID" disabled onclick="pause()">
+                        <input type="submit" class="disabledBtn" name="step" value="Step" id = "stepBtnID" disabled onclick="make_step()">
+                        <input type="submit" class="disabledBtn" name="stop" value="Stop" id = "stopBtnID" disabled onclick ="foolproofStop()">
                     </div>
                     <br>
                     <div id = "regionSeeds">
@@ -137,9 +142,6 @@
                 </div>
             </div>
         </div>
-
-        <h1>Notifications: </h1>
-        <div id="notificationDiv"></div>
     </body>
     <script th:src="@{js/loggedIn.js}" src="../static/js/loggedIn.js"></script>
         <script id="changeColor" src="js/changeColor.js"> </script>

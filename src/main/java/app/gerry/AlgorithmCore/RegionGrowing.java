@@ -6,6 +6,7 @@ import app.gerry.Geography.State;
 import app.gerry.Sse.SseResultData;
 import app.gerry.Util.AlgorithmUtil;
 
+import java.text.DecimalFormat;
 import java.util.*;
 
 public class RegionGrowing extends Algorithm{
@@ -22,6 +23,7 @@ public class RegionGrowing extends Algorithm{
     public RegionGrowing(Map<String, Object> params, AlgorithmUtil algorithmUtil) {
         this.algorithmUtil = algorithmUtil;
         context = algorithmUtil.initializeAlgorithmParameters(params);
+        System.out.println(context.getSeedCount());
         state = algorithmUtil.initializeStateWithRandomSeedDistricts(context.getStateName(), context.getSeedCount());
         chunkMoveStack = new Stack<>();
         moveStack = new Stack<>();
@@ -32,42 +34,21 @@ public class RegionGrowing extends Algorithm{
         }
     }
 
-//    /**
-//     * For each seed district:
-//     *  get adjacent chunks
-//     *  pick best chunk(random for now)
-//     *  finalize the move (update movestack)
-//     */
-//    @Override
-//    public void step() {
-//        List<District> seedDistricts = state.getSeedDistricts();
-//        if(seedDistricts.isEmpty())
-//            return;
-//        District seedDistrict = seedDistricts.get(index);
-//        Set<Chunk> adjacentChunks = new HashSet<>(seedDistrict.getAdjacentChunks());
-//        if(adjacentChunks.isEmpty()) {
-//            seedDistricts.remove(seedDistrict);
-//            index--;
-//            return;
-//        }
-//        int selectedIndex = getBestChunkIndex(adjacentChunks);
-//        Iterator chunkIt = adjacentChunks.iterator();
-//        Chunk selected = (Chunk)chunkIt.next();
-//        seedDistrict.addChunk(selected);
-//        updateState(selected, seedDistricts, selectedIndex);
-//    }
-
     @Override
     public void step() {
         District worstDistrict = getWorstDistrict();
         Move bestMove = getBestMove(worstDistrict);
+        if(bestMove == null) {
+            state.getSeedDistricts().remove(worstDistrict);
+            return;
+        }
         bestMove.execute();
         updateState(bestMove);
     }
 
     @Override
     public boolean isFinished() {
-        return unassignedChunks.isEmpty();
+        return state.getSeedDistricts().isEmpty();
     }
 
     @Override
@@ -92,6 +73,9 @@ public class RegionGrowing extends Algorithm{
             if(gain > maxGain) {
                 maxGain =  gain;
                 bestMove = move;
+                DecimalFormat df = new DecimalFormat("#.00000");
+                bestMove.setObjectiveValue(df.format(val));
+                bestMove.setObjectiveGain(df.format(gain));
             }
             move.undo();
         }
@@ -149,5 +133,13 @@ public class RegionGrowing extends Algorithm{
         Chunk chunk = state.getIdChunkMap().get(chunkId);
         seen.add(chunk);
         moveStack.push(move);
+    }
+
+    public State getState() {
+        return state;
+    }
+
+    public void setState(State state) {
+        this.state = state;
     }
 }

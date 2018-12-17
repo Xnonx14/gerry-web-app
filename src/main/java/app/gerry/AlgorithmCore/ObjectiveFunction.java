@@ -3,6 +3,7 @@ package app.gerry.AlgorithmCore;
 import app.gerry.Geography.District;
 import app.gerry.Geography.State;
 import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.algorithm.MinimumBoundingCircle;
 
 import java.util.HashMap;
 
@@ -13,26 +14,27 @@ public class ObjectiveFunction {
             return 0;
         }
         Geometry geometricData = district.getGeometricData();
-
         double reockWeight = context.getReockWeight();
         double polsbyWeight = context.getPolsbyPopperWeight();
         double convexWeight = context.getConvexHullWeight();
+        double fairnessWeight = context.getPoliticalFairnessWeight();
         double populationWeight = context.getPopulationEqualityWeight();
-
         double reockValue = calculateReock(geometricData);
         double polsbyValue = calculatePolsby(geometricData);
         double convexValue = calculateConvex(geometricData);
-//      double fairnessValue = calculate_Political();
+        double fairnessValue = calculate_Political();
         double populationValue = calculatePopulation(district);
-
-        double result = (populationValue * populationWeight) + (convexValue * convexWeight);
-        if(true)
+/*        double result = (populationValue * populationWeight) + (convexValue * convexWeight) + (polsbyValue * polsbyWeight)
+                + (fairnessValue * fairnessWeight);
+        if(true) {
             return result;
+        }*/
 
         return (reockWeight * reockValue)
                 + (polsbyWeight * polsbyValue)
                 + (convexWeight * convexValue)
-                + (populationWeight * populationValue);
+                + (populationWeight * populationValue)
+                + (fairnessWeight * fairnessValue);
     }
 
     private static double calculateReock(Geometry geometricData) {
@@ -77,7 +79,7 @@ public class ObjectiveFunction {
     }
 
     private static double getMinBoundingCircleArea(Geometry geometricData) {
-        //TODO
-        return -1;
+        MinimumBoundingCircle mbc = new MinimumBoundingCircle(geometricData);
+        return mbc.getCircle().getArea();
     }
 }
