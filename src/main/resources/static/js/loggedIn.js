@@ -57,6 +57,12 @@ var StateMap = {};
 function stateSelected(){
     document.getElementById("selectAlgorithm").style = "visibility: visible";
 	var state = document.getElementById("selected_state").value;
+	if(state == "Illinois")
+	document.getElementById("constitution_text").innerHTML = "Representative Districts shall be compact, contiguous, and substantially equal in population."
+    if(state == "West Virginia")
+    document.getElementById("constitution_text").innerHTML = "State Senate districts must be compact, contiguous, and bounded by county lines where doing so is not otherwise unlawful."
+    if(state == "New Hampshire")
+    document.getElementById("constitution_text").innerHTML = "For state representative districts, towns or wards near the average population for one or more seats are to constitute whole districts; additional population may be combined in overlapping, or floterial, districts. New Hampshire towns may determine whether they wish to split a multi-member district into multiple single-member districts."
 
 	var xhr = new XMLHttpRequest();
     xhr.open("POST", '/setupState', true);
