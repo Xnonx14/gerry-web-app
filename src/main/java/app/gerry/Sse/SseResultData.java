@@ -1,9 +1,11 @@
 package app.gerry.Sse;
 
 import app.gerry.AlgorithmCore.Move;
+import app.gerry.Constants.Party;
 import app.gerry.Geography.District;
 
 import java.util.Date;
+import java.util.Map;
 
 public class SseResultData {
     private int srcDistrictId;
@@ -17,6 +19,8 @@ public class SseResultData {
     private boolean isLastOne;
     private String objectiveValue;
     private String objectiveGain;
+    private Map<Party, Integer> precinctWastedVotes;
+    private Map<Party, Integer> destDistrictWastedVotes;
 
     public SseResultData(Move move, boolean isLastOne) {
         District srcDistrict = move.getSrcDistrict();
@@ -30,6 +34,8 @@ public class SseResultData {
         dateSent = new Date();
         objectiveValue = move.getObjectiveValue();
         objectiveGain = move.getObjectiveGain();
+        precinctWastedVotes = move.getChunk().getCummWastedVotes();
+        destDistrictWastedVotes = destDistrict.getCummWastedVotes();
     }
 
     public int getSrcDistrictId() {
@@ -118,5 +124,21 @@ public class SseResultData {
 
     public void setPrecinctIds(int[] precinctIds) {
         this.precinctIds = precinctIds;
+    }
+
+    public Map<Party, Integer> getPrecinctWastedVotes() {
+        return precinctWastedVotes;
+    }
+
+    public void setPrecinctWastedVotes(Map<Party, Integer> precinctWastedVotes) {
+        this.precinctWastedVotes = precinctWastedVotes;
+    }
+
+    public Map<Party, Integer> getDestDistrictWastedVotes() {
+        return destDistrictWastedVotes;
+    }
+
+    public void setDestDistrictWastedVotes(Map<Party, Integer> destDistrictWastedVotes) {
+        this.destDistrictWastedVotes = destDistrictWastedVotes;
     }
 }

@@ -74,8 +74,10 @@ var subscribe = function () {
             var district_data = {
                  population: move.destDistrictPopulation,
                  gain: move.objectiveGain,
-                 value: move.objectiveValue
+                 value: move.objectiveValue,
+                 wastedVotes: move.destDistrictWastedVotes
              };
+             console.log(move.destDistrictWastedVotes);
             dataMap[move.destDistrictId] = district_data;
             document.getElementById("tfObjectiveFunction").value = move.objectiveValue;
             if(selected_state == "West Virginia"){
@@ -139,7 +141,8 @@ var make_step = function(){
             var district_data = {
                 population: move.destDistrictPopulation,
                 gain: move.objectiveGain,
-                value: move.objectiveValue
+                value: move.objectiveValue,
+                wastedVotes: move.destDistrictWastedVotes
             };
             districtMap[move.precinctId] = move.destDistrictId;
             dataMap[move.destDistrictId] = district_data;
