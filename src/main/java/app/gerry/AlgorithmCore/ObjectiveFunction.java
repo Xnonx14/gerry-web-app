@@ -81,11 +81,17 @@ public class ObjectiveFunction {
 
     private static double calculatePopulation(District district) {
         State state = district.getState();
+        int lowestPop = Integer.MAX_VALUE;
+        for(District d : state.getSeedDistricts()) {
+            lowestPop = Math.min(lowestPop, d.getPopulation());
+        }
         int population = district.getPopulation();
         double averagePopulation = state.getAverageDistrictPopulation();
         int totalPopulation = state.getPopulation();
         double ratio = (Math.abs((double)population - averagePopulation)/totalPopulation);
         double populationValue = 1 - ratio;
+        if(population == lowestPop)
+            return -0.2;
         return populationValue;
     }
 
