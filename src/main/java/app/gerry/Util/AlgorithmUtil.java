@@ -84,10 +84,23 @@ public class AlgorithmUtil {
     }
     
     public State initializeStateWithRandomSeedDistricts(String stateName, int numDistricts) {
+        String politicalRestriction = getPoliticalRestriction(stateName);
         List<Precinct> precincts = aggregatePrecinctsInState(stateName);
         setPrecinctData(precincts);
         int totalPopulation = sumPrecinctsPopulation(precincts);
-        Map<Integer, Chunk> idChunkMap = toIdChunkMap(precincts);
+        Map<Integer, Chunk> idChunkMap = null;
+        if(politicalRestriction == null) {
+            idChunkMap = toIdChunkMap(precincts);
+        }
+        else {
+            //construct county chunks
+            //read in county chunk json
+            //for each county chunk json, construct chunk with county id, precincts
+            String filepath = "./preprocessing/wv/id_CountyAdj.json";
+
+            idChunkMap = toIdCountyChunkMap(precincts);
+            List<ChunkJson> chunkJsons = null;
+        }
         List<Chunk> chunks = new ArrayList<>(idChunkMap.values());
         Map<Integer, List<Integer>> adjacentChunkIdMap = constructAdjacentChunkMap(chunks, stateName);
         setAdjacentChunks(idChunkMap, adjacentChunkIdMap);
@@ -154,6 +167,10 @@ public class AlgorithmUtil {
                     .collect(Collectors.toMap(Precinct::getId, Chunk::new));
     }
 
+    private Map<Integer, Chunk> toIdCountyChunkMap(List<Precinct> precincts) {
+        return null;
+    }
+
     private List<District> constructSeedDistrictsRandomly(List<Chunk> chunks, int numDistricts) {
         List<Integer> seedIndices = getRandomIndices(chunks.size(), numDistricts);
         while (areAdjacentSeeds(chunks, seedIndices)) {
@@ -202,6 +219,11 @@ public class AlgorithmUtil {
             result.addAll(precinctRepository.findByDistrictId(districtEntity.getId()));
         }
         return result;
+    }
+
+    private String getPoliticalRestriction(String stateName) {
+        StateEntity stateEntity = stateRepository.findByName(stateName);
+        return stateEntity.getConstitutionText();
     }
 
     private List<Precinct> convertPrecinctEntitiesToPrecinctsSA(List<PrecinctEntity> precinctEntities) {

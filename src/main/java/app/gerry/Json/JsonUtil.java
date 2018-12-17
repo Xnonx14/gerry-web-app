@@ -23,4 +23,17 @@ public class JsonUtil {
         }
         return null;
     }
+
+    public static List<CountyChunkJson> createCountyChunkJsons(String filepath) {
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader(filepath));
+            Gson gson = new GsonBuilder().create();
+            CountyChunkJson[] chunkJsons = gson.fromJson(reader, CountyChunkJson[].class);
+            return Arrays.stream(chunkJsons).collect(Collectors.toList());
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
