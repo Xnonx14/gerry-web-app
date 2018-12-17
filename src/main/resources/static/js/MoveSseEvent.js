@@ -26,17 +26,17 @@ var subscribe = function () {
     var selected_state = document.getElementById("selected_state").value;
     document.getElementById("tfObjectiveFunction").value = "";
     if(state == "CLOSED"){
-        if(selected_state === "New Hampshire") {
+        if(selected_state == "New Hampshire") {
             if(state == "NORMAL" || state == "PAUSED"){
                 for(var i = nh_start; i <= nh_end; i++){
-                    StateMap[state].resetFeatureStyle(i);
+                    StateMap[selected_state].resetFeatureStyle(i);
                 }
             }
         }
-        if(selected_state === "West Virginia") {
+        if(selected_state == "West Virginia") {
             if(state == "NORMAL" || state == "PAUSED"){
                 for(var i = wv_start; i <= wv_end; i++){
-                    StateMap[state].resetFeatureStyle(i);
+                    StateMap[selected_state].resetFeatureStyle(i);
                 }
             }
         }
@@ -47,17 +47,17 @@ var subscribe = function () {
 
     if(selectedAlgo.value === "region") {
         console.log("NONE");
-        if(selected_state === "New Hampshire") {
+        if(selected_state == "New Hampshire") {
             if(state == "NORMAL" || state == "PAUSED"){
                 for(var i = nh_start; i <= nh_end; i++){
-                    StateMap[state].resetFeatureStyle(i);
+                    StateMap[selected_state].resetFeatureStyle(i);
                 }
             }
         }
-        if(selected_state === "West Virginia") {
+        if(selected_state == "West Virginia") {
             if(state == "NORMAL" || state == "PAUSED"){
                 for(var i = wv_start; i <= wv_end; i++){
-                    StateMap[state].resetFeatureStyle(i);
+                    StateMap[selected_state].resetFeatureStyle(i);
                 }
             }
         }
