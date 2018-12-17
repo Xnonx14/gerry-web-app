@@ -6,6 +6,7 @@ import app.gerry.Data.Representative;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Polygon;
 import org.locationtech.jts.operation.union.UnaryUnionOp;
+import org.springframework.security.core.parameters.P;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -135,7 +136,14 @@ public class District {
                 .filter(c -> c.getParentDistrict() == null ? true : c.getParentDistrict().getId() != this.getId())
                 .collect(Collectors.toList());
         if(isRemove){
+            for(Chunk temp: newAdjacentChunks){
+                System.out.print(temp.getId() + ",");
+            }
+            System.out.println();
             for(Chunk c : newAdjacentChunks) {
+                if(adjacentChunks.get(c) == null){
+                    continue;
+                }
                 int oldCount = adjacentChunks.get(c);
                 adjacentChunks.put(c, oldCount - 1);
                 if(oldCount == 1) {
@@ -169,6 +177,9 @@ public class District {
         //Otherwise we have to incrementally adjust our boundary data with each chunk
         Geometry districtPolygon = this.geometricData;
         Geometry chunkPolygon = chunk.getCummGeometricData();
+        if(chunkPolygon == null){
+            System.out.println("this polygon is null " + chunk.getId());
+        }
         Collection<Geometry> polygons = new ArrayList<>();
         polygons.add(districtPolygon);
         polygons.add(chunkPolygon);
@@ -177,7 +188,9 @@ public class District {
             this.geometricData = districtPolygon.difference(chunkPolygon);
             return;
         }
-        this.geometricData = new UnaryUnionOp(polygons).union();
+        if(chunkPolygon != null) {
+            this.geometricData = new UnaryUnionOp(polygons).union();
+        }
     }
 
     private void updateElectionData(Chunk chunk) {
