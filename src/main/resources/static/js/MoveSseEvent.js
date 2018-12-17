@@ -12,6 +12,7 @@ function colorStyle(color){
 var queue = [];
 var state = "NOT_INIT";
 var move;
+var districtMap = {};
 
 var eventSource = null;
 
@@ -41,6 +42,13 @@ var subscribe = function () {
 
     eventSource.onmessage = function (e) {
         var move = JSON.parse(e.data);
+        var object = {
+            id: move.destDistrictId,
+            population: move.destDistrictPopulation,
+            gain: move.objectiveGain,
+            value: move.objectiveValue
+        };
+        districtMap[move.destDistrictId] = object;
         queue.push(move);
         if(state == "CLOSED"){
            state = "NOT_INIT";
