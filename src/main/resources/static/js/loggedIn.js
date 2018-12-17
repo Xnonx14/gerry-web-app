@@ -52,6 +52,8 @@ function algoSelected(){
 }
 
 var precinct_data;
+var StateMap = {};
+
 function stateSelected(){
     document.getElementById("selectAlgorithm").style = "visibility: visible";
 	var state = document.getElementById("selected_state").value;
@@ -70,7 +72,7 @@ function stateSelected(){
 	        var districtId = precinct_data[key];
 	        var precinctId = key;
 	        var color = genColor(districtId);
-	        new_Hampshire.setFeatureStyle(precinctId, colorStyle(color))
+	        StateMap[state].setFeatureStyle(precinctId, colorStyle(color))
 	    }
     }
     }
@@ -210,9 +212,7 @@ style: style,
 onEachFeature: onEachFeature,
 }).addTo(map);
 })
-//fetch('geo/Illinois_P.json').then(function(response){
-//			return response.json();
-//		}).then(function(json){
+
 var illinois = L.vectorGrid.slicer( illinoisData, {
 	minZoom: 8,
 	rendererFactory: L.svg.tile,
@@ -231,36 +231,26 @@ var illinois = L.vectorGrid.slicer( illinoisData, {
 },
 	interactive: true,
 	getFeatureId: function(f) {
-		return f.properties.wb_a3;
+		return f.properties.PRECINCT_ID;
 	}
 })
-		.on('click', function(e) {
+		.on('mouseover', function(e) {
 			var properties = e.layer.properties;
-			L.popup()
-				.setContent(properties.VTDST10)
-				.setLatLng(e.latlng)
-				.openOn(map);
+			info.update(properties.PRECINCT_ID);
+			document.getElementById("tfPrecinctID").value= properties.PRECINCT_ID;
+            document.getElementById("tfDistrictID").value = precinct_data[properties.PRECINCT_ID];
+            document.getElementById("precinctPopulation").value= properties.POP100;
+            if (typeof dataMap[districtMap[parseInt(properties.PRECINCT_ID)]] !== 'undefined'){
+            document.getElementById("tfTotalPop").value = dataMap[districtMap[parseInt(properties.PRECINCT_ID)]].population;
+            }
+            //parseInt(precinct_data[properties.PRECINCT_ID])
+
+//			L.popup()
+//				.setContent("My parent district ID is: " + precinct_data[properties.PRECINCT_ID])
+//				.setLatLng(e.latlng)
+//				.openOn(map);
 		})
 .addTo(map);
-
-//
-//var illinois_district = L.vectorGrid.slicer(illinoisDistrict, {
-//	minZoom: 6,
-//	rendererFactory: L.svg.tile,
-//	vectorTileLayerStyles: {
-//	sliced: function(properties, zoom) {
-//		return {
-//		fillColor: 'white',
-//		fillOpacity: 0,
-//		stroke: true,
-//		fill: true,
-//		color: 'black',
-//		weight: 1,
-//		}
-//	}
-//}
-//}).addTo(map);
-
 
 var new_Hampshire = L.vectorGrid.slicer(nH_data, {
 	minZoom: 7,
@@ -288,9 +278,11 @@ var new_Hampshire = L.vectorGrid.slicer(nH_data, {
 			info.update(properties.PRECINCT_ID);
 			document.getElementById("tfPrecinctID").value= properties.PRECINCT_ID;
             document.getElementById("tfDistrictID").value = precinct_data[properties.PRECINCT_ID];
-            document.getElementById("tfTotalPop").value = districtMap[parseInt(precinct_data[properties.PRECINCT_ID])];
+            document.getElementById("precinctPopulation").value= properties.POP100;
+            if (typeof dataMap[districtMap[parseInt(properties.PRECINCT_ID)]] !== 'undefined'){
+            document.getElementById("tfTotalPop").value = dataMap[districtMap[parseInt(properties.PRECINCT_ID)]].population;
+            }
             //parseInt(precinct_data[properties.PRECINCT_ID])
-            console.log(districtMap);
 
 //			L.popup()
 //				.setContent("My parent district ID is: " + precinct_data[properties.PRECINCT_ID])
@@ -320,18 +312,31 @@ var west_Virginia = L.vectorGrid.slicer(wV_data, {
 		return f.properties.PRECINCT_ID;
 	}
 })
-		.on('click', function(e) {
+		.on('mouseover', function(e) {
 			var properties = e.layer.properties;
-			L.popup()
-				.setContent(properties.VTDST10)
-				.setLatLng(e.latlng)
-				.openOn(map);
+			info.update(properties.PRECINCT_ID);
+			document.getElementById("tfPrecinctID").value= properties.PRECINCT_ID;
+            document.getElementById("tfDistrictID").value = precinct_data[properties.PRECINCT_ID];
+            document.getElementById("precinctPopulation").value= properties.POP100;
+            if (typeof dataMap[districtMap[parseInt(properties.PRECINCT_ID)]] !== 'undefined'){
+            document.getElementById("tfTotalPop").value = dataMap[districtMap[parseInt(properties.PRECINCT_ID)]].population;
+            }
+            //parseInt(precinct_data[properties.PRECINCT_ID])
+
+//			L.popup()
+//				.setContent("My parent district ID is: " + precinct_data[properties.PRECINCT_ID])
+//				.setLatLng(e.latlng)
+//				.openOn(map);
 		})
 .addTo(map);
 
 map.on('zoomend', function (e) {
     zoomHandler();
 });
+
+StateMap["Illinois"] = illinois;
+StateMap["New Hampshire"] = new_Hampshire;
+StateMap["West Virginia"] = west_Virginia;
 
 function clean_map() {
     map.eachLayer(function (layer) {

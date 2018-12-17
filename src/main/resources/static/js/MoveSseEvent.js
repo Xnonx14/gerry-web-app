@@ -13,27 +13,32 @@ var queue = [];
 var state = "NOT_INIT";
 var move;
 var districtMap = {};
-
+var dataMap = {};
 var eventSource = null;
 
 var subscribe = function () {
+
+    var selected_state = document.getElementById("selected_state").value;
     document.getElementById("tfObjectiveFunction").value = "";
     if(state == "CLOSED"){
-        if(state == "NORMAL" || state == "PAUSED"){
-            for(var i = 17; i <= 345; i++){
-                new_Hampshire.resetFeatureStyle(i);
-            }
-        }
+//        if(state == "NORMAL" || state == "PAUSED"){
+//            for(var i = 17; i <= 345; i++){
+//                StateMap[state].resetFeatureStyle(i);
+//            }
+//        }
         state = "NOT_INIT";
     }
 
     var selectedAlgo = document.getElementById("selected_algo");
+
     if(selectedAlgo.value === "region") {
         for (var key in precinct_data) {
             var districtId = precinct_data[key];
             var precinctId = key;
             var color = 'white';
-            new_Hampshire.setFeatureStyle(precinctId, colorStyle(color))
+            console.log(selected_state)
+            console.log(districtId)
+            StateMap[selected_state].setFeatureStyle(precinctId, colorStyle(color))
         }
     }
 
@@ -41,14 +46,15 @@ var subscribe = function () {
     var elem = document.getElementById("pauseBtnID");
 
     eventSource.onmessage = function (e) {
+        console.log("running");
         var move = JSON.parse(e.data);
-        var object = {
-            id: move.destDistrictId,
+        var district_data = {
             population: move.destDistrictPopulation,
             gain: move.objectiveGain,
             value: move.objectiveValue
         };
-        districtMap[move.destDistrictId] = object;
+        districtMap[move.precinctId] = move.destDistrictId;
+        dataMap[move.destDistrictId] = district_data;
         queue.push(move);
         if(state == "CLOSED"){
            state = "NOT_INIT";
@@ -62,10 +68,9 @@ var subscribe = function () {
             var precinctId = move.precinctId;
             var districtId = move.destDistrictId;
             var color = genColor(districtId);
-            new_Hampshire.setFeatureStyle(precinctId, colorStyle(color))
+            StateMap[selected_state].setFeatureStyle(precinctId, colorStyle(color))
         }
     };
-
     eventSource.onopen = function () {
         if(state == "NOT_INIT"){
             state = "NORMAL";
@@ -108,7 +113,7 @@ var make_step = function(){
             var precinctId = move.precinctId;
             var districtId = move.districtId;
             var color = genColor(districtId);
-            new_Hampshire.setFeatureStyle(precinctId, colorStyle(color))
+            StateMap[state].setFeatureStyle(precinctId, colorStyle(color))
     }
 }
 
