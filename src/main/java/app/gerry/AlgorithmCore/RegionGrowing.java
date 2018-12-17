@@ -24,7 +24,8 @@ public class RegionGrowing extends Algorithm{
         this.algorithmUtil = algorithmUtil;
         context = algorithmUtil.initializeAlgorithmParameters(params);
         System.out.println(context.getSeedCount());
-        state = algorithmUtil.initializeStateWithRandomSeedDistricts(context.getStateName(), context.getSeedCount());
+        state = algorithmUtil.initializeStateWithRandomSeedDistricts(context.getStateName(), context.getSeedCount(),
+                context.getDate(), context.getPosition());
         chunkMoveStack = new Stack<>();
         moveStack = new Stack<>();
         seen = new HashSet<>();

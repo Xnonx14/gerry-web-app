@@ -1,8 +1,11 @@
 package app.gerry.Geography;
 
 import app.gerry.AlgorithmCore.ObjectiveFunction;
+import app.gerry.Constants.Party;
+import app.gerry.Data.ElectionData;
 import app.gerry.Data.GeometricData;
 import app.gerry.Data.Representative;
+import app.model.PartyRepresentative;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Polygon;
 import org.locationtech.jts.operation.union.UnaryUnionOp;
@@ -20,6 +23,8 @@ public class District {
     private Map<Chunk, Integer> adjacentChunks;
     private Set<Chunk> borderChunks;
     private Geometry geometricData;
+    private Map<Party, Integer> cummWastedVotes;
+    private Integer totalVotes;
     private int population;
     private double ObjectiveValue;
     private State state;
@@ -35,6 +40,7 @@ public class District {
         public Set<Chunk> borderChunks;
         public GeometricData geometricData;
         public double ObjectiveValue;
+        private Integer totalVotes;
 
         public Builder() {
 
@@ -79,6 +85,13 @@ public class District {
      *  - population data
      * @param chunk
      */
+    public Map<Party, Integer> getCummWastedVotes(){
+        return cummWastedVotes;
+    }
+
+    public int getTotalVotes(){
+        return totalVotes;
+    }
 
     public void testRemoveChunk(Chunk chunk){
         //update adjacencies
@@ -104,23 +117,24 @@ public class District {
             }
         }
         updateBoundaryData(chunk, true);
-        updateElectionData(chunk);
+        updateWastedVotes(chunk, true);
         updatePopulationData(chunk, true);
     }
 
     public void addChunk(Chunk chunk){
         updateAdjacentChunks(chunk, false);
         updateBoundaryData(chunk, false);
-        updateElectionData(chunk);
+        updateWastedVotes(chunk, false);
         updatePopulationData(chunk, false);
         chunks.add(chunk);
         chunk.setParentDistrict(this);
     }
 
+
     public void removeChunk(Chunk chunk) {
         updateAdjacentChunks(chunk, true);
         updateBoundaryData(chunk, true);
-        updateElectionData(chunk);
+        updateWastedVotes(chunk, true);
         updatePopulationData(chunk, true);
         chunk.setParentDistrict(null);
         chunks.remove(chunk);
@@ -195,8 +209,19 @@ public class District {
         }
     }
 
-    private void updateElectionData(Chunk chunk) {
-        //TODO
+    private void updateWastedVotes(Chunk chunk, boolean isRemove) {
+        Map<Party, Integer> chunkCummWastedVotes= chunk.getCummWastedVotes();
+        for (Party p : chunkCummWastedVotes.keySet()){
+            int chunkWastedVotes = chunkCummWastedVotes.get(p);
+            int total = 0;
+            if (isRemove) {
+                total = cummWastedVotes.get(p) - chunkWastedVotes;
+            }
+            else{
+                total = cummWastedVotes.get(p) + chunkWastedVotes;
+            }
+            cummWastedVotes.put(p, total);
+        }
     }
 
     private void updatePopulationData(Chunk chunk, boolean isRemove) {

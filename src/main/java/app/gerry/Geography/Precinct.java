@@ -1,13 +1,19 @@
 package app.gerry.Geography;
 
+import app.gerry.Constants.Party;
+import app.gerry.Constants.Position;
 import app.gerry.Data.Boundary;
 import app.gerry.Data.ElectionData;
 import app.gerry.Data.YearData;
 import app.gerry.Constants.PoliticalSubdivision;
+import app.model.PartyRepresentative;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Polygon;
 import org.locationtech.jts.io.WKTReader;
 
+import java.sql.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -30,17 +36,42 @@ public class Precinct {
     private boolean isBorderPrecinct;
     private Map<PoliticalSubdivision, String> restrictionData;
     private Set<Boundary> borderingLandmark;
-    private Map<Integer, ElectionData> electionData;
+    private ElectionData electionData;
 
     public Precinct(Builder builder) {
         this.id = builder.id;
         this.boundary = builder.boundary;
         this.adjacentPrecincts = builder.adjacentPrecincts;
         this.parentDistrictID = builder.parentDistrictID;
+        this.electionData = new ElectionData();
     }
 
     public District getRandomAdjacentDistrict(){
         return null;
+    }
+
+    public Map<Party, Integer> getWastedVotesMap(){
+        int max = 0;
+        Party winner = null;
+        int total = 0;
+        Map<Party, Integer> wastedVotesMap = new HashMap<>();
+        for (PartyRepresentative r: electionData.getRepresentativeVotes().keySet()){
+            Party party = electionData.getRepresentativePartyMap().get(r);
+            int votes = electionData.getRepresentativeVotes().get(r);
+            if (votes > max) {
+                max = votes;
+                winner = party;
+            }
+            else{
+                if (wastedVotesMap.containsKey(party))
+                    wastedVotesMap.put(party, wastedVotesMap.get(party)+ votes);
+                else
+                    wastedVotesMap.put(party, votes);
+            }
+            total += votes;
+        }
+        wastedVotesMap.put(winner, wastedVotesMap.get(winner) + (total/2 + 1));
+        return wastedVotesMap;
     }
 
     public String getSubdivisionName(PoliticalSubdivision ps){
@@ -161,11 +192,11 @@ public class Precinct {
         this.borderingLandmark = borderingLandmark;
     }
 
-    public Map<Integer, ElectionData> getElectionData() {
+    public ElectionData getElectionData() {
         return electionData;
     }
 
-    public void setElectionData(Map<Integer, ElectionData> electionData) {
+    public void setElectionData(ElectionData electionData) {
         this.electionData = electionData;
     }
 }

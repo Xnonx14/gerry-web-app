@@ -32,4 +32,32 @@ public class ElectionDataEntity {
 
     @Column(name = "POSITION")
     private Position position;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public Integer getRepresentativeId() {
+        return representativeId;
+    }
+
+    public Integer getPrecinctId() {
+        return precinctId;
+    }
+
+    public Party getParty() {
+        return party;
+    }
+
+    public Integer getVoteCount() {
+        return voteCount;
+    }
+
+    public Position getPosition() {
+        return position;
+    }
 }

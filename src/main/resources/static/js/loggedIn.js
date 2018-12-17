@@ -213,36 +213,36 @@ onEachFeature: onEachFeature,
 //fetch('geo/Illinois_P.json').then(function(response){
 //			return response.json();
 //		}).then(function(json){
-//var illinois = L.vectorGrid.slicer( json, {
-//	minZoom: 8,
-//	rendererFactory: L.svg.tile,
-//	vectorTileLayerStyles: {
-//	sliced: function(properties, zoom) {
-//	var p = parseInt(properties.COUNTYFP10);
-//		return {
-//		fillColor: genColor(p),
-//		fillOpacity: 0.5,
-//		stroke: true,
-//		fill: true,
-//		color: 'white',
-//		weight: 1,
-//		}
-//	}
-//},
-//	interactive: true,
-//	getFeatureId: function(f) {
-//		return f.properties.wb_a3;
-//	}
-//})
-//		.on('click', function(e) {
-//			var properties = e.layer.properties;
-//			L.popup()
-//				.setContent(properties.VTDST10)
-//				.setLatLng(e.latlng)
-//				.openOn(map);
-//		})
-//.addTo(map);
-//});
+var illinois = L.vectorGrid.slicer( illinoisData, {
+	minZoom: 8,
+	rendererFactory: L.svg.tile,
+	vectorTileLayerStyles: {
+	sliced: function(properties, zoom) {
+	var p = parseInt(properties.CONG_DISTR);
+		return {
+		fillColor: genColor(p),
+		fillOpacity: 0.5,
+		stroke: true,
+		fill: true,
+		color: 'white',
+		weight: 1,
+		}
+	}
+},
+	interactive: true,
+	getFeatureId: function(f) {
+		return f.properties.wb_a3;
+	}
+})
+		.on('click', function(e) {
+			var properties = e.layer.properties;
+			L.popup()
+				.setContent(properties.VTDST10)
+				.setLatLng(e.latlng)
+				.openOn(map);
+		})
+.addTo(map);
+
 //
 //var illinois_district = L.vectorGrid.slicer(illinoisDistrict, {
 //	minZoom: 6,

@@ -1,11 +1,13 @@
 package app.gerry.AlgorithmCore;
 
+import app.gerry.Constants.Party;
 import app.gerry.Geography.District;
 import app.gerry.Geography.State;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.algorithm.MinimumBoundingCircle;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class ObjectiveFunction {
 
@@ -14,10 +16,12 @@ public class ObjectiveFunction {
             return 0;
         }
         Geometry geometricData = district.getGeometricData();
+        Map<Party, Integer> wastedVotes = district.getCummWastedVotes();
+        int totalVotes = district.getTotalVotes();
         double reockWeight = context.getReockWeight();
         double polsbyWeight = context.getPolsbyPopperWeight();
         double convexWeight = context.getConvexHullWeight();
-        double fairnessWeight = context.getPoliticalFairnessWeight();
+        double fairnessWeight = context.getPoliticalFairnessWeight(wastedVotes, totalVotes);
         double populationWeight = context.getPopulationEqualityWeight();
         double reockValue = calculateReock(geometricData);
         double polsbyValue = calculatePolsby(geometricData);
@@ -59,8 +63,18 @@ public class ObjectiveFunction {
         return area/convexHullArea;
     }
 
-    private static double calculate_Political() {
-        return 0;
+    private static double calculate_Political(Map<Party, Integer> wastedVotes, int totalVotes) {
+        int maxWastedVotes = 0;
+        int otherVotes = 0;
+        for (Party p : wastedVotes.keySet()){
+            if (wastedVotes.get(p) > maxWastedVotes){
+                maxWastedVotes = wastedVotes.get(p);
+            }
+            else{
+                otherVotes += wastedVotes.get(p);
+            }
+        }
+        return ((double)(maxWastedVotes-otherVotes))/totalVotes;
     }
 
     private static double calculatePopulation(District district) {
