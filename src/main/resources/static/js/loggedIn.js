@@ -24,12 +24,14 @@ function foolproofStop(){
 
 function displayStateData(){
 	if(document.getElementById("innerData").style['display'] != "block"){
-        document.getElementById("innerData").style = "display: block";
-		document.getElementById("data").style="width: 15%"
+        document.getElementById("innerData").style = "display:block; float:left; width:49%;";
+        document.getElementById("precinctDataID").style = "display:block; float:left; width:49%;";
+		document.getElementById("data").style="width: 30%"
 		document.getElementById("displayBtn").value = "-";
-		document.getElementById("first").style = "width: 65%";
+		document.getElementById("first").style = "width: 50%";
     }else{
         document.getElementById("innerData").style = "display: none";
+        document.getElementById("precinctDataID").style = "display:none;";
 		document.getElementById("data").style="width: 3%"
 		document.getElementById("displayBtn").value = "+";
 		document.getElementById("first").style = "width: 77%";
@@ -284,8 +286,9 @@ var new_Hampshire = L.vectorGrid.slicer(nH_data, {
 		.on('mouseover', function(e) {
 			var properties = e.layer.properties;
 			info.update(properties.PRECINCT_ID);
-			document.getElementById("Name").innerHTML = "Precinct ID: "+ properties.PRECINCT_ID;
-            document.getElementById("Population").innerHTML = "Population/Parent ID: "+precinct_data[properties.PRECINCT_ID];
+			document.getElementById("tfPrecinctID").value= "Precinct ID: "+ properties.PRECINCT_ID;
+			console.log(precinct_data);
+            document.getElementById("tfDistrictID").value = "Parent District ID: "+precinct_data[properties.PRECINCT_ID];
 //			L.popup()
 //				.setContent("My parent district ID is: " + precinct_data[properties.PRECINCT_ID])
 //				.setLatLng(e.latlng)
