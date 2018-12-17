@@ -16,21 +16,29 @@ var districtMap = {};
 var dataMap = {};
 var eventSource = null;
 
+var nh_start = 17;
+var nh_end = 345;
+var wv_start = 11904;
+var wv_end = 13759;
+
 var subscribe = function () {
 
     var selected_state = document.getElementById("selected_state").value;
     document.getElementById("tfObjectiveFunction").value = "";
     if(state == "CLOSED"){
-//        if(state == "NORMAL" || state == "PAUSED"){
-//            for(var i = 17; i <= 345; i++){
-//                StateMap[state].resetFeatureStyle(i);
-//            }
-//        }
-        for (var key in precinct_data) {
-            var districtId = precinct_data[key];
-            var precinctId = key;
-            var color = 'white';
-            StateMap[selected_state].setFeatureStyle(precinctId, colorStyle(color))
+        if(selected_state === "New Hampshire") {
+            if(state == "NORMAL" || state == "PAUSED"){
+                for(var i = nh_start; i <= nh_end; i++){
+                    StateMap[state].resetFeatureStyle(i);
+                }
+            }
+        }
+        if(selected_state === "West Virginia") {
+            if(state == "NORMAL" || state == "PAUSED"){
+                for(var i = wv_start; i <= wv_end; i++){
+                    StateMap[state].resetFeatureStyle(i);
+                }
+            }
         }
         state = "NOT_INIT";
     }
@@ -39,11 +47,19 @@ var subscribe = function () {
 
     if(selectedAlgo.value === "region") {
         console.log("NONE");
-        for (var key in precinct_data) {
-            var districtId = precinct_data[key];
-            var precinctId = key;
-            var color = 'white';
-            StateMap[selected_state].setFeatureStyle(precinctId, colorStyle(color))
+        if(selected_state === "New Hampshire") {
+            if(state == "NORMAL" || state == "PAUSED"){
+                for(var i = nh_start; i <= nh_end; i++){
+                    StateMap[state].resetFeatureStyle(i);
+                }
+            }
+        }
+        if(selected_state === "West Virginia") {
+            if(state == "NORMAL" || state == "PAUSED"){
+                for(var i = wv_start; i <= wv_end; i++){
+                    StateMap[state].resetFeatureStyle(i);
+                }
+            }
         }
     }
 
