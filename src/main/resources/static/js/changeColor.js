@@ -1,28 +1,29 @@
-//Call Script
-//<script id="changeColor" src="js/changeColor.js" precinct = ".." district = "..">/script>
+;(function(){
+  function id(v){return document.getElementById(v); }
+  function loadbar() {
+    var ovrl = id("overlay"),
+        prog = id("progress"),
+        stat = id("stat"),
+        img = document.images,
+        c = 0;
+        tot = img.length;
 
-//var precinct = $('#changeColor').attr("precinct");
-//var district = $('#changeColor').attr("district");
-
-//function colorStyle(color){
-//    return {
-//    		fillColor: color,
-//    		fillOpacity: 0.3,
-//    		stroke: true,
-//    		fill: true,
-//    		color: 'black',
-//    		weight: 1,
-//    };
-//}
-//
-//
-//var district = '19';
-//for(i = 17; i <= 342; i++){
-//    var precinct = i.toString();
-//    if(district == '19'){
-//    district = '20';
-//    }
-//    else{district = '19';}
-//    var color = genColor(district);
-//    window.new_Hampshire.setFeatureStyle(precinct, colorStyle(color));
-//}
+    function imgLoaded(){
+      c += 1;
+      if(c===tot) return doneLoading();
+    }
+    function doneLoading(){
+      ovrl.style.opacity = 0;
+      setTimeout(function(){ 
+        ovrl.style.display = "none";
+      }, 1200);
+    }
+    for(var i=0; i<tot; i++) {
+      var tImg     = new Image();
+      tImg.onload  = imgLoaded;
+      tImg.onerror = imgLoaded;
+      tImg.src     = img[i].src;
+    }    
+  }
+  document.addEventListener('DOMContentLoaded', loadbar, false);
+}());

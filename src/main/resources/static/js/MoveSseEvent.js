@@ -32,12 +32,11 @@ var subscribe = function () {
     var selectedAlgo = document.getElementById("selected_algo");
 
     if(selectedAlgo.value === "region") {
+        console.log("NONE");
         for (var key in precinct_data) {
             var districtId = precinct_data[key];
             var precinctId = key;
             var color = 'white';
-            console.log(selected_state)
-            console.log(districtId)
             StateMap[selected_state].setFeatureStyle(precinctId, colorStyle(color))
         }
     }
