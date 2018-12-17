@@ -26,18 +26,14 @@ var subscribe = function () {
     var selected_state = document.getElementById("selected_state").value;
     document.getElementById("tfObjectiveFunction").value = "";
     if(state == "CLOSED"){
-        if(selected_state == "New Hampshire") {
-            if(state == "NORMAL" || state == "PAUSED"){
-                for(var i = nh_start; i <= nh_end; i++){
-                    StateMap[selected_state].resetFeatureStyle(i);
-                }
+        if(selected_state === "New Hampshire") {
+            for(var i = nh_start; i <= nh_end; i++){
+                StateMap[selected_state].resetFeatureStyle(i);
             }
         }
-        if(selected_state == "West Virginia") {
-            if(state == "NORMAL" || state == "PAUSED"){
-                for(var i = wv_start; i <= wv_end; i++){
-                    StateMap[selected_state].resetFeatureStyle(i);
-                }
+        if(selected_state === "West Virginia") {
+            for(var i = wv_start; i <= wv_end; i++){
+                StateMap[selected_state].resetFeatureStyle(i);
             }
         }
         state = "NOT_INIT";
@@ -47,18 +43,14 @@ var subscribe = function () {
 
     if(selectedAlgo.value === "region") {
         console.log("NONE");
-        if(selected_state == "New Hampshire") {
-            if(state == "NORMAL" || state == "PAUSED"){
-                for(var i = nh_start; i <= nh_end; i++){
-                    StateMap[selected_state].resetFeatureStyle(i);
-                }
+        if(selected_state === "New Hampshire") {
+            for(var i = nh_start; i <= nh_end; i++){
+                StateMap[selected_state].resetFeatureStyle(i);
             }
         }
-        if(selected_state == "West Virginia") {
-            if(state == "NORMAL" || state == "PAUSED"){
-                for(var i = wv_start; i <= wv_end; i++){
-                    StateMap[selected_state].resetFeatureStyle(i);
-                }
+        if(selected_state === "West Virginia") {
+            for(var i = wv_start; i <= wv_end; i++){
+                StateMap[selected_state].resetFeatureStyle(i);
             }
         }
     }
@@ -68,6 +60,7 @@ var subscribe = function () {
 
     eventSource.onmessage = function (e) {
         console.log("running");
+        console.log(e.data);
         var move = JSON.parse(e.data);
         var district_data = {
             population: move.destDistrictPopulation,
@@ -89,16 +82,17 @@ var subscribe = function () {
             if(selected_state == "West Virginia"){
                 var districtId = move.destDistrictId;
                 var Ids = move.precinctIds;
+                console.log(Ids);
                 var color = genColor(districtId);
                 Ids.forEach(function(precinctId) {
                      StateMap[selected_state].setFeatureStyle(precinctId, colorStyle(color))
                 });
             }
             else{
-            var precinctId = move.precinctId;
-            var districtId = move.destDistrictId;
-            var color = genColor(districtId);
-            StateMap[selected_state].setFeatureStyle(precinctId, colorStyle(color))
+                var precinctId = move.precinctId;
+                var districtId = move.destDistrictId;
+                var color = genColor(districtId);
+                StateMap[selected_state].setFeatureStyle(precinctId, colorStyle(color))
             }
         }
     };

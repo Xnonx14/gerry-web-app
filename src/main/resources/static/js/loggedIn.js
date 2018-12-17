@@ -304,7 +304,7 @@ var west_Virginia = L.vectorGrid.slicer(wV_data, {
 	sliced: function(properties, zoom) {
 		var district = parseInt(properties.CONG_DISTR);
 		return {
-		fillColor: genColor(district),
+		fillColor: 'white',
 		fillOpacity: 0.6,
 		stroke: true,
 		fill: true,

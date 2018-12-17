@@ -111,4 +111,12 @@ public class SseResultData {
     public void setObjectiveGain(String objectiveGain) {
         this.objectiveGain = objectiveGain;
     }
+
+    public int[] getPrecinctIds() {
+        return precinctIds;
+    }
+
+    public void setPrecinctIds(int[] precinctIds) {
+        this.precinctIds = precinctIds;
+    }
 }
