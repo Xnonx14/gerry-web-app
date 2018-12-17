@@ -61,14 +61,7 @@ var subscribe = function () {
     eventSource.onmessage = function (e) {
         console.log("running");
         console.log(e.data);
-        var move = JSON.parse(e.data);
-        var district_data = {
-            population: move.destDistrictPopulation,
-            gain: move.objectiveGain,
-            value: move.objectiveValue
-        };
-        districtMap[move.precinctId] = move.destDistrictId;
-        dataMap[move.destDistrictId] = district_data;
+        var move = JSON.parse(e.data)
         queue.push(move);
         if(state == "CLOSED"){
            state = "NOT_INIT";
@@ -78,6 +71,12 @@ var subscribe = function () {
         }
         if(state == "NORMAL" && queue.length > 0){
             move = queue.shift();
+            var district_data = {
+                 population: move.destDistrictPopulation,
+                 gain: move.objectiveGain,
+                 value: move.objectiveValue
+             };
+            dataMap[move.destDistrictId] = district_data;
             document.getElementById("tfObjectiveFunction").value = move.objectiveValue;
             if(selected_state == "West Virginia"){
                 var districtId = move.destDistrictId;
@@ -85,10 +84,12 @@ var subscribe = function () {
                 console.log(Ids);
                 var color = genColor(districtId);
                 Ids.forEach(function(precinctId) {
+                     districtMap[precinctId] = move.destDistrictId;
                      StateMap[selected_state].setFeatureStyle(precinctId, colorStyle(color))
                 });
             }
             else{
+                districtMap[move.precinctId] = move.destDistrictId;
                 var precinctId = move.precinctId;
                 var districtId = move.destDistrictId;
                 var color = genColor(districtId);

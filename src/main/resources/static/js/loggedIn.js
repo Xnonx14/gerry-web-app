@@ -244,7 +244,7 @@ var illinois = L.vectorGrid.slicer( illinoisData, {
 			var properties = e.layer.properties;
 			info.update(properties.PRECINCT_ID);
 			document.getElementById("tfPrecinctID").value= properties.PRECINCT_ID;
-            document.getElementById("tfDistrictID").value = precinct_data[properties.PRECINCT_ID];
+            document.getElementById("tfDistrictID").value = districtMap[parseInt(properties.PRECINCT_ID)];
             document.getElementById("precinctPopulation").value= properties.POP100;
             if (typeof dataMap[districtMap[parseInt(properties.PRECINCT_ID)]] !== 'undefined'){
             document.getElementById("tfTotalPop").value = dataMap[districtMap[parseInt(properties.PRECINCT_ID)]].population;
@@ -283,7 +283,7 @@ var new_Hampshire = L.vectorGrid.slicer(nH_data, {
 			var properties = e.layer.properties;
 			info.update(properties.PRECINCT_ID);
 			document.getElementById("tfPrecinctID").value= properties.PRECINCT_ID;
-            document.getElementById("tfDistrictID").value = precinct_data[properties.PRECINCT_ID];
+            document.getElementById("tfDistrictID").value = districtMap[parseInt(properties.PRECINCT_ID)];
             document.getElementById("precinctPopulation").value= properties.POP100;
             if (typeof dataMap[districtMap[parseInt(properties.PRECINCT_ID)]] !== 'undefined'){
             document.getElementById("tfTotalPop").value = dataMap[districtMap[parseInt(properties.PRECINCT_ID)]].population;
@@ -322,7 +322,7 @@ var west_Virginia = L.vectorGrid.slicer(wV_data, {
 			var properties = e.layer.properties;
 			info.update(properties.PRECINCT_ID);
 			document.getElementById("tfPrecinctID").value= properties.PRECINCT_ID;
-            document.getElementById("tfDistrictID").value = precinct_data[properties.PRECINCT_ID];
+            document.getElementById("tfDistrictID").value = districtMap[parseInt(properties.PRECINCT_ID)];
             document.getElementById("precinctPopulation").value= properties.POP100;
             if (typeof dataMap[districtMap[parseInt(properties.PRECINCT_ID)]] !== 'undefined'){
             document.getElementById("tfTotalPop").value = dataMap[districtMap[parseInt(properties.PRECINCT_ID)]].population;
