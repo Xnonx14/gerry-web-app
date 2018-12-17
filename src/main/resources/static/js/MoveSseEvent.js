@@ -26,18 +26,23 @@ var subscribe = function () {
 //                StateMap[state].resetFeatureStyle(i);
 //            }
 //        }
+        for (var key in precinct_data) {
+            var districtId = precinct_data[key];
+            var precinctId = key;
+            var color = 'white';
+            StateMap[selected_state].setFeatureStyle(precinctId, colorStyle(color))
+        }
         state = "NOT_INIT";
     }
 
     var selectedAlgo = document.getElementById("selected_algo");
 
     if(selectedAlgo.value === "region") {
+        console.log("NONE");
         for (var key in precinct_data) {
             var districtId = precinct_data[key];
             var precinctId = key;
             var color = 'white';
-            console.log(selected_state)
-            console.log(districtId)
             StateMap[selected_state].setFeatureStyle(precinctId, colorStyle(color))
         }
     }
@@ -65,10 +70,20 @@ var subscribe = function () {
         if(state == "NORMAL" && queue.length > 0){
             move = queue.shift();
             document.getElementById("tfObjectiveFunction").value = move.objectiveValue;
+            if(selected_state == "West Virginia"){
+                var districtId = move.destDistrictId;
+                var Ids = move.precinctIds;
+                var color = genColor(districtId);
+                Ids.forEach(function(precinctId) {
+                     StateMap[selected_state].setFeatureStyle(precinctId, colorStyle(color))
+                });
+            }
+            else{
             var precinctId = move.precinctId;
             var districtId = move.destDistrictId;
             var color = genColor(districtId);
             StateMap[selected_state].setFeatureStyle(precinctId, colorStyle(color))
+            }
         }
     };
     eventSource.onopen = function () {

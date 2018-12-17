@@ -20,6 +20,18 @@
                   href="../static/css/style.css" />
         </head>
         <body>
+
+        <script type="text/javascript" src="js/changeColor.js"></script>
+
+        <div id="overlay">
+            <div class="vertical">
+                <img src="https://i.imgur.com/6bAkUow.gif" alt="centered image" />
+            </div>
+            <div id="stat"></div>
+            <div id="progress"></div>
+        </div>
+
+
             <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
                 <div class="container-fluid">
                     <div class="navbar-header">
@@ -58,6 +70,11 @@
                             <h4>Objective Function</h4>
                             <input type="text" id="tfObjectiveFunction" value="">
 						</div>
+                        <h4>Constitution Text</h4>
+                        <div id = "constitution_text">
+
+                        </div>
+
                     </div>
                     <div id="precinctDataID" style="float:left; width: 50%;">
                         <div class="dataField" id="dataTitle">
