@@ -49,13 +49,12 @@ public class AlgorithmUtil {
     public State initializeStateWithAllDistricts(String stateName) {
         List<PrecinctEntity> precinctEntities = aggregatePrecinctEntitiesInState(stateName);
         List<Precinct> precincts = convertPrecinctEntitiesToPrecinctsSA(precinctEntities);
+        setPrecinctData(precincts);
+
+        int totalPopulation = sumPrecinctsPopulation(precincts);
         Map<Integer, Chunk> idChunkMap = toIdChunkMap(precincts);
         List<Chunk> chunks = new ArrayList<>(idChunkMap.values());
-        for (Precinct p: precincts){
-            int id = p.getId();
-            idChunkMap.get(id).setParentDistrictID(p.getParentDistrictID());
-        }
-        
+
         Map<Integer, List<Integer>> adjacentChunkIdMap = constructAdjacentChunkMap(chunks, stateName);
         setAdjacentChunks(idChunkMap, adjacentChunkIdMap);
         StateEntity stateEntity = stateRepository.findByName(stateName);
@@ -79,6 +78,7 @@ public class AlgorithmUtil {
                         .withIdChunkMap(idChunkMap)
                         .withDistricts(districtList)
                         .withAdjacentChunkMap(adjacentChunkIdMap)
+                        .withPopulation(totalPopulation)
                         .build();
         return state;
     }
