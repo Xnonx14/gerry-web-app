@@ -1,27 +1,28 @@
 package app.gerry.Util;
 
 import app.gerry.AlgorithmCore.Context;
+import app.gerry.Constants.Party;
+import app.gerry.Constants.Position;
+import app.gerry.Data.ElectionData;
+import app.gerry.Data.Representative;
 import app.gerry.Geography.Chunk;
 import app.gerry.Geography.District;
 import app.gerry.Geography.Precinct;
 import app.gerry.Geography.State;
 import app.gerry.Json.ChunkJson;
-import app.model.DistrictEntity;
-import app.model.PopulationEntity;
-import app.model.PrecinctEntity;
-import app.model.StateEntity;
-import app.repository.DistrictRepository;
-import app.repository.PopulationRepository;
-import app.repository.PrecinctRepository;
-import app.repository.StateRepository;
+import app.gerry.Json.CountyChunkJson;
+import app.model.*;
+import app.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.sql.Date;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static app.gerry.Constants.AlgorithmConstants.*;
 import static app.gerry.Json.JsonUtil.createChunkJsons;
+import static app.gerry.Json.JsonUtil.createCountyChunkJsons;
 
 @Service
 public class AlgorithmUtil {
@@ -33,10 +34,16 @@ public class AlgorithmUtil {
     private PrecinctRepository precinctRepository;
     @Autowired
     private PopulationRepository populationRepository;
+    @Autowired
+    private ElectionDataRepository electionDataRepository;
+    @Autowired
+    private RepresentativeRepository representativeRepository;
 
     public Context initializeAlgorithmParameters(Map<String, Object> params) {
         Context context = new Context();
         context.setSeedCount(Integer.parseInt((String) params.get("seedCount")));
+        context.setDate((Date)params.get("date"));
+        context.setPosition((Position)params.get("position"));
         context.setPoliticalFairnessWeight(toDouble(params, POLITICAL_FAIRNESS));
         context.setPolsbyPopperWeight(toDouble(params, POLSBY_POPPER));
         context.setConvexHullWeight(toDouble(params, CONVEX_HULL));
@@ -48,9 +55,11 @@ public class AlgorithmUtil {
     
     public State initializeStateWithAllDistricts(String stateName) {
         List<PrecinctEntity> precinctEntities = aggregatePrecinctEntitiesInState(stateName);
+        Map<Integer, PartyRepresentative> idRepresentativeMap = ((List<PartyRepresentative>)representativeRepository
+                .findAll()).stream().collect(Collectors.toMap(PartyRepresentative::getId, v->v));
         List<Precinct> precincts = convertPrecinctEntitiesToPrecinctsSA(precinctEntities);
+        setPrecinctElectionData(precincts, idRepresentativeMap);
         setPrecinctData(precincts);
-
         int totalPopulation = sumPrecinctsPopulation(precincts);
         Map<Integer, Chunk> idChunkMap = toIdChunkMap(precincts);
         List<Chunk> chunks = new ArrayList<>(idChunkMap.values());
@@ -82,11 +91,14 @@ public class AlgorithmUtil {
                         .build();
         return state;
     }
-    
+
     public State initializeStateWithRandomSeedDistricts(String stateName, int numDistricts) {
         String politicalRestriction = getPoliticalRestriction(stateName);
         List<Precinct> precincts = aggregatePrecinctsInState(stateName);
+        Map<Integer, PartyRepresentative> idRepresentativeMap = ((List<PartyRepresentative>)representativeRepository
+                .findAll()).stream().collect(Collectors.toMap(PartyRepresentative::getId, v->v));
         setPrecinctData(precincts);
+        setPrecinctElectionData(precincts, idRepresentativeMap);
         int totalPopulation = sumPrecinctsPopulation(precincts);
         Map<Integer, Chunk> idChunkMap = null;
         if(politicalRestriction == null) {
@@ -98,11 +110,31 @@ public class AlgorithmUtil {
             //for each county chunk json, construct chunk with county id, precincts
             String filepath = "./preprocessing/wv/id_CountyAdj.json";
 
-            idChunkMap = toIdCountyChunkMap(precincts);
-            List<ChunkJson> chunkJsons = null;
+            List<Chunk> countyChunks = new ArrayList<>();
+            List<CountyChunkJson> chunkJsons = createCountyChunkJsons(filepath);
+            for(CountyChunkJson chunkJson : chunkJsons) {
+                int countyId = chunkJson.getId();
+                int[] precinctIds = chunkJson.getPrecincts();
+                Map<Integer, Precinct> precinctMap = precincts.stream()
+                        .collect(Collectors.toMap(Precinct::getId, p -> p));
+                List<Precinct> countyPrecincts = new ArrayList<>();
+                for(int id : precinctIds) {
+                    countyPrecincts.add(precinctMap.get(id));
+                }
+                List<Integer> adjCountyIds = new ArrayList<>();
+                for(int id : chunkJson.getAdjCounties()) {
+                    adjCountyIds.add(id);
+                }
+                countyChunks.add(new Chunk(countyId, countyPrecincts, adjCountyIds));
+            }
+            idChunkMap = countyChunks.stream()
+                    .collect(Collectors.toMap(Chunk::getId, c -> c));
         }
+
         List<Chunk> chunks = new ArrayList<>(idChunkMap.values());
-        Map<Integer, List<Integer>> adjacentChunkIdMap = constructAdjacentChunkMap(chunks, stateName);
+        Map<Integer, List<Integer>> adjacentChunkIdMap =
+                politicalRestriction == null ? constructAdjacentChunkMap(chunks, stateName)
+                : constructAdjacentCountyChunkMap(chunks);
         setAdjacentChunks(idChunkMap, adjacentChunkIdMap);
         List<District> seeds = constructSeedDistrictsRandomly(chunks, numDistricts);
 
@@ -117,6 +149,11 @@ public class AlgorithmUtil {
                 .withPopulation(totalPopulation)
                 .build();
         return state;
+    }
+
+    private Map<Integer, List<Integer>> constructAdjacentCountyChunkMap(List<Chunk> chunks) {
+        return chunks.stream()
+                .collect(Collectors.toMap(Chunk::getId, Chunk::getAdjChunkIds));
     }
 
     private void setPrecinctData(List<Precinct> precincts) {
@@ -137,6 +174,26 @@ public class AlgorithmUtil {
         }
     }
 
+    private void setPrecinctElectionData(List<Precinct> precincts, Map<Integer, PartyRepresentative> idRepresentativeMap){
+        for (Precinct precinct: precincts){
+            List<ElectionDataEntity> electionDataEntities = electionDataRepository.findByPrecinctId(precinct.getId());
+            if (electionDataEntities != null && !electionDataEntities.isEmpty()) {
+                Date date = electionDataEntities.get(0).getDate();
+                Position position = electionDataEntities.get(0).getPosition();
+                List<ElectionDataEntity> ede = electionDataRepository.findByPrecinctIdAndDateAndPosition(
+                        precinct.getId(),date, position);
+                ElectionData ed = new ElectionData();
+                for (ElectionDataEntity e: ede){
+                    Map repVotes = ed.getRepresentativeVotes();
+                    Map repParty = ed.getRepresentativePartyMap();
+                    repVotes.put(idRepresentativeMap.get(e.getRepresentativeId()), e.getVoteCount());
+                    repParty.put(idRepresentativeMap.get(e.getRepresentativeId()), e.getParty());
+                }
+                precinct.setElectionData(ed);
+            }
+        }
+    }
+
     private void setAdjacentChunks(Map<Integer, Chunk> idChunkMap, Map<Integer, List<Integer>> adjacentChunkIdMap) {
         for(Chunk chunk : idChunkMap.values()) {
             List<Integer> adjIds = adjacentChunkIdMap.get(chunk.getId());
@@ -151,9 +208,11 @@ public class AlgorithmUtil {
     }
 
     private Map<Integer, List<Integer>> constructAdjacentChunkMap(List<Chunk> chunks, String stateName) {
+        StateEntity stateEntity = stateRepository.findByName(stateName);
+        String stateShortName = stateEntity.getShortName().toLowerCase();
         Map<Integer, List<Integer>> idAdjacencyMap = new HashMap<>();
         String politicalSubdivision = chunks.get(0).getSubdivision().toString();
-        String filepath = "./preprocessing/nh/idPrecinctAdj.json";
+        String filepath = "./preprocessing/" + stateShortName +"/idPrecinctAdj.json";
         List<ChunkJson> chunkJsons = createChunkJsons(filepath);
         for(ChunkJson chunkJson : chunkJsons) {
             List<Integer> adjacency = Arrays.stream(chunkJson.getPrecincts()).boxed().collect(Collectors.toList());
@@ -165,10 +224,6 @@ public class AlgorithmUtil {
     private Map<Integer, Chunk> toIdChunkMap(List<Precinct> precincts) {
         return precincts.stream()
                     .collect(Collectors.toMap(Precinct::getId, Chunk::new));
-    }
-
-    private Map<Integer, Chunk> toIdCountyChunkMap(List<Precinct> precincts) {
-        return null;
     }
 
     private List<District> constructSeedDistrictsRandomly(List<Chunk> chunks, int numDistricts) {
@@ -271,4 +326,5 @@ public class AlgorithmUtil {
         }
         return params.get(key).toString();
     }
+
 }

@@ -1,22 +1,23 @@
 package app.gerry.Geography;
 
+import app.gerry.Constants.Party;
 import app.gerry.Data.ElectionData;
 import app.gerry.Data.GeometricData;
 import app.gerry.Constants.PoliticalSubdivision;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Polygon;
+import org.locationtech.jts.operation.union.UnaryUnionOp;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Chunk {
     private int id;
     private String name;
     private List<Precinct> precincts;
     private Set<Chunk> adjacentChunks;
+    private List<Integer> adjChunkIds;
     private ElectionData cummElectionData;
+    private Map<Party, Integer> cummWastedVotes;
     private Geometry cummGeometricData;
     private int cummPopulation;
     private PoliticalSubdivision subdivision;
@@ -43,21 +44,71 @@ public class Chunk {
         precincts = new ArrayList<>();
         precincts.add(precinct);
         subdivision = PoliticalSubdivision.PRECINCT;
-        id = precinct.getId();
         cummPopulation = precinct.getPopulation();
         cummGeometricData = precinct.getBoundary();
-        //TODO: fill in rest of fields
+        cummElectionData = precinct.getElectionData();
+        cummWastedVotes = precinct.getWastedVotesMap();
+    }
+
+    public Map<Party, Integer> getCummWastedVotes() {
+        return cummWastedVotes;
     }
 
     /**
      * Chunk of many precincts eg. county
      * @param precincts
      */
-    public Chunk(List<Precinct> precincts) {
-        precincts.addAll(precincts);
+    public Chunk(int countyId, List<Precinct> precincts, List<Integer> adjCountyIds) {
+        id = countyId;
+        this.precincts = precincts;
         subdivision = PoliticalSubdivision.COUNTY;
+        cummPopulation = 0;
+        cummGeometricData = null;
+        cummElectionData = null;
+        cummWastedVotes = null;
+        for(Precinct precinct : precincts) {
+            addPrecinct(precinct);
+        }
         //TODO: assign county id to chunk id
         //TODO: fill in rest of fields
+    }
+
+    public void addPrecinct(Precinct precinct) {
+        updateBoundary(precinct);
+        updateWastedVotes(precinct);
+        updatePopulationData(precinct);
+    }
+
+    private void updateBoundary(Precinct precinct) {
+        if(cummGeometricData == null) {
+            cummGeometricData = precinct.getBoundary();
+            return;
+        }
+
+        Geometry chunkPolygon = this.cummGeometricData;
+        Geometry precinctPolygon = precinct.getBoundary();
+
+        if(precinctPolygon == null){
+            System.out.println("this polygon is null " + precinct.getId());
+        }
+        Collection<Geometry> polygons = new ArrayList<>();
+        polygons.add(chunkPolygon);
+        polygons.add(precinctPolygon);
+
+        try{
+            this.cummGeometricData = new UnaryUnionOp(polygons).union();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private void updateWastedVotes(Precinct precinct) {
+        //TODO
+    }
+
+    private void updatePopulationData(Precinct precinct) {
+        this.cummPopulation += precinct.getPopulation();
     }
 
     //I don't think this would work logically
@@ -162,5 +213,13 @@ public class Chunk {
 
     public void setBorderChunk(boolean borderChunk) {
         isBorderChunk = borderChunk;
+    }
+
+    public List<Integer> getAdjChunkIds() {
+        return adjChunkIds;
+    }
+
+    public void setAdjChunkIds(List<Integer> adjChunkIds) {
+        this.adjChunkIds = adjChunkIds;
     }
 }

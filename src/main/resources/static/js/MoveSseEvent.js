@@ -12,11 +12,12 @@ function colorStyle(color){
 var queue = [];
 var state = "NOT_INIT";
 var move;
+var districtMap = {};
 
 var eventSource = null;
 
 var subscribe = function () {
-    document.getElementById("console").innerHTML = "";
+    document.getElementById("tfObjectiveFunction").value = "";
     if(state == "CLOSED"){
         if(state == "NORMAL" || state == "PAUSED"){
             for(var i = 17; i <= 345; i++){
@@ -41,6 +42,13 @@ var subscribe = function () {
 
     eventSource.onmessage = function (e) {
         var move = JSON.parse(e.data);
+        var object = {
+            id: move.destDistrictId,
+            population: move.destDistrictPopulation,
+            gain: move.objectiveGain,
+            value: move.objectiveValue
+        };
+        districtMap[move.destDistrictId] = object;
         queue.push(move);
         if(state == "CLOSED"){
            state = "NOT_INIT";
@@ -50,7 +58,7 @@ var subscribe = function () {
         }
         if(state == "NORMAL" && queue.length > 0){
             move = queue.shift();
-            document.getElementById("console").innerHTML = move.objectiveValue + "\n" + document.getElementById("console").innerHTML;
+            document.getElementById("tfObjectiveFunction").value = move.objectiveValue;
             var precinctId = move.precinctId;
             var districtId = move.destDistrictId;
             var color = genColor(districtId);
@@ -96,7 +104,7 @@ var make_step = function(){
     }
     if(state == "PAUSED" && queue.length > 0){
             move = queue.shift();
-            document.getElementById("console").innerHTML = move.objectiveValue + "\n" + document.getElementById("console").innerHTML;
+            document.getElementById("tfObjectiveFunction").value = move.objectiveValue;
             var precinctId = move.precinctId;
             var districtId = move.districtId;
             var color = genColor(districtId);

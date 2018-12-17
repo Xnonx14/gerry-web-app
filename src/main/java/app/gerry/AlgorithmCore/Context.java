@@ -1,9 +1,14 @@
 package app.gerry.AlgorithmCore;
 
+import app.gerry.Constants.Position;
 import app.gerry.Geography.State;
+
+import java.sql.Date;
 
 public class Context {
     private String stateName;
+    private Date date;
+    private Position position;
     private double polsbyPopperWeight;
     private double convexHullWeight;
     private double reockWeight;
@@ -12,13 +17,19 @@ public class Context {
     private int seedCount;
     private State state;
     
-    public void setSeedCount(int count){
-        this.seedCount = count;
-    }
+    public void setSeedCount(int count){this.seedCount = count;}
     
     public int getSeedCount(){
         return seedCount;
     }
+
+    public Date getDate() {return date;}
+
+    public void setDate(Date date) {this.date = date;}
+
+    public Position getPosition() {return position;}
+
+    public void setPosition(Position position) {this.position = position;}
 
     public String getStateName() {
         return stateName;
