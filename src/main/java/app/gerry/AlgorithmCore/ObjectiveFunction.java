@@ -86,6 +86,9 @@ public class ObjectiveFunction {
         int totalPopulation = state.getPopulation();
         double ratio = (Math.abs((double)population - averagePopulation)/totalPopulation);
         double populationValue = 1 - ratio;
+        if(true)
+            return (1 - (((double) totalPopulation - population) / totalPopulation)) * 4;
+
         return populationValue;
     }
 

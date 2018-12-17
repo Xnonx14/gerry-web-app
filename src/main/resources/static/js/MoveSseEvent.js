@@ -62,13 +62,6 @@ var subscribe = function () {
         console.log("running");
         console.log(e.data);
         var move = JSON.parse(e.data);
-        var district_data = {
-            population: move.destDistrictPopulation,
-            gain: move.objectiveGain,
-            value: move.objectiveValue
-        };
-        districtMap[move.precinctId] = move.destDistrictId;
-        dataMap[move.destDistrictId] = district_data;
         queue.push(move);
         if(state == "CLOSED"){
            state = "NOT_INIT";
@@ -78,6 +71,13 @@ var subscribe = function () {
         }
         if(state == "NORMAL" && queue.length > 0){
             move = queue.shift();
+            var district_data = {
+                population: move.destDistrictPopulation,
+                gain: move.objectiveGain,
+                value: move.objectiveValue
+            };
+            districtMap[move.precinctId] = move.destDistrictId;
+            dataMap[move.destDistrictId] = district_data;
             document.getElementById("tfObjectiveFunction").value = move.objectiveValue;
             if(selected_state == "West Virginia"){
                 var districtId = move.destDistrictId;
@@ -128,17 +128,25 @@ var pause = function () {
 }
 
 var make_step = function(){
+    var selected_state = document.getElementById("selected_state").value;
     if(state == "NOT_INIT"){
         state = "INIT_FROM_STEP"
         subscribe();
     }
     if(state == "PAUSED" && queue.length > 0){
             move = queue.shift();
+            var district_data = {
+                population: move.destDistrictPopulation,
+                gain: move.objectiveGain,
+                value: move.objectiveValue
+            };
+            districtMap[move.precinctId] = move.destDistrictId;
+            dataMap[move.destDistrictId] = district_data;
             document.getElementById("tfObjectiveFunction").value = move.objectiveValue;
             var precinctId = move.precinctId;
-            var districtId = move.districtId;
+            var districtId = move.destDistrictId;
             var color = genColor(districtId);
-            StateMap[state].setFeatureStyle(precinctId, colorStyle(color))
+            StateMap[selected_state].setFeatureStyle(precinctId, colorStyle(color))
     }
 }
 

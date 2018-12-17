@@ -286,7 +286,8 @@ var new_Hampshire = L.vectorGrid.slicer(nH_data, {
             document.getElementById("tfDistrictID").value = precinct_data[properties.PRECINCT_ID];
             document.getElementById("precinctPopulation").value= properties.POP100;
             if (typeof dataMap[districtMap[parseInt(properties.PRECINCT_ID)]] !== 'undefined'){
-            document.getElementById("tfTotalPop").value = dataMap[districtMap[parseInt(properties.PRECINCT_ID)]].population;
+                document.getElementById("tfTotalPop").value = dataMap[districtMap[parseInt(properties.PRECINCT_ID)]].population;
+                document.getElementById("tfObjectiveFunction").value = dataMap[districtMap[parseInt(properties.PRECINCT_ID)]].value;
             }
             //parseInt(precinct_data[properties.PRECINCT_ID])
 
